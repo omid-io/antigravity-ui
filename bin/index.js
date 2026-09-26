@@ -180,6 +180,10 @@ async function main() {
         const spinner = ora('Restoring original app.asar...').start();
         try {
             fs.copyFileSync(backupPath, asarPath);
+            const metaPath = asarPath + '.meta.json';
+            if (fs.existsSync(metaPath)) {
+                try { fs.unlinkSync(metaPath); } catch (e) {}
+            }
             spinner.succeed('Successfully restored original Antigravity Desktop!');
             handleIdeExtension(true);
             process.exit(0);
@@ -190,12 +194,9 @@ async function main() {
         }
     }
 
-    const spinner = ora('Checking permissions and backing up...').start();
+    const spinner = ora('Checking write permissions...').start();
     try {
         fs.accessSync(path.dirname(asarPath), fs.constants.W_OK);
-        if (!fs.existsSync(backupPath)) {
-            fs.copyFileSync(asarPath, backupPath);
-        }
     } catch (e) {
         spinner.fail('Permission Denied.');
         console.error(red('\nSystem Error: ' + e.message));
@@ -235,7 +236,20 @@ async function main() {
         let utilsCode = fs.readFileSync(utilsPath, 'utf8');
         
         const isPatched = utilsCode.includes('/* ANTIGRAVITY UI PATCH */') || utilsCode.includes('/* ANTIGRAVITY RTL PATCH */');
-        if (isPatched) {
+        const metaPath = asarPath + '.meta.json';
+
+        if (!isPatched) {
+            // Pristine, unpatched build from official Google release: always refresh backup to current version
+            spinner.text = 'Creating pristine backup of current Antigravity version...';
+            fs.copyFileSync(asarPath, backupPath);
+            try {
+                fs.writeFileSync(metaPath, JSON.stringify({
+                    pluginVersion: pkg.version,
+                    backedUpAt: new Date().toISOString(),
+                    asarSize: fs.statSync(asarPath).size
+                }, null, 2));
+            } catch (e) {}
+        } else {
             if (fs.existsSync(backupPath)) {
                 spinner.text = 'Updating existing UI patch to latest version...';
                 utilsCode = asar.extractFile(backupPath, 'dist/utils.js').toString('utf8');
