@@ -5,7 +5,7 @@
 **The complete UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![npm version](https://img.shields.io/badge/npm-v2.0.5-cb3837.svg)](https://www.npmjs.com/package/antigravity-ui)
+[![npm version](https://img.shields.io/npm/v/antigravity-ui.svg?color=cb3837)](https://www.npmjs.com/package/antigravity-ui)
 [![CI](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/omid-io/antigravity-ui?color=blue&label=release)](https://github.com/omid-io/antigravity-ui/releases/latest)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
@@ -13,7 +13,7 @@
 
 <p>
   <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.5)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.8)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
   <a href="#-visual-tour">Visual Tour</a> •
@@ -96,11 +96,11 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :---: | :--- |
-| **Antigravity 2.17.x** (Latest) | `1.107.0+` (Code-OSS) | `v2.0.5` | 🟢 **Verified & Tested** | Full 160px sidebar + VSIX auto-installer |
-| **Antigravity 2.16.x** | `1.107.0+` | `v2.0.5` | 🟢 **Verified & Tested** | Injected via `void win.loadURL(url);` anchor |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v2.0.5` | 🟡 **Compatible** | Expected to work; standard Electron Asar structure |
-| **Antigravity 1.x** (Legacy) | `1.x` | `v2.0.5` | 🟡 **Legacy Compatible** | Basic Asar patch fallback |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v2.0.5` | 🟢 **CI-Verified** | 9-job matrix (Node 18, 20, 22 on Ubuntu, macOS, Windows) & 64-char SHA-256 |
+| **Antigravity 2.17.x** (Latest) | `1.107.0+` (Code-OSS) | `v2.0.8` | 🟢 **Verified & Tested** | Full 160px sidebar + VSIX auto-installer |
+| **Antigravity 2.16.x** | `1.107.0+` | `v2.0.8` | 🟢 **Verified & Tested** | Injected via `void win.loadURL(url);` anchor |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v2.0.8` | 🟡 **Compatible** | Expected to work; standard Electron Asar structure |
+| **Antigravity 1.x** (Legacy) | `1.x` | `v2.0.8` | 🟡 **Legacy Compatible** | Basic Asar patch fallback |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v2.0.8` | 🟢 **CI-Verified** | 9-job matrix (Node 18, 20, 22 on Ubuntu, macOS, Windows) & 64-char SHA-256 |
 
 ---
 
@@ -230,11 +230,11 @@ npx antigravity-ui --restore
 
 | نسخه Antigravity | ادیتور Antigravity IDE | نسخه Antigravity UI | وضعیت | توضیحات فنی |
 | :--- | :--- | :--- | :---: | :--- |
-| **نسخه های 2.17.x (جدیدترین)** | `1.107.0` به بالا | `v2.0.5` | 🟢 **تست شده و فعال** | سایدبار ۱۶۰px و نصب خودکار VSIX |
-| **نسخه های 2.16.x** | سری 1.107.x | `v2.0.5` | 🟢 **تست شده و فعال** | تزریق استاندارد با انکر لودینگ |
-| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v2.0.5` | 🟡 **سازگار** | ساختار سازگار Asar و هسته الکترون |
-| **نسخه های 1.x** | سری 1.x | `v2.0.5` | 🟡 **سازگار قبلی** | پچ پایه با قابلیت بازگردانی |
-| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.5` | 🟢 **تایید شده در CI** | اجرای ماتریس ۹ تایی ابری (نود ۱۸، ۲۰ و ۲۲ روی اوبونتو، مک و ویندوز) |
+| **نسخه های 2.17.x (جدیدترین)** | `1.107.0` به بالا | `v2.0.8` | 🟢 **تست شده و فعال** | سایدبار ۱۶۰px و نصب خودکار VSIX |
+| **نسخه های 2.16.x** | سری 1.107.x | `v2.0.8` | 🟢 **تست شده و فعال** | تزریق استاندارد با انکر لودینگ |
+| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v2.0.8` | 🟡 **سازگار** | ساختار سازگار Asar و هسته الکترون |
+| **نسخه های 1.x** | سری 1.x | `v2.0.8` | 🟡 **سازگار قبلی** | پچ پایه با قابلیت بازگردانی |
+| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.8` | 🟢 **تایید شده در CI** | اجرای ماتریس ۹ تایی ابری (نود ۱۸، ۲۰ و ۲۲ روی اوبونتو، مک و ویندوز) |
 
 ---
 
@@ -264,7 +264,7 @@ npx antigravity-ui --restore
 
 ### 🛡️ تضمین های امنیتی و حفظ حریم خصوصی
 
-- 🔒 **عدم ارسال تله متری حین پچ:** پس از دریافت پکیج از طریق npx، کلیه عملیات پچ کاملاً به صورت محلی روی دستگاه شما انجام شده و هیچ گونه کد، چت یا تله متری به سرور خارجی ارسال نمی شود.
+- 🔒 **عدم ارسال تله متری و حفظ کامل داده ها:** پچر هرگز کدها، گفتگوها، توکن ها یا اطلاعات کاری شما را به هیچ سروری ارسال نمی کند. صرفاً یک بررسی سبک و کش شده ۲۴ ساعته نسخه پکیج مستقیماً با رجیستری عمومی npm برای اطلاع رسانی آپدیت ها با تایم اوت بسیار سریع و بدون معطلی انجام می پذیرد.
 - 🛡️ **بکاپ هوشمند آگاه از نسخه و اعتبارسنجی SHA-256:** ایجاد خودکار نسخه پشتیبان دست نخورده (`app.asar.bak`) با ثبت هش کامل ۶۴ کاراکتری SHA-256 و متادیتا (`app.asar.meta.json`) با هر بار به روزرسانی رسمی گوگل؛ حین دستور بازگردانی (`--restore`)، سلامت فایل بکاپ اعتبارسنجی شده و در صورت هرگونه نقص یا دستکاری، عملیات مسدود می شود.
 - 💡 **سمانتیک بکاپ های قدیمی:** بکاپ های مربوط به نسخه های پیشین (که فاقد متادیتا هستند) حین بازگردانی به صورت خودکار و سازگار (Graceful Fallback) بازیابی می شوند تا کاربر دچار وقفه کاری نشود؛ در حالی که بکاپ های نسخه های جدید منحصراً با شرط تطابق ۱۰۰٪ اثر انگشت رمزنگاری بازیابی می گردند.
 - ⚡ **بازگردانی ۱۰۰٪ با یک دستور:** قابلیت بازگشت کامل به حالت کارخانه در هر لحظه با اجرای `npx antigravity-ui --restore` (و در صورت نیاز اضطراری با فلگ `--force`).
@@ -292,6 +292,12 @@ sudo npx antigravity-ui
 ```bash
 sudo npx antigravity-ui
 ```
+
+### 💻 دستورات و فلگ های خط فرمان (CLI Commands & Flags)
+- `update` یا `--update`: بررسی رجیستری رسمی npm، ارتقای خودکار به آخرین نسخه و همگام سازی مجدد پچ های دسکتاپ و IDE.
+- `--restore`: بازگردانی فایل های دسکتاپ و افزونه IDE به وضعیت خام کارخانه پس از راستی آزمایی رمزنگاری هش SHA-256 نسخه پشتیبان.
+- `--force`: (اختیاری) اجبار به بازگردانی حتی در صورت عدم وجود فایل متادیتا یا هشدار عدم تطابق هش.
+- `--devtools`: (اختیاری) فعال سازی ابزار توسعه کرومیوم (DevTools) در برنامه دسکتاپ برای دیباگ و شخصی سازی عمیق المان های DOM.
 
 ---
 
