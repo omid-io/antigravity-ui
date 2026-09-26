@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 import crypto from 'crypto';
 import picocolors from 'picocolors';
 import ora from 'ora';
@@ -208,7 +208,14 @@ async function main() {
                 process.exit(1);
             }
             updateSpinner.succeed(bold(green(`Successfully upgraded ${pkg.name} to v${latest}!`)));
-            console.log(cyan('\nApplying updated UI Studio patch to Antigravity Desktop and IDE...\n'));
+            console.log(cyan('\nSpawning upgraded Antigravity UI Studio to patch Desktop and IDE...\n'));
+
+            const forwardedArgs = args.filter(a => a !== 'update' && a !== '--update');
+            const reExecResult = spawnSync('antigravity-ui', forwardedArgs, {
+                stdio: 'inherit',
+                shell: true
+            });
+            process.exit(reExecResult.status ?? 0);
         }
     }
 
@@ -331,7 +338,10 @@ async function main() {
         handleIdeExtension(false);
         console.log(green('\n✨ Antigravity UI Studio is fully enabled. Please restart Antigravity to see the changes.\n'));
 
-        const updateInfo = await updateCheckPromise.catch(() => null);
+        const updateInfo = await Promise.race([
+            updateCheckPromise,
+            new Promise(resolve => setTimeout(() => resolve(null), 50))
+        ]).catch(() => null);
         if (updateInfo && updateInfo.hasUpdate) {
             console.log(renderUpdateBox(pkg.version, updateInfo.latestVersion));
         }

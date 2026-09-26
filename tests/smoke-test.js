@@ -12,10 +12,12 @@ import {
 } from '../lib/patcher.js';
 import {
     isNewerVersion,
+    parseSemver,
     stripAnsi,
     renderUpdateBox,
     writeCache,
-    readCache
+    readCache,
+    clearCache
 } from '../lib/updater.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +25,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const testDir = path.join(rootDir, 'temp-smoke-test');
 
-console.log('🧪 Starting Antigravity UI Real Pipeline Smoke Test (v2.0.6)...');
+console.log('🧪 Starting Antigravity UI Real Pipeline Smoke Test (v2.0.7)...');
 
 try {
     // 1. Setup temporary sandbox
@@ -136,28 +138,55 @@ module.exports = { setupWindow };
     }
     console.log('  ✔ Verified restore passed: Bit-for-bit SHA-256 match, patch removed.');
 
-    // 10. Test Updater Module SemVer & Box Rendering
-    if (!isNewerVersion('2.0.4', '2.0.5')) throw new Error('isNewerVersion failed on patch upgrade');
-    if (!isNewerVersion('2.0.4', '2.1.0')) throw new Error('isNewerVersion failed on minor upgrade');
-    if (!isNewerVersion('2.0.4', '3.0.0')) throw new Error('isNewerVersion failed on major upgrade');
-    if (isNewerVersion('2.0.4', '2.0.4')) throw new Error('isNewerVersion should be false for equal versions');
-    if (isNewerVersion('2.0.5', '2.0.4')) throw new Error('isNewerVersion should be false for older versions');
+    // 10. Test Updater Module SemVer 2.0, Cache Lifecycle & Re-exec Forwarding
+    // A. SemVer 2.0 comparisons
+    if (!isNewerVersion('2.0.6', '2.0.7')) throw new Error('isNewerVersion failed on patch upgrade');
+    if (!isNewerVersion('2.0.6', '2.1.0')) throw new Error('isNewerVersion failed on minor upgrade');
+    if (!isNewerVersion('2.0.6', '3.0.0')) throw new Error('isNewerVersion failed on major upgrade');
+    if (isNewerVersion('2.0.6', '2.0.6')) throw new Error('isNewerVersion should be false for equal versions');
+    if (isNewerVersion('2.0.7', '2.0.6')) throw new Error('isNewerVersion should be false for older versions');
 
+    // B. Pre-release & metadata compliance
+    const parsed = parseSemver('v2.0.7-beta.1+build.12');
+    if (!parsed || parsed.major !== 2 || parsed.minor !== 0 || parsed.patch !== 7 || parsed.prerelease[0] !== 'beta' || parsed.prerelease[1] !== '1') {
+        throw new Error('parseSemver failed on full SemVer 2.0 spec');
+    }
+    if (!isNewerVersion('2.0.7-beta.1', '2.0.7')) throw new Error('Release should be newer than pre-release');
+    if (isNewerVersion('2.0.7', '2.0.7-beta.1')) throw new Error('Pre-release should not be newer than release');
+    if (!isNewerVersion('2.0.7-beta.1', '2.0.7-beta.2')) throw new Error('beta.2 should be newer than beta.1');
+    if (!isNewerVersion('2.0.7-alpha', '2.0.7-beta')) throw new Error('beta should be newer than alpha');
+
+    // C. ANSI stripping & Box Rendering
     const cleanStr = stripAnsi('\x1b[31mHello\x1b[0m \x1b[32mWorld\x1b[0m');
     if (cleanStr !== 'Hello World') throw new Error(`stripAnsi failed. Received: "${cleanStr}"`);
 
-    const box = renderUpdateBox('2.0.4', '2.0.5');
-    if (!box.includes('2.0.4') || !box.includes('2.0.5') || !box.includes('antigravity-ui update')) {
+    const box = renderUpdateBox('2.0.6', '2.0.7');
+    if (!box.includes('2.0.6') || !box.includes('2.0.7') || !box.includes('antigravity-ui update')) {
         throw new Error('renderUpdateBox output missing expected content');
     }
 
+    // D. Cache Lifecycle & Clean Invalidation
     const testCachePath = path.join(testDir, 'test-cache.json');
-    writeCache('2.0.6', testCachePath);
+    writeCache('2.0.7', testCachePath);
     const cachedData = readCache(testCachePath);
-    if (!cachedData || cachedData.latestVersion !== '2.0.6' || typeof cachedData.lastCheck !== 'number') {
+    if (!cachedData || cachedData.latestVersion !== '2.0.7' || typeof cachedData.lastCheck !== 'number') {
         throw new Error('readCache failed to retrieve correctly formatted cache data');
     }
-    console.log('  ✔ Updater SemVer comparison, ANSI stripper, 24h cache persistence, and notification box verified.');
+    writeCache(null, testCachePath);
+    if (fs.existsSync(testCachePath)) throw new Error('writeCache(null) should cleanly delete cache file');
+
+    writeCache('2.0.7', testCachePath);
+    clearCache(testCachePath);
+    if (fs.existsSync(testCachePath)) throw new Error('clearCache should cleanly delete cache file');
+
+    // E. Re-exec Argument Forwarding Simulation
+    const rawArgs = ['update', '--devtools', '--force'];
+    const forwardedArgs = rawArgs.filter(a => a !== 'update' && a !== '--update');
+    if (forwardedArgs.length !== 2 || !forwardedArgs.includes('--devtools') || !forwardedArgs.includes('--force') || forwardedArgs.includes('update')) {
+        throw new Error('Argument filter for re-exec failed to isolate forwarded flags');
+    }
+
+    console.log('  ✔ Updater SemVer 2.0 (pre-releases/builds), ANSI stripper, cache lifecycle, and re-exec forwarding verified.');
 
     // 11. Cleanup
     fs.rmSync(testDir, { recursive: true, force: true });
