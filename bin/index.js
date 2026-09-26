@@ -10,6 +10,13 @@ import ora from 'ora';
 import prompts from 'prompts';
 import * as asar from '@electron/asar';
 import figlet from 'figlet';
+import {
+    detectPatchState,
+    createPristineBackup,
+    verifyBackupIntegrity,
+    restoreBackup,
+    applyPayloadToCode
+} from '../lib/patcher.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -168,6 +175,7 @@ function handleIdeExtension(isRestore = false) {
 const args = process.argv.slice(2);
 const isRestore = args.includes('--restore');
 const enableDevTools = args.includes('--devtools');
+const isForce = args.includes('--force');
 
 async function main() {
     const asarPath = await getAsarPath();
@@ -178,19 +186,16 @@ async function main() {
             console.error(red('✖ No backup found to restore.\n'));
             process.exit(1);
         }
-        const spinner = ora('Restoring original app.asar...').start();
+        const metaPath = asarPath + '.meta.json';
+        const spinner = ora('Verifying backup SHA-256 integrity and restoring app.asar...').start();
         try {
-            fs.copyFileSync(backupPath, asarPath);
-            const metaPath = asarPath + '.meta.json';
-            if (fs.existsSync(metaPath)) {
-                try { fs.unlinkSync(metaPath); } catch (e) {}
-            }
-            spinner.succeed('Successfully restored original Antigravity Desktop!');
+            const result = restoreBackup(asarPath, backupPath, metaPath, { force: isForce });
+            spinner.succeed(result.message);
             handleIdeExtension(true);
             process.exit(0);
         } catch (e) {
-            spinner.fail('Failed to restore.');
-            console.error(red(e.message));
+            spinner.fail('Failed to restore backup.');
+            console.error(red('\n' + e.message + '\n'));
             process.exit(1);
         }
     }
@@ -236,22 +241,18 @@ async function main() {
 
         let utilsCode = fs.readFileSync(utilsPath, 'utf8');
         
-        const isPatched = utilsCode.includes('/* ANTIGRAVITY UI PATCH */') || utilsCode.includes('/* ANTIGRAVITY RTL PATCH */');
+        const isPatched = detectPatchState(utilsCode);
         const metaPath = asarPath + '.meta.json';
 
         if (!isPatched) {
             // Pristine, unpatched build from official Google release: always refresh backup to current version
-            spinner.text = 'Creating pristine backup of current Antigravity version...';
-            fs.copyFileSync(asarPath, backupPath);
+            spinner.text = 'Creating pristine backup with 64-char SHA-256 checksum...';
             try {
-                const asarSha256 = crypto.createHash('sha256').update(fs.readFileSync(asarPath)).digest('hex').substring(0, 16);
-                fs.writeFileSync(metaPath, JSON.stringify({
-                    pluginVersion: pkg.version,
-                    backedUpAt: new Date().toISOString(),
-                    asarSize: fs.statSync(asarPath).size,
-                    asarSha256: asarSha256
-                }, null, 2));
-            } catch (e) {}
+                createPristineBackup(asarPath, backupPath, metaPath, pkg.version);
+            } catch (e) {
+                console.warn(yellow(`⚠ Could not generate full backup metadata: ${e.message}`));
+                fs.copyFileSync(asarPath, backupPath);
+            }
         } else {
             if (fs.existsSync(backupPath)) {
                 spinner.text = 'Updating existing UI patch to latest version...';
@@ -268,16 +269,7 @@ async function main() {
         const payloadPath = path.join(__dirname, 'payload.js');
         const payload = fs.readFileSync(payloadPath, 'utf8');
 
-        const anchor = 'void win.loadURL(url);';
-        if (!utilsCode.includes(anchor)) {
-            throw new Error('Injection anchor not found. The app version might be unsupported.');
-        }
-
-        utilsCode = utilsCode.replace(anchor, payload);
-        if (enableDevTools) {
-            // Optional: Enable DevTools in packaged app if user explicitly passed --devtools flag
-            utilsCode = utilsCode.replace(/devTools:\s*!electron_1?\.app\.isPackaged/g, 'devTools: true');
-        }
+        utilsCode = applyPayloadToCode(utilsCode, payload, enableDevTools);
         fs.writeFileSync(utilsPath, utilsCode);
 
         const fontSource = path.join(__dirname, 'Vazirmatn-Variable.woff2');

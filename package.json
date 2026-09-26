@@ -1,10 +1,10 @@
 {
   "name": "antigravity-ui",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "The complete UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.",
   "main": "./bin/index.js",
   "scripts": {
-    "test": "node -c bin/index.js && node -c bin/payload.js && node tests/smoke-test.js"
+    "test": "node -c bin/index.js && node -c bin/payload.js && node -c lib/patcher.js && node tests/smoke-test.js"
   },
   "keywords": [
     "antigravity",
@@ -35,6 +35,7 @@
   "homepage": "https://github.com/omid-io/antigravity-ui#readme",
   "files": [
     "bin",
+    "lib",
     "assets",
     "README.md"
   ],
