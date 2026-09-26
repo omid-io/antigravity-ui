@@ -11,11 +11,12 @@
 [![GitHub stars](https://img.shields.io/github/stars/omid-io/antigravity-ui?style=social)](https://github.com/omid-io/antigravity-ui)
 
 <p>
+  <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
   <a href="#-visual-tour">Visual Tour</a> •
   <a href="#-dual-engine-architecture">Dual Engine</a> •
   <a href="#-features">Features</a> •
   <a href="#-quick-start">Quick Start</a> •
-  <a href="#-uninstall--restore">Uninstall</a> •
+  <a href="#-security-privacy--safety-guarantees">Security & Safety</a> •
   <a href="#-راهنمای-فارسی-persian-guide">راهنمای فارسی</a>
 </p>
 
@@ -24,6 +25,18 @@
 <img src="assets/showcase-split.png" alt="Antigravity UI Dual Theme Showcase" width="100%">
 
 </div>
+
+---
+
+## 💡 Why Antigravity UI? (The Problems We Solve)
+
+| Default Google Antigravity | With Antigravity UI Studio |
+| :--- | :--- |
+| **Fixed 256px Sidebar:** Wastes ~100px of valuable screen space on laptop displays. | **Fluid 160px–420px Sidebar:** Smooth mouse dragging with anti-clipping text layout. |
+| **Rigid Chat Styling:** Fixed colors with no control over message contrast or borders. | **Dual Dark Glow & Light 3D Studio:** Custom colors, borders, shadows & live sliders. |
+| **Fragmented Multilingual Text:** Persian/Arabic letters reversed, punctuation broken. | **Smart BiDi Engine:** Paragraph-level language detection + built-in Vazirmatn font. |
+| **Disconnected IDE:** No unified typography between Chat and Code Editor. | **Companion IDE Extension:** Native VS Code status bar toggle and `Ctrl+Alt+R` hotkey. |
+| **Zero Setup Agony:** No manual builds, cloning, or dependency friction. | **Single Command:** Instant execution via `npx antigravity-ui` across macOS, Linux, and Windows. |
 
 ---
 
@@ -124,8 +137,24 @@ sudo npx antigravity-ui
 sudo npx antigravity-ui
 ```
 
+### CLI Flags
+- `--restore`: Revert Antigravity Desktop and IDE to their factory state.
+- `--devtools`: (Optional) Enable Chromium DevTools in the packaged desktop app for custom DOM debugging.
+
 > [!TIP]
 > **Antigravity Updates:** Updating Antigravity will reset patched desktop files. Simply re-run `npx antigravity-ui` after any official app update to restore your custom studio.
+
+---
+
+## 🛡️ Security, Privacy & Safety Guarantees
+
+Because Antigravity UI interacts with application packaging files, we hold trust and data safety to the highest standard:
+
+- 🔒 **100% Offline & Private:** Zero telemetry, analytics, or background internet requests. Your code and chats never leave your machine.
+- 🛡️ **Untouched Safety Backup:** Automatically creates an untouched `app.asar.bak` before making any modification.
+- ⚡ **One-Command Full Revert:** Run `npx antigravity-ui --restore` at any moment to return everything to 100% factory state.
+- 🎯 **Minimal & Non-Invasive:** Only injects lightweight client CSS and DOM ergonomics; never alters your API keys, credentials, or workspace data.
+- 🛠️ **Opt-In DevTools:** DevTools inspection is disabled by default and only enabled if you explicitly pass `--devtools`.
 
 ---
 
@@ -165,6 +194,17 @@ npx antigravity-ui --restore
 
 ---
 
+### 💡 چرا Antigravity UI؟ (مشکلاتی که حل می کنیم)
+
+| پیش فرض Google Antigravity | با Antigravity UI Studio |
+| :--- | :--- |
+| **سایدبار ثابت ۲۵۶ پیکسل:** هدر رفتن فضای ارزشمند مانیتور به خصوص در لپ تاپ ها. | **سایدبار منعطف ۱۶۰ تا ۴۲۰ پیکسل:** درگ کاملاً روان موس با چیدمان ضد بریدگی متن. |
+| **ظاهر ثابت و یکنواخت چت:** عدم امکان شخصی سازی رنگ یا خوانایی حباب پیام ها. | **استودیو تم دارک نئونی و لایت ۳ بعدی:** کنترل اسلایدرهای فونت، حاشیه و سایه. |
+| **به هم ریختگی متون چندزبانه:** برعکس شدن حروف فارسی/عربی و پرش علائم نگارشی. | **موتور هوشمند BiDi:** تشخیص خودکار زبان پاراگراف + فونت توکار وزیرمتن. |
+| **ناهماهنگی ادیتور و چت:** عدم وجود فونت و جهت مناسب در ادیتور کد Antigravity IDE. | **افزونه اختصاصی ادیتور:** سوییچ جهت در Status Bar و میانبر `Ctrl+Alt+R`. |
+
+---
+
 ### 🌟 قابلیت های کلیدی
 
 #### ۱. معماری موتور دوگانه (Desktop + IDE)
@@ -186,6 +226,15 @@ npx antigravity-ui --restore
 * **راست چین خودکار پاراگراف ها:** تشخیص هوشمند زبان هر پاراگراف؛ متن فارسی راست چین و کدهای انگلیسی چپ چین می مانند.
 * **فونت توکار Vazirmatn Variable:** بالاترین سطح وضوح و خوانایی بدون نیاز به نصب دستی فونت در سیستم عامل.
 * **حل مشکل کیبورد فارسی:** نگاشت خودکار کلید ترکیبی `Shift + 2` برای تایپ کاراکتر `@` به جای «٬» در چیدمان فارسی.
+
+---
+
+### 🛡️ تضمین های امنیتی و حفظ حریم خصوصی
+
+- 🔒 **۱۰۰٪ آفلاین و محلی:** بدون هیچ گونه ارسال تله متری، لاگ یا ارتباط با سرور خارجی. کدهای شما هرگز از دستگاهتان خارج نمی شود.
+- 🛡️ **بکاپ خودکار و دست نخورده:** ایجاد نسخه پشتیبان `app.asar.bak` پیش از هرگونه تغییر برای اطمینان خاطر.
+- ⚡ **بازگردانی ۱۰۰٪ با یک دستور:** قابلیت بازگشت کامل به حالت کارخانه با `npx antigravity-ui --restore`.
+- 🛠️ **حفظ امنیت:** ابزار DevTools به صورت پیش فرض خاموش است و صرفاً در صورت ارسال فلگ اختیاری `--devtools` برای برنامه نویسان فعال می شود.
 
 ---
 

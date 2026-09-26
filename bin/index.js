@@ -166,6 +166,7 @@ function handleIdeExtension(isRestore = false) {
 
 const args = process.argv.slice(2);
 const isRestore = args.includes('--restore');
+const enableDevTools = args.includes('--devtools');
 
 async function main() {
     const asarPath = await getAsarPath();
@@ -256,8 +257,10 @@ async function main() {
         }
 
         utilsCode = utilsCode.replace(anchor, payload);
-        // Force-enable DevTools in packaged app
-        utilsCode = utilsCode.replace(/devTools:\s*!electron_1?\.app\.isPackaged/g, 'devTools: true');
+        if (enableDevTools) {
+            // Optional: Enable DevTools in packaged app if user explicitly passed --devtools flag
+            utilsCode = utilsCode.replace(/devTools:\s*!electron_1?\.app\.isPackaged/g, 'devTools: true');
+        }
         fs.writeFileSync(utilsPath, utilsCode);
 
         const fontSource = path.join(__dirname, 'Vazirmatn-Variable.woff2');
