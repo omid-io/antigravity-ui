@@ -1040,13 +1040,8 @@ win.webContents.on('dom-ready', () => {
             widgetWrapper.style.cssText = \`direction: ltr; position: fixed !important; z-index: 999999 !important; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none !important; overflow: visible !important;\`;
             
             widgetWrapper.innerHTML = \`
-                <!-- Floating Trigger Icon -->
-                <div id="rtl-floating-trigger" class="relative w-10 h-10 flex items-center justify-center rounded-full bg-secondary text-secondary-foreground hover:text-foreground cursor-pointer opacity-80 hover:opacity-100 transition-all duration-200 shadow-md \${placement === 'sidebar' ? 'hidden' : ''}" style="position: fixed !important; bottom: \${floatingBottom}px !important; right: 16px !important; pointer-events: auto !important; \${placement === 'sidebar' ? 'display: none !important;' : 'display: flex !important;'}">
-                    <svg height="20" width="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                </div>
-                
-                <!-- Settings Panel -->
-                <div id="rtl-settings-panel" class="rtl-widget-panel rtl-theme-panel fixed p-0 rounded-2xl text-sm w-80 flex flex-col overflow-hidden" style="position: fixed !important; bottom: \${placement === 'sidebar' ? '56px' : (floatingBottom + 45) + 'px'} !important; \${placement === 'sidebar' ? 'left: 16px !important; right: auto !important;' : 'right: 16px !important; left: auto !important;'}">
+                <!-- Settings Panel (Pinned to Sidebar) -->
+                <div id="rtl-settings-panel" class="rtl-widget-panel rtl-theme-panel fixed p-0 rounded-2xl text-sm w-80 flex flex-col overflow-hidden" style="position: fixed !important; bottom: 56px !important; left: 16px !important; right: auto !important;">
                     
                     <!-- Pinned Top Header & Main Navigation Tabs -->
                     <div class="rtl-panel-header-pinned flex flex-col gap-2 p-2.5 pb-2 border-b border-border border-opacity-40 shrink-0">
@@ -1098,29 +1093,6 @@ win.webContents.on('dom-ready', () => {
                                         <button id="rtl-force-btn" type="button" role="switch" class="rtl-toggle-btn-reset relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out shrink-0 h-5 w-9 \${forceRTL ? 'bg-accent' : 'bg-gray-400 bg-opacity-40'} cursor-pointer">
                                             <span id="rtl-force-knob" class="inline-block rounded-full bg-white transition-transform duration-200 ease-in-out shadow-sm h-3.5 w-3.5" style="transform: translateX(\${forceRTL ? '18px' : '3px'});"></span>
                                         </button>
-                                    </div>
-                                    
-                                    <!-- Placement: Sidebar vs Floating -->
-                                    <div class="flex flex-col gap-1">
-                                        <span class="font-medium text-xs opacity-80">Button Location</span>
-                                        <div class="grid grid-cols-2 gap-1 p-0.5 rounded-lg bg-muted border border-border border-opacity-40">
-                                            <button id="rtl-loc-sidebar-btn" type="button" class="py-1 px-2 text-[11px] font-medium rounded-md transition-all \${placement === 'sidebar' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'} cursor-pointer">
-                                                Sidebar Menu
-                                            </button>
-                                            <button id="rtl-loc-floating-btn" type="button" class="py-1 px-2 text-[11px] font-medium rounded-md transition-all \${placement === 'floating' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'} cursor-pointer">
-                                                Floating Icon
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Floating Height Slider -->
-                                    <div id="rtl-float-height-row" class="flex items-center justify-between gap-2 \${placement === 'floating' ? '' : 'hidden'}">
-                                        <span class="font-medium text-xs opacity-80" title="Floating button bottom offset">Float Height</span>
-                                        <div class="flex items-center gap-1.5">
-                                            <input id="rtl-float-height-input" type="range" min="16" max="220" step="4" value="\${floatingBottom}" class="h-1 w-20 cursor-pointer" style="accent-color: #3b82f6;">
-                                            <span id="rtl-float-height-val" class="text-[10px] font-mono text-muted-foreground w-8 text-right">\${floatingBottom}px</span>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
 
@@ -1317,7 +1289,6 @@ win.webContents.on('dom-ready', () => {
             function bindWidgetControls() {
                 // References
                 const panel = document.getElementById('rtl-settings-panel');
-            const floatingTrigger = document.getElementById('rtl-floating-trigger');
             const panelCloseBtn = document.getElementById('rtl-panel-close-btn');
             const toggleBtn = document.getElementById('rtl-toggle-btn');
             const toggleKnob = document.getElementById('rtl-toggle-knob');
@@ -1326,11 +1297,6 @@ win.webContents.on('dom-ready', () => {
             const typoCard = document.getElementById('rtl-typo-card');
             const forceBtn = document.getElementById('rtl-force-btn');
             const forceKnob = document.getElementById('rtl-force-knob');
-            const locSidebarBtn = document.getElementById('rtl-loc-sidebar-btn');
-            const locFloatingBtn = document.getElementById('rtl-loc-floating-btn');
-            const floatHeightRow = document.getElementById('rtl-float-height-row');
-            const floatHeightInput = document.getElementById('rtl-float-height-input');
-            const floatHeightVal = document.getElementById('rtl-float-height-val');
             
             const compactSidebarToggleBtn = document.getElementById('rtl-compact-sidebar-toggle-btn');
             const compactSidebarToggleKnob = document.getElementById('rtl-compact-sidebar-toggle-knob');
@@ -1427,15 +1393,9 @@ win.webContents.on('dom-ready', () => {
 
             let isPanelOpen = false;
             function updatePanelPosition() {
-                if (placement === 'sidebar') {
-                    panel.style.bottom = '56px';
-                    panel.style.left = '16px';
-                    panel.style.right = 'auto';
-                } else {
-                    panel.style.bottom = (floatingBottom + 45) + 'px';
-                    panel.style.right = '16px';
-                    panel.style.left = 'auto';
-                }
+                panel.style.bottom = '56px';
+                panel.style.left = '16px';
+                panel.style.right = 'auto';
             }
             function setPanelOpen(open) {
                 isPanelOpen = open;
@@ -1449,10 +1409,6 @@ win.webContents.on('dom-ready', () => {
                 }
             }
 
-            floatingTrigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                setPanelOpen(!isPanelOpen);
-            });
             panelCloseBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 setPanelOpen(false);
@@ -1461,7 +1417,7 @@ win.webContents.on('dom-ready', () => {
             document.addEventListener('click', (e) => {
                 if (!isPanelOpen) return;
                 const sidebarBtn = document.getElementById('rtl-sidebar-btn');
-                if (!panel.contains(e.target) && !floatingTrigger.contains(e.target) && (!sidebarBtn || !sidebarBtn.contains(e.target))) {
+                if (!panel.contains(e.target) && (!sidebarBtn || !sidebarBtn.contains(e.target))) {
                     setPanelOpen(false);
                 }
             }, { capture: true });
@@ -1511,8 +1467,7 @@ win.webContents.on('dom-ready', () => {
                     isRTL: isRTL,
                     forceRTL: forceRTL,
                     fixAtSign: fixAtSign,
-                    placement: placement,
-                    floatingBottom: floatingBottom,
+                    placement: 'sidebar',
                     sidebarWidth: sidebarWidth,
                     compactSidebar: compactSidebar,
                     userMsgEnabled: userMsgEnabled,
@@ -1529,39 +1484,6 @@ win.webContents.on('dom-ready', () => {
                 updateDynamicCSS(faFontInput.value.trim(), enFontInput.value.trim(), codeFontInput.value.trim(), lhInput.value, fsInput.value, sidebarWidth);
             }
 
-            locSidebarBtn.addEventListener('click', () => {
-                placement = 'sidebar';
-                locSidebarBtn.classList.add('bg-background', 'text-foreground', 'shadow-sm');
-                locSidebarBtn.classList.remove('text-muted-foreground');
-                locFloatingBtn.classList.remove('bg-background', 'text-foreground', 'shadow-sm');
-                locFloatingBtn.classList.add('text-muted-foreground');
-                floatingTrigger.style.setProperty('display', 'none', 'important');
-                floatingTrigger.classList.add('hidden');
-                floatHeightRow.classList.add('hidden');
-                updatePanelPosition();
-                saveConfig();
-            });
-
-            locFloatingBtn.addEventListener('click', () => {
-                placement = 'floating';
-                locFloatingBtn.classList.add('bg-background', 'text-foreground', 'shadow-sm');
-                locFloatingBtn.classList.remove('text-muted-foreground');
-                locSidebarBtn.classList.remove('bg-background', 'text-foreground', 'shadow-sm');
-                locSidebarBtn.classList.add('text-muted-foreground');
-                floatingTrigger.style.setProperty('display', 'flex', 'important');
-                floatingTrigger.classList.remove('hidden');
-                floatHeightRow.classList.remove('hidden');
-                updatePanelPosition();
-                saveConfig();
-            });
-
-            floatHeightInput.addEventListener('input', (e) => {
-                floatingBottom = parseInt(e.target.value);
-                floatHeightVal.textContent = floatingBottom + 'px';
-                widgetWrapper.style.bottom = floatingBottom + 'px';
-                updatePanelPosition();
-                saveConfig();
-            });
 
             if (compactSidebarToggleBtn) {
                 compactSidebarToggleBtn.addEventListener('click', () => {

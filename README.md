@@ -5,7 +5,7 @@
 **The complete UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![npm version](https://img.shields.io/badge/npm-v2.0.4-cb3837.svg)](https://www.npmjs.com/package/antigravity-ui)
+[![npm version](https://img.shields.io/badge/npm-v2.0.5-cb3837.svg)](https://www.npmjs.com/package/antigravity-ui)
 [![CI](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/omid-io/antigravity-ui?color=blue&label=release)](https://github.com/omid-io/antigravity-ui/releases/latest)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
@@ -13,7 +13,7 @@
 
 <p>
   <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.4)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.5)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
   <a href="#-visual-tour">Visual Tour</a> •
@@ -96,11 +96,11 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :---: | :--- |
-| **Antigravity 2.17.x** (Latest) | `1.107.0+` (Code-OSS) | `v2.0.4` | 🟢 **Verified & Tested** | Full 160px sidebar + VSIX auto-installer |
-| **Antigravity 2.16.x** | `1.107.0+` | `v2.0.4` | 🟢 **Verified & Tested** | Injected via `void win.loadURL(url);` anchor |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v2.0.4` | 🟡 **Compatible** | Expected to work; standard Electron Asar structure |
-| **Antigravity 1.x** (Legacy) | `1.x` | `v2.0.4` | 🟡 **Legacy Compatible** | Basic Asar patch fallback |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v2.0.4` | 🟢 **Verified & Tested** | Automated OS path detection & 64-char SHA-256 backup verification |
+| **Antigravity 2.17.x** (Latest) | `1.107.0+` (Code-OSS) | `v2.0.5` | 🟢 **Verified & Tested** | Full 160px sidebar + VSIX auto-installer |
+| **Antigravity 2.16.x** | `1.107.0+` | `v2.0.5` | 🟢 **Verified & Tested** | Injected via `void win.loadURL(url);` anchor |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v2.0.5` | 🟡 **Compatible** | Expected to work; standard Electron Asar structure |
+| **Antigravity 1.x** (Legacy) | `1.x` | `v2.0.5` | 🟡 **Legacy Compatible** | Basic Asar patch fallback |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v2.0.5` | 🟢 **CI-Verified** | 9-job matrix (Node 18, 20, 22 on Ubuntu, macOS, Windows) & 64-char SHA-256 |
 
 ---
 
@@ -227,11 +227,11 @@ npx antigravity-ui --restore
 
 | نسخه Antigravity | ادیتور Antigravity IDE | نسخه Antigravity UI | وضعیت | توضیحات فنی |
 | :--- | :--- | :--- | :---: | :--- |
-| **نسخه های 2.17.x (جدیدترین)** | `1.107.0` به بالا | `v2.0.4` | 🟢 **تست شده و فعال** | سایدبار ۱۶۰px و نصب خودکار VSIX |
-| **نسخه های 2.16.x** | سری 1.107.x | `v2.0.4` | 🟢 **تست شده و فعال** | تزریق استاندارد با انکر لودینگ |
-| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v2.0.4` | 🟡 **سازگار** | ساختار سازگار Asar و هسته الکترون |
-| **نسخه های 1.x** | سری 1.x | `v2.0.4` | 🟡 **سازگار قبلی** | پچ پایه با قابلیت بازگردانی |
-| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.4` | 🟢 **تست شده** | تشخیص خودکار مسیر اجرایی و اعتبارسنجی ۶۴ کاراکتری SHA-256 |
+| **نسخه های 2.17.x (جدیدترین)** | `1.107.0` به بالا | `v2.0.5` | 🟢 **تست شده و فعال** | سایدبار ۱۶۰px و نصب خودکار VSIX |
+| **نسخه های 2.16.x** | سری 1.107.x | `v2.0.5` | 🟢 **تست شده و فعال** | تزریق استاندارد با انکر لودینگ |
+| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v2.0.5` | 🟡 **سازگار** | ساختار سازگار Asar و هسته الکترون |
+| **نسخه های 1.x** | سری 1.x | `v2.0.5` | 🟡 **سازگار قبلی** | پچ پایه با قابلیت بازگردانی |
+| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.5` | 🟢 **تایید شده در CI** | اجرای ماتریس ۹ تایی ابری (نود ۱۸، ۲۰ و ۲۲ روی اوبونتو، مک و ویندوز) |
 
 ---
 
