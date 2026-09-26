@@ -17,7 +17,9 @@ import {
     renderUpdateBox,
     writeCache,
     readCache,
-    clearCache
+    clearCache,
+    fetchLatestVersion,
+    reExecUpdatedCli
 } from '../lib/updater.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,7 +27,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const testDir = path.join(rootDir, 'temp-smoke-test');
 
-console.log('🧪 Starting Antigravity UI Real Pipeline Smoke Test (v2.0.7)...');
+console.log('🧪 Starting Antigravity UI Real Pipeline Smoke Test (v2.0.8)...');
 
 try {
     // 1. Setup temporary sandbox
@@ -138,55 +140,103 @@ module.exports = { setupWindow };
     }
     console.log('  ✔ Verified restore passed: Bit-for-bit SHA-256 match, patch removed.');
 
-    // 10. Test Updater Module SemVer 2.0, Cache Lifecycle & Re-exec Forwarding
-    // A. SemVer 2.0 comparisons
-    if (!isNewerVersion('2.0.6', '2.0.7')) throw new Error('isNewerVersion failed on patch upgrade');
-    if (!isNewerVersion('2.0.6', '2.1.0')) throw new Error('isNewerVersion failed on minor upgrade');
-    if (!isNewerVersion('2.0.6', '3.0.0')) throw new Error('isNewerVersion failed on major upgrade');
-    if (isNewerVersion('2.0.6', '2.0.6')) throw new Error('isNewerVersion should be false for equal versions');
-    if (isNewerVersion('2.0.7', '2.0.6')) throw new Error('isNewerVersion should be false for older versions');
+    // 10. Deep Integration Test: Strict SemVer 2.0, AbortSignal Cancellation, Cache Lifecycle, and Child Process Re-exec
+    // A. Strict SemVer 2.0 verification and invalid format rejection
+    if (isNewerVersion('01.2.3', '1.2.3')) throw new Error('isNewerVersion should reject leading zero in current');
+    if (isNewerVersion('1.2.3', '01.2.4')) throw new Error('isNewerVersion should reject leading zero in latest');
+    if (isNewerVersion('1.2.3-alpha..1', '1.2.3')) throw new Error('isNewerVersion should reject empty prerelease identifier');
+    if (parseSemver('01.2.3') !== null) throw new Error('parseSemver should reject 01.2.3');
+    if (parseSemver('1.2.3-alpha..1') !== null) throw new Error('parseSemver should reject double dots in prerelease');
 
-    // B. Pre-release & metadata compliance
-    const parsed = parseSemver('v2.0.7-beta.1+build.12');
-    if (!parsed || parsed.major !== 2 || parsed.minor !== 0 || parsed.patch !== 7 || parsed.prerelease[0] !== 'beta' || parsed.prerelease[1] !== '1') {
+    if (!isNewerVersion('2.0.7', '2.0.8')) throw new Error('isNewerVersion failed on patch upgrade');
+    if (!isNewerVersion('2.0.7', '2.1.0')) throw new Error('isNewerVersion failed on minor upgrade');
+    if (!isNewerVersion('2.0.7', '3.0.0')) throw new Error('isNewerVersion failed on major upgrade');
+    if (isNewerVersion('2.0.7', '2.0.7')) throw new Error('isNewerVersion should be false for equal versions');
+    if (isNewerVersion('2.0.8', '2.0.7')) throw new Error('isNewerVersion should be false for older versions');
+
+    const parsed = parseSemver('v2.0.8-beta.1+build.12');
+    if (!parsed || parsed.major !== 2 || parsed.minor !== 0 || parsed.patch !== 8 || parsed.prerelease[0] !== 'beta' || parsed.prerelease[1] !== 1) {
         throw new Error('parseSemver failed on full SemVer 2.0 spec');
     }
-    if (!isNewerVersion('2.0.7-beta.1', '2.0.7')) throw new Error('Release should be newer than pre-release');
-    if (isNewerVersion('2.0.7', '2.0.7-beta.1')) throw new Error('Pre-release should not be newer than release');
-    if (!isNewerVersion('2.0.7-beta.1', '2.0.7-beta.2')) throw new Error('beta.2 should be newer than beta.1');
-    if (!isNewerVersion('2.0.7-alpha', '2.0.7-beta')) throw new Error('beta should be newer than alpha');
+    if (!isNewerVersion('2.0.8-beta.1', '2.0.8')) throw new Error('Release should be newer than pre-release');
+    if (isNewerVersion('2.0.8', '2.0.8-beta.1')) throw new Error('Pre-release should not be newer than release');
+    if (!isNewerVersion('2.0.8-beta.1', '2.0.8-beta.2')) throw new Error('beta.2 should be newer than beta.1');
+    if (!isNewerVersion('2.0.8-alpha', '2.0.8-beta')) throw new Error('beta should be newer than alpha');
 
-    // C. ANSI stripping & Box Rendering
+    // B. AbortSignal Immediate Cancellation Test (Zero-latency verification)
+    const testAbortController = new AbortController();
+    testAbortController.abort();
+    const abortStart = Date.now();
+    const abortedResult = await fetchLatestVersion('antigravity-ui', 5000, testAbortController.signal);
+    const abortDuration = Date.now() - abortStart;
+    if (abortedResult !== null) throw new Error('Aborted fetch should immediately return null');
+    if (abortDuration > 50) throw new Error(`Aborted fetch exceeded 50ms guard: took ${abortDuration}ms`);
+
+    // C. Child Process Integration Test: reExecUpdatedCli without shell
+    const mockCliPath = path.join(testDir, 'mock-cli.js');
+    fs.writeFileSync(mockCliPath, [
+        'const args = process.argv.slice(2);',
+        'console.log("MOCK_RE_EXEC_OUT:" + args.join(","));',
+        'if (args.includes("--fail-test")) process.exit(42);',
+        'process.exit(0);'
+    ].join('\n'), 'utf8');
+
+    // Test C1: Successful child spawn with forwarded arguments and clean output
+    const reExecSuccess = reExecUpdatedCli('test-pkg', ['--devtools', '--force'], {
+        cliPath: mockCliPath,
+        stdio: 'pipe'
+    });
+    if (!reExecSuccess.success || reExecSuccess.status !== 0) {
+        throw new Error(`reExecUpdatedCli failed in normal execution: status ${reExecSuccess.status}`);
+    }
+    const stdoutStr = reExecSuccess.stdout ? reExecSuccess.stdout.toString() : '';
+    if (!stdoutStr.includes('MOCK_RE_EXEC_OUT:--devtools,--force')) {
+        throw new Error(`reExecUpdatedCli did not forward arguments properly. Output: ${stdoutStr}`);
+    }
+
+    // Test C2: Non-zero exit code propagation
+    const reExecFailed = reExecUpdatedCli('test-pkg', ['--fail-test'], {
+        cliPath: mockCliPath,
+        stdio: 'pipe'
+    });
+    if (reExecFailed.success !== false || reExecFailed.status !== 42) {
+        throw new Error(`reExecUpdatedCli failed to propagate non-zero exit code 42: got ${reExecFailed.status}`);
+    }
+
+    // Test C3: Binary resolution failure handling
+    const reExecMissing = reExecUpdatedCli('test-pkg', [], {
+        cliPath: 'non-existent-script.js',
+        nodePath: 'non-existent-node-binary-xyz',
+        stdio: 'pipe'
+    });
+    if (reExecMissing.success !== false || reExecMissing.status !== 1 || !reExecMissing.error) {
+        throw new Error('reExecUpdatedCli failed to handle launch error gracefully');
+    }
+
+    // D. ANSI Stripping & Box Rendering
     const cleanStr = stripAnsi('\x1b[31mHello\x1b[0m \x1b[32mWorld\x1b[0m');
     if (cleanStr !== 'Hello World') throw new Error(`stripAnsi failed. Received: "${cleanStr}"`);
 
-    const box = renderUpdateBox('2.0.6', '2.0.7');
-    if (!box.includes('2.0.6') || !box.includes('2.0.7') || !box.includes('antigravity-ui update')) {
+    const box = renderUpdateBox('2.0.7', '2.0.8');
+    if (!box.includes('2.0.7') || !box.includes('2.0.8') || !box.includes('antigravity-ui update')) {
         throw new Error('renderUpdateBox output missing expected content');
     }
 
-    // D. Cache Lifecycle & Clean Invalidation
+    // E. Cache Lifecycle & Clean Invalidation
     const testCachePath = path.join(testDir, 'test-cache.json');
-    writeCache('2.0.7', testCachePath);
+    writeCache('2.0.8', testCachePath);
     const cachedData = readCache(testCachePath);
-    if (!cachedData || cachedData.latestVersion !== '2.0.7' || typeof cachedData.lastCheck !== 'number') {
+    if (!cachedData || cachedData.latestVersion !== '2.0.8' || typeof cachedData.lastCheck !== 'number') {
         throw new Error('readCache failed to retrieve correctly formatted cache data');
     }
     writeCache(null, testCachePath);
     if (fs.existsSync(testCachePath)) throw new Error('writeCache(null) should cleanly delete cache file');
 
-    writeCache('2.0.7', testCachePath);
+    writeCache('2.0.8', testCachePath);
     clearCache(testCachePath);
     if (fs.existsSync(testCachePath)) throw new Error('clearCache should cleanly delete cache file');
 
-    // E. Re-exec Argument Forwarding Simulation
-    const rawArgs = ['update', '--devtools', '--force'];
-    const forwardedArgs = rawArgs.filter(a => a !== 'update' && a !== '--update');
-    if (forwardedArgs.length !== 2 || !forwardedArgs.includes('--devtools') || !forwardedArgs.includes('--force') || forwardedArgs.includes('update')) {
-        throw new Error('Argument filter for re-exec failed to isolate forwarded flags');
-    }
-
-    console.log('  ✔ Updater SemVer 2.0 (pre-releases/builds), ANSI stripper, cache lifecycle, and re-exec forwarding verified.');
+    console.log('  ✔ Updater SemVer 2.0 (authoritative semver lib), AbortSignal cancellation, child process re-exec integration, and cache verified.');
 
     // 11. Cleanup
     fs.rmSync(testDir, { recursive: true, force: true });

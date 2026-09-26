@@ -22,7 +22,8 @@ import {
     renderUpdateBox,
     executeNpmUpgrade,
     fetchLatestVersion,
-    isNewerVersion
+    isNewerVersion,
+    reExecUpdatedCli
 } from '../lib/updater.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -211,16 +212,17 @@ async function main() {
             console.log(cyan('\nSpawning upgraded Antigravity UI Studio to patch Desktop and IDE...\n'));
 
             const forwardedArgs = args.filter(a => a !== 'update' && a !== '--update');
-            const reExecResult = spawnSync('antigravity-ui', forwardedArgs, {
-                stdio: 'inherit',
-                shell: true
-            });
-            process.exit(reExecResult.status ?? 0);
+            const reExecResult = reExecUpdatedCli(pkg.name, forwardedArgs);
+            if (!reExecResult.success && reExecResult.error) {
+                console.error(red(`\nFailed to launch updated CLI: ${reExecResult.error.message}\n`));
+            }
+            process.exit(reExecResult.status ?? 1);
         }
     }
 
+    const abortController = new AbortController();
     const updateCheckPromise = (!isRestore && !isUpdate)
-        ? checkForUpdate(pkg.version, pkg.name, { useCache: true, timeoutMs: 1200 })
+        ? checkForUpdate(pkg.version, pkg.name, { useCache: true, timeoutMs: 1200, signal: abortController.signal })
         : Promise.resolve(null);
 
     const asarPath = await getAsarPath();
@@ -338,10 +340,18 @@ async function main() {
         handleIdeExtension(false);
         console.log(green('\n✨ Antigravity UI Studio is fully enabled. Please restart Antigravity to see the changes.\n'));
 
-        const updateInfo = await Promise.race([
-            updateCheckPromise,
-            new Promise(resolve => setTimeout(() => resolve(null), 50))
-        ]).catch(() => null);
+        let updateInfo = null;
+        try {
+            updateInfo = await Promise.race([
+                updateCheckPromise,
+                new Promise(resolve => setTimeout(() => {
+                    abortController.abort();
+                    resolve(null);
+                }, 50))
+            ]);
+        } catch {
+            abortController.abort();
+        }
         if (updateInfo && updateInfo.hasUpdate) {
             console.log(renderUpdateBox(pkg.version, updateInfo.latestVersion));
         }

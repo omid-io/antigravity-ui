@@ -1,6 +1,6 @@
 {
   "name": "antigravity-ui",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "The complete UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.",
   "main": "./bin/index.js",
   "scripts": {
@@ -44,7 +44,8 @@
     "figlet": "^1.11.0",
     "ora": "^9.4.1",
     "picocolors": "^1.1.1",
-    "prompts": "^2.4.2"
+    "prompts": "^2.4.2",
+    "semver": "^7.8.5"
   },
   "type": "module",
   "bin": {
