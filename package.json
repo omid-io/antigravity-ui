@@ -1,25 +1,41 @@
 {
-  "name": "antigravity-rtl",
-  "version": "1.0.11",
-  "description": "A smart RTL (Right-to-Left) patcher with UI settings for the Antigravity application.",
+  "name": "antigravity-ui",
+  "version": "2.0.0",
+  "description": "The complete UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.",
   "main": "./bin/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node -c bin/index.js && node -c bin/payload.js"
   },
   "keywords": [
     "antigravity",
-    "rtl",
+    "antigravity-ui",
+    "antigravity-rtl",
+    "ui-studio",
+    "sidebar-resizer",
+    "compact-sidebar",
     "persian",
     "arabic",
-    "hebrew",
+    "bidi",
+    "vscode-antigravity",
+    "antigravity-ide",
+    "customizer",
     "patcher",
     "electron",
     "asar"
   ],
-  "author": "mmnaderi",
+  "author": "Omid Zaferi <omidzaferi@gmail.com> (https://github.com/omid-io)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omid-io/antigravity-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/omid-io/antigravity-ui/issues"
+  },
+  "homepage": "https://github.com/omid-io/antigravity-ui#readme",
   "files": [
     "bin",
+    "assets",
     "README.md"
   ],
   "dependencies": {
@@ -31,6 +47,7 @@
   },
   "type": "module",
   "bin": {
+    "antigravity-ui": "./bin/index.js",
     "antigravity-rtl": "./bin/index.js"
   }
 }

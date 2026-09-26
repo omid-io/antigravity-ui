@@ -1,19 +1,21 @@
 <div align="center">
 
-# 🌌 Antigravity Smart RTL & UI Suite
+# 🌌 Antigravity UI Studio
 
-**A high-performance RTL engine & modular theme customizer for the [Antigravity](https://github.com/google/antigravity) desktop app.**
+**The complete UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![npm version](https://img.shields.io/badge/npm-v2.0.0-cb3837.svg)](https://www.npmjs.com/package/antigravity-ui)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](https://github.com/google/antigravity)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/mmnaderi/antigravity-rtl/pulls)
+[![GitHub stars](https://img.shields.io/github/stars/omid-io/antigravity-ui?style=social)](https://github.com/omid-io/antigravity-ui)
 
 <p>
   <a href="#-visual-tour">Visual Tour</a> •
+  <a href="#-dual-engine-architecture">Dual Engine</a> •
   <a href="#-features">Features</a> •
-  <a href="#-installation">Installation</a> •
-  <a href="#-restoring-to-original-uninstall">Uninstall</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-uninstall--restore">Uninstall</a> •
   <a href="#-راهنمای-فارسی-persian-guide">راهنمای فارسی</a>
 </p>
 
@@ -56,22 +58,39 @@
 
 ---
 
+## ⚡ Dual-Engine Architecture
+
+**Antigravity UI** is engineered to provide a cohesive, unified workspace across your entire Google Antigravity workflow:
+
+```mermaid
+flowchart LR
+    A["CLI: npx antigravity-ui"] --> B["Desktop Patcher (Asar)"]
+    A --> C["IDE Extension Installer"]
+    B --> D["Antigravity Desktop App<br/>• 160px Compact Sidebar<br/>• Live Customizer Studio<br/>• Vazirmatn Variable Font<br/>• Dark Glow & Light 3D Themes"]
+    C --> E["Antigravity IDE (VS Code Fork)<br/>• Status Bar RTL/LTR Toggle<br/>• Ctrl+Alt+R Shortcut<br/>• Editor Typography Injection<br/>• Unicode BiDi Markers"]
+```
+
+1. **Antigravity Desktop App:** Injects the live visual customizer studio, ergonomic sidebar resizer, dynamic font sliders, and smart bidirectional text engine.
+2. **Antigravity IDE (VS Code Fork):** Automatically detects `antigravity-ide` and installs the native companion extension (`assets/antigravity-ui-1.0.0.vsix`), adding a status bar direction switch and `Ctrl+Alt+R` hotkey for code, markdown, and prompt editing.
+
+---
+
 ## ✨ Features
 
 ### 🎨 Dual-Theme UI & Styling Engine
 - **Independent Theme Tabs**: Customize user message bubbles separately for **Dark Mode** (with vibrant Neon Glow) and **Light Mode** (with elevated 3D shadow).
 - **Zero-Inversion Contrast (WCAG AAA)**: Text and labels stay crystal clear across all themes without washed-out labels or inverted colors.
-- **Granular Visual Controls**: Custom background color, text color, border width, border color, and shadow intensity presets (`None`, `Soft`, `Medium`, `Glow`).
+- **Granular Visual Controls**: Custom background color, text color, border width, border color, and shadow intensity presets (`None`, `Soft`, `3D`, `Glow`).
 - **Synchronized Chat Input**: Automatically harmonizes the active prompt input box border with your personalized bubble styling.
-- **Decoupled Architecture**: Custom UI styling stays 100% active even when the RTL engine is toggled off.
+- **Decoupled Architecture**: Custom UI styling stays 100% active even when the RTL engine is toggled off (ideal for English-only developers who only want the UI perks!).
 
-### 📐 Ergonomic Sidebar & Compact Mode (160px)
+### 📐 Ergonomic Workspace & Compact Sidebar (160px)
 - **Activity Sidebar Docking**: Integrates seamlessly right above the Settings gear icon, keeping the chat canvas clean.
 - **Fluid Mouse Resizing**: Natural, smooth mouse dragging across the calibrated 160px–420px range.
-- **Compact Sidebar (160px)**: Allows resizing down to 160px with left-pinned CSS rules that prevent text clipping.
+- **Compact Sidebar (160px)**: Allows resizing down to 160px with left-pinned CSS rules that prevent text clipping on smaller laptop screens.
 - **Click-to-Toggle**: Opens only on click and dismisses smoothly on outside click or the `Esc` key.
 
-### 📝 Smart Typography & RTL Engine
+### 📝 Smart Multilingual Typography & BiDi Engine
 - **Intelligent Auto-Direction**: Dynamically detects paragraph language, right-aligning Persian/Arabic while keeping English and code blocks LTR.
 - **Force RTL Mode**: Option to align all content to the right when full RTL layout is preferred.
 - **Built-in Vazirmatn Font**: Ships with the modern, high-legibility Vazirmatn Variable font out of the box.
@@ -82,53 +101,49 @@
 
 ---
 
-## 🚀 Installation
+## 🚀 Quick Start
 
-You don't need to clone any repositories or download files manually. Run the command for your operating system:
-
-### macOS
-Ensure [Node.js](https://nodejs.org) is installed (e.g. via Homebrew: `brew install node`). Run with `sudo` to allow patching application files:
-```bash
-sudo npx antigravity-rtl
-```
-> **macOS Users:** If you encounter a "Permission Denied" error even with `sudo`, ensure your terminal app (Terminal, iTerm2, VS Code) has **App Management** permission in `System Settings > Privacy & Security > App Management`.
-
-### Linux
-Run with `sudo` to allow patching application files:
-```bash
-sudo apt install nodejs npm # Skip if Node.js is already installed
-sudo npx antigravity-rtl
-```
+No repository cloning or manual file copying required. Simply run the command for your operating system:
 
 ### Windows
 Open **PowerShell** as **Administrator** (Right-click -> Run as Administrator), then run:
 ```powershell
-winget install OpenJS.NodeJS.LTS # Skip if Node.js is already installed
-npx antigravity-rtl
+npx antigravity-ui
+```
+*(Legacy alias `npx antigravity-rtl` is also fully supported)*
+
+### macOS
+Ensure [Node.js](https://nodejs.org) is installed (e.g. `brew install node`). Run with `sudo`:
+```bash
+sudo npx antigravity-ui
+```
+> **macOS Note:** If you encounter a "Permission Denied" error with `sudo`, ensure your terminal app has **App Management** permission in `System Settings > Privacy & Security > App Management`.
+
+### Linux
+```bash
+sudo npx antigravity-ui
 ```
 
-> [!WARNING]
-> **Antigravity Updates:** Because updating Antigravity overwrites internal application files, the patch will be reset upon each app update. Simply re-run `npx antigravity-rtl` to re-apply the patch.
+> [!TIP]
+> **Antigravity Updates:** Updating Antigravity will reset patched desktop files. Simply re-run `npx antigravity-ui` after any official app update to restore your custom studio.
 
 ---
 
-## 🔄 Restoring to Original (Uninstall)
+## 🔄 Uninstall / Restore
 
-To revert Antigravity to its pristine factory state at any time, run the command with the `--restore` flag:
+To revert Antigravity Desktop and Antigravity IDE to their factory state at any time:
 
 ```bash
-sudo npx antigravity-rtl --restore
+npx antigravity-ui --restore
 ```
-*(On Windows, run without `sudo` in an Administrator PowerShell window)*
+*(On macOS/Linux, prepend `sudo`)*
 
 ---
 
-## 🛠️ How It Works
+## 🏛️ Attribution & Credits
 
-1. **Locates Installation**: Detects your Antigravity installation path across macOS, Linux, and Windows.
-2. **Safe Backup**: Creates an untouched safety backup of the original `app.asar` archive.
-3. **Core Injection**: Safely injects the modular RTL & UI engine into client logic.
-4. **Repacks & Seals**: Repackages the application so changes take effect immediately upon launch.
+- Based on initial proof-of-concept by **Mohammad Mahdi Naderi** (`mmnaderi/antigravity-rtl`).
+- Re-engineered, decoupled, and maintained by **Omid Zaferi** (`omid-io/antigravity-ui`) as an independent full-suite UI studio with IDE integration and laptop ergonomics.
 
 ---
 
@@ -138,117 +153,74 @@ sudo npx antigravity-rtl --restore
 
 <div align="center">
 
-## اصلاح‌کنندهٔ هوشمند راست‌به‌چپ و شخصی‌ساز پیشرفتهٔ ظاهر Antigravity
+## سوئیت جامع ارتقای رابط کاربری، سایدبار ارگونومیک و پشتیبانی هوشمند فارسی در Antigravity
 
-**پشتیبانی بی‌نقص از زبان‌های راست‌به‌چپ (فارسی، عربی، عبری) و شخصی‌سازی ارگونومیک رابط کاربری در نرم‌افزار [Antigravity](https://github.com/google/antigravity)**
+**شخصی سازی پیشرفته رابط کاربری، کاهش عرض سایدبار تا ۱۶۰ پیکسل، پشتیبانی کامل از فونت وزیرمتن و هماهنگی همزمان با ادیتور کد Antigravity IDE**
 
 <br>
 
-<img src="assets/showcase-split.png" alt="نمای تم دارک و لایت پچ آنتی‌گرویتی" width="100%">
+<img src="assets/showcase-split.png" alt="نمای تم دارک و لایت پچ آنتی گرویتی" width="100%">
 
 </div>
 
 ---
 
-### 🌟 تور بصری امکانات
+### 🌟 قابلیت های کلیدی
 
-<div align="center">
-<table>
-  <tr>
-    <td align="center" width="46%" valign="top">
-      <h4>🎛️ استودیو شخصی‌سازی پیام‌ها (Dual UI)</h4>
-      <p><sub>تنظیم مستقل تم تیره و روشن با انیمیشن‌های نرم و فیزیکی</sub></p>
-      <img src="assets/tab-switch.gif" width="270" alt="سوییچ بین تب‌ها">
-    </td>
-    <td align="center" width="54%" valign="top">
-      <h4>📍 جای‌گیری در نوار کناری (سایدبار) و حالت فشرده</h4>
-      <p><sub>یکپارچه بالای دکمه تنظیمات • درگ کاملاً روان و سایدبار فشرده ۱۴۰px</sub></p>
-      <br>
-      <img src="assets/sidebar-placement.png" width="250" alt="جای‌گیری در سایدبار">
-      <br><br>
-      <div align="right">
-        <ul>
-          <li><b>میز کار خلوت:</b> ادغام مستقیم در سایدبار بدون مزاحمت آیکون‌های شناور</li>
-          <li><b>سایدبار فشرده (160px):</b> درگ آزاد موس تا ۱۶۰ پیکسل و عبور از محدودیت ۲۵۶ پیکسلی</li>
-          <li><b>بدون برش متون:</b> تراز پین‌شده به چپ برای حفظ خوانایی کامل متن‌ها</li>
-          <li><b>باز شدن با کلیک:</b> بدون هاور ناخواسته؛ بسته شدن با Esc یا کلیک بیرون</li>
-        </ul>
-      </div>
-    </td>
-  </tr>
-</table>
-</div>
+#### ۱. معماری موتور دوگانه (Desktop + IDE)
+* **اپلیکیشن دسکتاپ Antigravity:** پچ امن و خودکار فایلهای هسته، فعال سازی استودیو کاستومایزر، تنظیم اسلایدرهای فونت و پشتیبانی از سایدبار ۱۶۰ پیکسلی.
+* **ادیتور کد Antigravity IDE:** شناسایی خودکار ادیتور کد (بر پایه VS Code) و نصب افزونه اختصاصی با کلید میانبر `Ctrl+Alt+R` و دکمه تغییر جهت در نوار وضعیت (Status Bar).
+
+#### ۲. استودیو شخصی سازی پیام ها (Dual Dark/Light UI)
+* **دو تب مستقل برای دارک مود و لایت مود:** تنظیم مجزای استایل پیام ها در تم تیره (با افکت درخشش نئونی / Neon Glow) و تم روشن (با سایه برجسته سه بعدی / 3D Shadow).
+* **کنتراست استاندارد WCAG AAA:** تضمین خوانایی ۱۰۰٪ متون و لیبل ها در هر دو تم بدون هیچ گونه وارونگی یا محو شدگی.
+* **کنترل کامل المان های بصری:** شخصی سازی رنگ پس زمینه، رنگ متن، رنگ و ضخامت کادر و شدت سایه.
+* **استقلال کامل از موتور RTL:** اگر تمایلی به راست چین کردن متون نداشته باشید، می توانید موتور RTL را خاموش کرده و صرفاً از سایدبار ۱۶۰ پیکسلی و کاستومایزر ظاهر استفاده کنید.
+
+#### ۳. سایدبار ارگونومیک فشرده (Compact 160px)
+* **جای گیری شیک در سایدبار بالای Settings:** خلوت ماندن محیط کار بدون مزاحمت دکمه های شناور.
+* **درگ آزاد و روان موس بین ۱۶۰ تا ۴۲۰ پیکسل:** شکستن محدودیت ۲۵۶ پیکسلی پیش فرض نرم افزار و صرفه جویی در فضای مانیتور لپ تاپ ها.
+* **بدون بریدگی متون:** چیدمان پین شده به چپ برای حفظ خوانایی منوها حتی در عرض ۱۶۰ پیکسل.
+
+#### ۴. تایپوگرافی هوشمند و فونت وزیرمتن
+* **راست چین خودکار پاراگراف ها:** تشخیص هوشمند زبان هر پاراگراف؛ متن فارسی راست چین و کدهای انگلیسی چپ چین می مانند.
+* **فونت توکار Vazirmatn Variable:** بالاترین سطح وضوح و خوانایی بدون نیاز به نصب دستی فونت در سیستم عامل.
+* **حل مشکل کیبورد فارسی:** نگاشت خودکار کلید ترکیبی `Shift + 2` برای تایپ کاراکتر `@` به جای «٬» در چیدمان فارسی.
 
 ---
 
-### 🌟 قابلیت‌های کلیدی
+### 🚀 نحوه نصب و اجرا
 
-#### ۱. استودیو شخصی‌سازی پیام‌ها (Dual Dark/Light UI)
-- **دو تب کاملاً مستقل برای دارک‌مود و لایت‌مود**: تنظیم مجزای استایل پیام‌های کاربر در تم تیره (با افکت درخشش نئونی / Neon Glow) و تم روشن (با سایه برجسته سه‌بعدی / Elevated 3D Shadow) متناسب با نور محیط.
-- **کنتراست استاندارد WCAG AAA**: تضمین خوانایی ۱۰۰٪ متون و لیبل‌ها در هر دو تم بدون هیچ‌گونه وارونگی ناخواسته یا محو شدن متن‌ها.
-- **کنترل کامل المان‌های بصری**: شخصی‌سازی رنگ پس‌زمینه، رنگ متن، رنگ و ضخامت کادر (Border) و شدت سایه (`None`، `Soft`، `Medium`، `Glow`).
-- **همگام‌سازی کادر ورودی چت**: هماهنگی خودکار استایل و بوردر کادر ورودی پیام‌ها (Chat Input Box) با حباب پیام کاربر.
-- **استقلال کامل از موتور RTL**: استایل‌های ظاهری در تگ اختصاصی تفکیک شده و حتی در صورت خاموش کردن موتور RTL کاملاً فعال و دست‌نخورده باقی می‌مانند.
+ترمینال سیستم عامل خود را باز کرده و دستور زیر را اجرا نمایید:
 
-#### ۲. یکپارچگی ارگونومیک با سایدبار و حالت فشرده (Compact 160px)
-- **جای‌گیری شیک در سایدبار بالای Settings**: دکمه تنظیمات مستقیماً در سایدبار اصلی و در بالای آیکون Settings قرار می‌گیرد تا میز کار همیشه خلوت بماند (همراه با قابلیت بازگشت به آیکون شناور).
-- **درگ کاملاً روان و طبیعی موس**: احیای درگ آزاد و نرم موس بین ۱۶۰ تا ۴۲۰ پیکسل بدون تداخل و پرش.
-- **سایدبار فشرده (Compact 160px)**: امکان کوچک کردن سایدبار تا ۱۶۰ پیکسل (فراتر از محدودیت پیش‌فرض ۲۵۶ پیکسلی نرم‌افزار) همراه با تراز پین‌شده به چپ جهت رفع کامل باگ بریده شدن متون.
-- **باز شدن با کلیک (Click-to-Toggle)**: حذف باز شدن‌های ناخواسته هنگام عبور موس؛ پنل صرفاً با کلیک باز شده و با کلیک بیرون یا کلید `Esc` بسته می‌شود.
-
-#### ۳. موتور هوشمند RTL و تایپوگرافی
-- **راست‌چین خودکار پاراگراف‌ها (Smart Auto-Direction)**: تشخیص هوشمند زبان هر پاراگراف؛ متون فارسی راست‌چین و تکه‌های کد یا انگلیسی چپ‌چین و تراز باقی می‌مانند.
-- **حالت راست‌چین اجباری (Force RTL)**: هدایت کلیه پیام‌ها به سمت راست تنها با فشردن یک کلید.
-- **فونت وزیرمتن توکار**: گنجانده شدن فونت استاندارد و زیبای Vazirmatn Variable برای بالاترین سطح خوانایی.
-- **تفکیک فونت‌ها**: امکان تعیین فونت اختصاصی و جداگانه برای متون فارسی، انگلیسی و بلاک‌های کد.
-- **اسلایدرهای دقیق تایپوگرافی**: تنظیم فاصله خطوط (Line Height) و اندازه قلم (Font Size) پیام‌های چت به صورت زنده.
-- **حل مشکل کیبورد فارسی**: نگاشت خودکار کلید ترکیبی `Shift + 2` برای تایپ کاراکتر `@` به جای «٬» در چیدمان فارسی.
-- **محافظ ضد صفحه سفید استارت‌آپ**: اجرای ایزوله و امن در قالب IIFE با لودینگ منعطف در چرخه حیات کلاینت.
-
----
-
-### 💻 آموزش نصب و استفاده
-
-بدون نیاز به دانلود فایل یا کلون کردن مخزن، دستور متناسب با سیستم‌عامل خود را در ترمینال اجرا کنید:
+#### در ویندوز (Windows)
+برنامه **PowerShell** را با راست کلیک و انتخاب **Run as Administrator** اجرا کرده و دستور زیر را بزنید:
+```powershell
+npx antigravity-ui
+```
 
 #### در مک (macOS)
-مطمئن شوید [Node.js](https://nodejs.org) روی سیستم نصب است (مثلاً با دستور `brew install node`). سپس دستور زیر را با `sudo` اجرا نمایید:
 ```bash
-sudo npx antigravity-rtl
+sudo npx antigravity-ui
 ```
-> **کاربران مک:** در صورت مواجهه با خطای عدم دسترسی حتی با وجود `sudo`، دسترسی **App Management** را در مسیر `System Settings > Privacy & Security > App Management` برای نرم‌افزار ترمینال خود فعال کنید.
 
-#### در لینوکس
+#### در لینوکس (Linux)
 ```bash
-sudo apt install nodejs npm # در صورت نصب بودن نود جی‌اس این خط را رد کنید
-sudo npx antigravity-rtl
+sudo npx antigravity-ui
 ```
-
-#### در ویندوز
-برنامه **PowerShell** را در حالت **Administrator** (راست‌کلیک -> Run as Administrator) باز کرده و دستور زیر را اجرا کنید:
-```powershell
-winget install OpenJS.NodeJS.LTS # در صورت نصب بودن نود جی‌اس این خط را رد کنید
-npx antigravity-rtl
-```
-
-> [!WARNING]
-> **به‌روزرسانی نرم‌افزار:** از آنجا که آپدیت‌های Antigravity فایل‌های داخلی برنامه را بازنویسی می‌کنند، پچ با هر بار آپدیت نرم‌افزار ریست می‌شود. پس از هر آپدیت کافیست دستور `npx antigravity-rtl` را مجدداً اجرا کنید.
 
 ---
 
 ### 🔄 بازگردانی به حالت اولیه کارخانه (Uninstall)
 
-برای برگرداندن Antigravity به وضعیت دست‌نخورده قبل از پچ، از فلگ `--restore` استفاده کنید:
-
-```bash
-sudo npx antigravity-rtl --restore
+جهت بازگردانی سریع کلیه تغییرات Desktop و افزونه IDE به وضعیت پیش فرض:
+```powershell
+npx antigravity-ui --restore
 ```
-*(در ویندوز دستور فوق را بدون `sudo` در ترمینال ادمین اجرا کنید)*
 
 ---
 
-### 🤝 مشارکت در توسعه (Contributing)
-
-با کمال میل از نظرات، پیشنهادات، گزارش باگ‌ها و ارسال Pull Request استقبال می‌شود.
+### 📄 لایسنس و حقوق توسعه
+این پروژه تحت مجوز متن باز **MIT** منتشر شده و توسط **امید زعفری** توسعه یافته است.
 
 </div>

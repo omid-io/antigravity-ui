@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import picocolors from 'picocolors';
 import ora from 'ora';
 import prompts from 'prompts';
@@ -18,7 +19,7 @@ const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 
 function printBanner() {
     try {
-        const fullArt = figlet.textSync('Antigravity RTL', { font: 'RubiFont' }).split('\n');
+        const fullArt = figlet.textSync('Antigravity UI', { font: 'RubiFont' }).split('\n');
 
         // Hex colors for the multi-color gradient
         const hexColors = [
@@ -73,10 +74,9 @@ function printBanner() {
             console.log(applyGradient(line));
         }
         console.log('');
-        console.log(`\x1b[2m  RTL & UI Patcher for Antigravity | v${pkg.version}\x1b[0m\n`);
+        console.log(`\x1b[2m  The Complete UI & BiDi Studio for Antigravity | v${pkg.version}\x1b[0m\n`);
     } catch (err) {
-        // Fallback banner in case figlet has issues loading
-        console.log(bold(cyan(`\n✨ Antigravity Smart RTL Patcher v${pkg.version}\n`)));
+        console.log(bold(cyan(`\n✨ Antigravity UI Studio v${pkg.version}\n`)));
     }
 }
 
@@ -95,12 +95,12 @@ function getDefaultPath() {
 async function getAsarPath() {
     let asarPath = getDefaultPath();
     if (fs.existsSync(asarPath)) {
-        console.log(blue(`ℹ Found Antigravity installation at:`));
+        console.log(blue(`ℹ Found Antigravity Desktop installation at:`));
         console.log(`  ${asarPath}\n`);
         return asarPath;
     }
 
-    console.log(yellow(`⚠ Could not find Antigravity at default location.`));
+    console.log(yellow(`⚠ Could not find Antigravity Desktop at default location.`));
     const response = await prompts({
         type: 'text',
         name: 'customPath',
@@ -112,6 +112,56 @@ async function getAsarPath() {
         process.exit(1);
     }
     return response.customPath;
+}
+
+function getAntigravityIdeBinPath() {
+    let candidate = '';
+    if (os.platform() === 'win32') {
+        candidate = path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Antigravity IDE', 'bin', 'antigravity-ide.cmd');
+    } else if (os.platform() === 'darwin') {
+        candidate = '/Applications/Antigravity IDE.app/Contents/Resources/app/bin/antigravity-ide';
+    } else {
+        candidate = '/usr/bin/antigravity-ide';
+    }
+    if (candidate && fs.existsSync(candidate)) {
+        return candidate;
+    }
+    try {
+        const cmd = os.platform() === 'win32' ? 'where antigravity-ide' : 'which antigravity-ide';
+        const result = execSync(cmd, { stdio: ['pipe', 'pipe', 'ignore'], encoding: 'utf8' }).trim().split('\n')[0].trim();
+        if (result && fs.existsSync(result)) {
+            return result;
+        }
+    } catch (e) {}
+    return null;
+}
+
+function handleIdeExtension(isRestore = false) {
+    const ideBin = getAntigravityIdeBinPath();
+    if (!ideBin) {
+        return;
+    }
+
+    const vsixPath = path.join(__dirname, '..', 'assets', 'antigravity-ui-1.0.0.vsix');
+    if (isRestore) {
+        try {
+            execSync(`"${ideBin}" --uninstall-extension omid-io.antigravity-ui`, { stdio: 'ignore' });
+            console.log(green('✔ Successfully removed Antigravity UI extension from Antigravity IDE.\n'));
+        } catch (e) {}
+        return;
+    }
+
+    if (!fs.existsSync(vsixPath)) {
+        return;
+    }
+
+    const spinner = ora('Detecting Antigravity IDE and configuring editor extension...').start();
+    try {
+        execSync(`"${ideBin}" --install-extension "${vsixPath}" --force`, { stdio: 'ignore' });
+        spinner.succeed('Successfully configured Antigravity UI extension for Antigravity IDE!\n');
+    } catch (e) {
+        spinner.warn('Antigravity IDE was detected, but extension installation was skipped: ' + e.message);
+    }
 }
 
 const args = process.argv.slice(2);
@@ -129,7 +179,8 @@ async function main() {
         const spinner = ora('Restoring original app.asar...').start();
         try {
             fs.copyFileSync(backupPath, asarPath);
-            spinner.succeed('Successfully restored original Antigravity!\n');
+            spinner.succeed('Successfully restored original Antigravity Desktop!');
+            handleIdeExtension(true);
             process.exit(0);
         } catch (e) {
             spinner.fail('Failed to restore.');
@@ -160,7 +211,7 @@ async function main() {
         process.exit(1);
     }
     
-    const extractDir = path.join(path.dirname(asarPath), 'app-extracted-rtl-temp');
+    const extractDir = path.join(path.dirname(asarPath), 'app-extracted-ui-temp');
     spinner.text = 'Extracting app.asar (this may take a few seconds)...';
     try {
         if (fs.existsSync(extractDir)) {
@@ -173,7 +224,7 @@ async function main() {
         process.exit(1);
     }
 
-    spinner.text = 'Injecting RTL features...';
+    spinner.text = 'Injecting Antigravity UI Studio features...';
     try {
         const utilsPath = path.join(extractDir, 'dist', 'utils.js');
         if (!fs.existsSync(utilsPath)) {
@@ -182,14 +233,16 @@ async function main() {
 
         let utilsCode = fs.readFileSync(utilsPath, 'utf8');
         
-        if (utilsCode.includes('/* ANTIGRAVITY RTL PATCH */')) {
+        const isPatched = utilsCode.includes('/* ANTIGRAVITY UI PATCH */') || utilsCode.includes('/* ANTIGRAVITY RTL PATCH */');
+        if (isPatched) {
             if (fs.existsSync(backupPath)) {
-                spinner.text = 'Updating existing RTL patch to latest version...';
+                spinner.text = 'Updating existing UI patch to latest version...';
                 utilsCode = asar.extractFile(backupPath, 'dist/utils.js').toString('utf8');
             } else {
-                spinner.succeed('Antigravity is already patched!');
+                spinner.succeed('Antigravity Desktop is already patched with UI Studio!');
                 fs.rmSync(extractDir, { recursive: true, force: true });
-                console.log(green('\n✨ Enjoy your RTL experience!\n'));
+                handleIdeExtension(false);
+                console.log(green('\n✨ Enjoy your Antigravity UI Studio experience!\n'));
                 process.exit(0);
             }
         }
@@ -224,8 +277,9 @@ async function main() {
     try {
         await asar.createPackage(extractDir, asarPath);
         fs.rmSync(extractDir, { recursive: true, force: true });
-        spinner.succeed('Successfully patched Antigravity!');
-        console.log(green('\n✨ RTL Features have been enabled. Please restart Antigravity to see the changes.\n'));
+        spinner.succeed('Successfully patched Antigravity Desktop!');
+        handleIdeExtension(false);
+        console.log(green('\n✨ Antigravity UI Studio is fully enabled. Please restart Antigravity to see the changes.\n'));
     } catch (e) {
         spinner.fail('Failed to repack ASAR.');
         console.error(red(e.message));
