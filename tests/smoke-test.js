@@ -10,13 +10,20 @@ import {
     restoreBackup,
     applyPayloadToCode
 } from '../lib/patcher.js';
+import {
+    isNewerVersion,
+    stripAnsi,
+    renderUpdateBox,
+    writeCache,
+    readCache
+} from '../lib/updater.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const testDir = path.join(rootDir, 'temp-smoke-test');
 
-console.log('🧪 Starting Antigravity UI Real Pipeline Smoke Test (v2.0.4)...');
+console.log('🧪 Starting Antigravity UI Real Pipeline Smoke Test (v2.0.6)...');
 
 try {
     // 1. Setup temporary sandbox
@@ -129,9 +136,32 @@ module.exports = { setupWindow };
     }
     console.log('  ✔ Verified restore passed: Bit-for-bit SHA-256 match, patch removed.');
 
-    // 10. Cleanup
+    // 10. Test Updater Module SemVer & Box Rendering
+    if (!isNewerVersion('2.0.4', '2.0.5')) throw new Error('isNewerVersion failed on patch upgrade');
+    if (!isNewerVersion('2.0.4', '2.1.0')) throw new Error('isNewerVersion failed on minor upgrade');
+    if (!isNewerVersion('2.0.4', '3.0.0')) throw new Error('isNewerVersion failed on major upgrade');
+    if (isNewerVersion('2.0.4', '2.0.4')) throw new Error('isNewerVersion should be false for equal versions');
+    if (isNewerVersion('2.0.5', '2.0.4')) throw new Error('isNewerVersion should be false for older versions');
+
+    const cleanStr = stripAnsi('\x1b[31mHello\x1b[0m \x1b[32mWorld\x1b[0m');
+    if (cleanStr !== 'Hello World') throw new Error(`stripAnsi failed. Received: "${cleanStr}"`);
+
+    const box = renderUpdateBox('2.0.4', '2.0.5');
+    if (!box.includes('2.0.4') || !box.includes('2.0.5') || !box.includes('antigravity-ui update')) {
+        throw new Error('renderUpdateBox output missing expected content');
+    }
+
+    const testCachePath = path.join(testDir, 'test-cache.json');
+    writeCache('2.0.6', testCachePath);
+    const cachedData = readCache(testCachePath);
+    if (!cachedData || cachedData.latestVersion !== '2.0.6' || typeof cachedData.lastCheck !== 'number') {
+        throw new Error('readCache failed to retrieve correctly formatted cache data');
+    }
+    console.log('  ✔ Updater SemVer comparison, ANSI stripper, 24h cache persistence, and notification box verified.');
+
+    // 11. Cleanup
     fs.rmSync(testDir, { recursive: true, force: true });
-    console.log('✨ All 9 real pipeline stages PASSED successfully!\n');
+    console.log('✨ All 10 real pipeline stages PASSED successfully!\n');
 
 } catch (err) {
     if (fs.existsSync(testDir)) {

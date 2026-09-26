@@ -37,8 +37,6 @@ win.webContents.on('dom-ready', () => {
             isRTL: true,
             forceRTL: false,
             fixAtSign: true,
-            placement: 'sidebar',
-            floatingBottom: 24,
             sidebarWidth: 256,
             compactSidebar: true,
             userMsgEnabled: true,
@@ -104,8 +102,6 @@ win.webContents.on('dom-ready', () => {
             let isRTL = rtlConfig.isRTL !== false;
             let forceRTL = rtlConfig.forceRTL || false;
             let fixAtSign = rtlConfig.fixAtSign !== false;
-            let placement = rtlConfig.placement || 'sidebar';
-            let floatingBottom = parseInt(rtlConfig.floatingBottom) || 24;
             let sidebarWidth = parseInt(rtlConfig.sidebarWidth) || 256;
             let compactSidebar = rtlConfig.compactSidebar !== false;
             let userMsgEnabled = rtlConfig.userMsgEnabled !== false;
@@ -1467,7 +1463,6 @@ win.webContents.on('dom-ready', () => {
                     isRTL: isRTL,
                     forceRTL: forceRTL,
                     fixAtSign: fixAtSign,
-                    placement: 'sidebar',
                     sidebarWidth: sidebarWidth,
                     compactSidebar: compactSidebar,
                     userMsgEnabled: userMsgEnabled,

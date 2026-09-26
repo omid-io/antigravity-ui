@@ -153,13 +153,16 @@ sudo npx antigravity-ui
 sudo npx antigravity-ui
 ```
 
-### CLI Flags
+### CLI Commands & Flags
+- `update` or `--update`: Check the npm registry for new versions, automatically upgrade via npm, and synchronize desktop and IDE patches.
 - `--restore`: Revert Antigravity Desktop and IDE to their factory state after verifying SHA-256 backup integrity.
 - `--force`: (Optional) Force restore even if metadata is missing or hash mismatch is detected.
 - `--devtools`: (Optional) Enable Chromium DevTools in the packaged desktop app for custom DOM debugging.
 
 > [!TIP]
-> **Antigravity Updates:** Updating Antigravity will reset patched desktop files. Simply re-run `npx antigravity-ui` after any official app update to restore your custom studio. The patcher will automatically refresh its pristine backup to the new version.
+> **Automatic Update Notifications:** The CLI automatically checks the official npm registry in the background during normal runs and alerts you with a clean update box if a newer release is published.
+>
+> **Antigravity Upstream Updates:** Updating Antigravity Desktop will reset patched files. Simply re-run `npx antigravity-ui` (or `antigravity-ui update`) after any official app update to restore your custom studio. The patcher will automatically refresh its pristine backup to the new version.
 
 ---
 
@@ -167,7 +170,7 @@ sudo npx antigravity-ui
 
 Because Antigravity UI interacts with application packaging files, we hold transparency and data safety to the highest standard:
 
-- 🔒 **Zero Telemetry or External Requests During Patching:** After package download via npx, the patcher performs all operations entirely locally on your machine and never transmits code, chats, credentials, or telemetry to external servers.
+- 🔒 **Zero Telemetry or Data Exfiltration:** The patcher never transmits code, chats, credentials, or workspace data to any server. A lightweight 24-hour cached version check queries only the official public npm registry for release updates with an ultra-fast non-blocking timeout.
 - 🛡️ **Version-Aware Safety Backup & SHA-256 Verification:** Automatically preserves an untouched backup (`app.asar.bak`) with full 64-character SHA-256 checksum and metadata (`app.asar.meta.json`) whenever a fresh official Google release is detected before patching. During `--restore`, the patcher calculates the backup hash and blocks the operation if any corruption or tampering is detected.
 - 💡 **Legacy Backup Semantics:** For backups created by older releases prior to metadata introduction, the restore command executes under a safe, unverified fallback without blocking your workflow, whereas all backups created by modern releases enforce strict cryptographic integrity.
 - ⚡ **One-Command Full Revert:** Run `npx antigravity-ui --restore` at any moment to cleanly return desktop files and the IDE extension to 100% factory state (overrideable with `--force` if needed).

@@ -17,6 +17,13 @@ import {
     restoreBackup,
     applyPayloadToCode
 } from '../lib/patcher.js';
+import {
+    checkForUpdate,
+    renderUpdateBox,
+    executeNpmUpgrade,
+    fetchLatestVersion,
+    isNewerVersion
+} from '../lib/updater.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -176,8 +183,39 @@ const args = process.argv.slice(2);
 const isRestore = args.includes('--restore');
 const enableDevTools = args.includes('--devtools');
 const isForce = args.includes('--force');
+const isUpdate = args.includes('update') || args.includes('--update');
 
 async function main() {
+    if (isUpdate) {
+        const updateSpinner = ora(`Checking for updates on npm registry for ${pkg.name}...`).start();
+        const latest = await fetchLatestVersion(pkg.name, 5000);
+
+        if (!latest) {
+            updateSpinner.fail('Could not reach npm registry. Please check your internet connection.');
+            process.exit(1);
+        }
+
+        if (!isNewerVersion(pkg.version, latest)) {
+            updateSpinner.succeed(`You are already running the latest version of ${pkg.name} (v${pkg.version}).`);
+            console.log(cyan('\nRe-applying patch to ensure Antigravity Desktop and IDE are synchronized...\n'));
+        } else {
+            updateSpinner.text = `Found update: v${pkg.version} → v${latest}. Downloading and upgrading via npm...`;
+            const upgradeResult = executeNpmUpgrade(pkg.name);
+            if (!upgradeResult.success) {
+                updateSpinner.fail(`Failed to upgrade ${pkg.name} automatically.`);
+                console.error(red(`\nError: ${upgradeResult.error}`));
+                console.log(yellow(`\nPlease run manually:\n  npm install -g ${pkg.name}@latest\n`));
+                process.exit(1);
+            }
+            updateSpinner.succeed(bold(green(`Successfully upgraded ${pkg.name} to v${latest}!`)));
+            console.log(cyan('\nApplying updated UI Studio patch to Antigravity Desktop and IDE...\n'));
+        }
+    }
+
+    const updateCheckPromise = (!isRestore && !isUpdate)
+        ? checkForUpdate(pkg.version, pkg.name, { useCache: true, timeoutMs: 1200 })
+        : Promise.resolve(null);
+
     const asarPath = await getAsarPath();
     const backupPath = asarPath + '.bak';
     
@@ -292,6 +330,11 @@ async function main() {
         spinner.succeed('Successfully patched Antigravity Desktop!');
         handleIdeExtension(false);
         console.log(green('\n✨ Antigravity UI Studio is fully enabled. Please restart Antigravity to see the changes.\n'));
+
+        const updateInfo = await updateCheckPromise.catch(() => null);
+        if (updateInfo && updateInfo.hasUpdate) {
+            console.log(renderUpdateBox(pkg.version, updateInfo.latestVersion));
+        }
     } catch (e) {
         spinner.fail('Failed to repack ASAR.');
         console.error(red(e.message));
