@@ -4,6 +4,7 @@ import path from 'path';
 import os from 'os';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
+import crypto from 'crypto';
 import picocolors from 'picocolors';
 import ora from 'ora';
 import prompts from 'prompts';
@@ -243,10 +244,12 @@ async function main() {
             spinner.text = 'Creating pristine backup of current Antigravity version...';
             fs.copyFileSync(asarPath, backupPath);
             try {
+                const asarSha256 = crypto.createHash('sha256').update(fs.readFileSync(asarPath)).digest('hex').substring(0, 16);
                 fs.writeFileSync(metaPath, JSON.stringify({
                     pluginVersion: pkg.version,
                     backedUpAt: new Date().toISOString(),
-                    asarSize: fs.statSync(asarPath).size
+                    asarSize: fs.statSync(asarPath).size,
+                    asarSha256: asarSha256
                 }, null, 2));
             } catch (e) {}
         } else {

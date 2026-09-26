@@ -5,14 +5,14 @@
 **The complete UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![npm version](https://img.shields.io/badge/npm-v2.0.2-cb3837.svg)](https://www.npmjs.com/package/antigravity-ui)
+[![npm version](https://img.shields.io/badge/npm-v2.0.3-cb3837.svg)](https://www.npmjs.com/package/antigravity-ui)
 [![Latest Release](https://img.shields.io/github/v/release/omid-io/antigravity-ui?color=blue&label=release)](https://github.com/omid-io/antigravity-ui/releases/latest)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](https://github.com/google/antigravity)
 
 <p>
   <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.2)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.3)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
   <a href="#-visual-tour">Visual Tour</a> •
@@ -93,11 +93,13 @@ flowchart LR
 
 Antigravity UI Studio is version-aware and continuously validated against upstream Google releases:
 
-| Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture Notes |
+| Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :---: | :--- |
-| **2.x.x** (Current / 2026) | `1.107.0+` (Code-OSS) | `v2.0.2` | 🟢 **Verified** | Primary focus. Full 160px sidebar + VSIX auto-installer |
-| **1.x.x** (Legacy) | `1.x` | `v2.0.2` | 🟡 **Compatible** | Standard Electron Asar patcher with anchor fallback |
-| **Cross-Platform** | Windows, macOS, Linux | `v2.0.2` | 🟢 **Verified** | Automated OS path detection & version-aware backup |
+| **Antigravity 2.17.x** (Latest) | `1.107.0+` (Code-OSS) | `v2.0.3` | 🟢 **Verified & Tested** | Full 160px sidebar + VSIX auto-installer |
+| **Antigravity 2.16.x** | `1.107.0+` | `v2.0.3` | 🟢 **Verified & Tested** | Injected via `void win.loadURL(url);` anchor |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v2.0.3` | 🟡 **Compatible** | Expected to work; standard Electron Asar structure |
+| **Antigravity 1.x** (Legacy) | `1.x` | `v2.0.3` | 🟡 **Legacy Compatible** | Basic Asar patch fallback |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v2.0.3` | 🟢 **Verified & Tested** | Automated OS path detection & SHA-256 backup metadata |
 
 ---
 
@@ -164,7 +166,7 @@ sudo npx antigravity-ui
 Because Antigravity UI interacts with application packaging files, we hold transparency and data safety to the highest standard:
 
 - 🔒 **Zero Telemetry or External Requests During Patching:** After package download via npx, the patcher performs all operations entirely locally on your machine and never transmits code, chats, credentials, or telemetry to external servers.
-- 🛡️ **Version-Aware Safety Backup:** Automatically preserves an untouched backup (`app.asar.bak` + metadata) whenever a fresh official Google release is detected before patching.
+- 🛡️ **Version-Aware Safety Backup:** Automatically preserves an untouched backup (`app.asar.bak`) with SHA-256 checksum and metadata (`app.asar.meta.json`) whenever a fresh official Google release is detected before patching.
 - ⚡ **One-Command Full Revert:** Run `npx antigravity-ui --restore` at any moment to cleanly return desktop files and the IDE extension to 100% factory state.
 - 🎯 **Transparent Modifications:** Applies localized UI/DOM styling, font injection, and workspace ergonomics to the packaged desktop app and companion IDE extension; never reads, stores, or alters your API keys, credentials, or workspace projects.
 - 🛠️ **Opt-In DevTools:** Chromium DevTools inspection is disabled by default and only unlocked if you explicitly pass the `--devtools` flag.
@@ -222,9 +224,11 @@ npx antigravity-ui --restore
 
 | نسخه Antigravity | ادیتور Antigravity IDE | نسخه Antigravity UI | وضعیت | توضیحات فنی |
 | :--- | :--- | :--- | :---: | :--- |
-| **نسخه های 2.x.x (فعلی)** | `1.107.0` به بالا | `v2.0.2` | 🟢 **پشتیبانی کامل** | هسته اصلی • سایدبار ۱۶۰px و نصب خودکار VSIX |
-| **نسخه های 1.x.x** | سری 1.x | `v2.0.2` | 🟡 **سازگار** | پچ استاندارد Asar با انکر لودینگ |
-| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.2` | 🟢 **تست شده** | تشخیص خودکار مسیر اجرایی و بدون وابستگی |
+| **نسخه های 2.17.x (جدیدترین)** | `1.107.0` به بالا | `v2.0.3` | 🟢 **تست شده و فعال** | سایدبار ۱۶۰px و نصب خودکار VSIX |
+| **نسخه های 2.16.x** | سری 1.107.x | `v2.0.3` | 🟢 **تست شده و فعال** | تزریق استاندارد با انکر لودینگ |
+| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v2.0.3` | 🟡 **سازگار** | ساختار سازگار Asar و هسته الکترون |
+| **نسخه های 1.x** | سری 1.x | `v2.0.3` | 🟡 **سازگار قبلی** | پچ پایه با قابلیت بازگردانی |
+| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.3` | 🟢 **تست شده** | تشخیص خودکار مسیر اجرایی و متادیتای SHA-256 |
 
 ---
 
@@ -255,7 +259,7 @@ npx antigravity-ui --restore
 ### 🛡️ تضمین های امنیتی و حفظ حریم خصوصی
 
 - 🔒 **عدم ارسال تله متری حین پچ:** پس از دریافت پکیج از طریق npx، کلیه عملیات پچ کاملاً به صورت محلی روی دستگاه شما انجام شده و هیچ گونه کد، چت یا تله متری به سرور خارجی ارسال نمی شود.
-- 🛡️ **بکاپ هوشمند آگاه از نسخه:** ایجاد خودکار نسخه پشتیبان دست نخورده (`app.asar.bak`) و متادیتا با هر بار به روزرسانی رسمی نرم افزار توسط گوگل.
+- 🛡️ **بکاپ هوشمند آگاه از نسخه:** ایجاد خودکار نسخه پشتیبان دست نخورده (`app.asar.bak`) با ثبت اثر انگشت SHA-256 و متادیتا با هر بار به روزرسانی رسمی نرم افزار توسط گوگل.
 - ⚡ **بازگردانی ۱۰۰٪ با یک دستور:** قابلیت بازگشت کامل به حالت کارخانه در هر لحظه با اجرای `npx antigravity-ui --restore`.
 - 🎯 **تغییرات شفاف و بدون مداخله در اسرار:** صرفاً استایل های فرانت اند، فونت وزیرمتن و ارگونومی سایدبار اعمال شده و ابزار هیچ گونه دسترسی یا تغییری در کلیدهای API، توکن ها و سورس کدهای شما ندارد.
 - 🛠️ **حفظ امنیت:** ابزار DevTools به صورت پیش فرض خاموش است و صرفاً در صورت ارسال فلگ اختیاری `--devtools` برای برنامه نویسان فعال می شود.
