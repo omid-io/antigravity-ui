@@ -1,0 +1,65 @@
+{
+  "name": "antigravity-ui",
+  "displayName": "Antigravity UI — IDE BiDi & Typography Suite",
+  "description": "Smart RTL, Vazirmatn typography, and workspace ergonomics for Antigravity IDE (Chat, Agent, Plan, and Markdown)",
+  "version": "1.0.0",
+  "publisher": "omid-io",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other",
+    "Formatters"
+  ],
+  "keywords": [
+    "antigravity",
+    "antigravity-ui",
+    "rtl",
+    "persian",
+    "arabic",
+    "vazirmatn",
+    "bidi"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "markdown.previewStyles": [
+      "./resources/markdown-preview-rtl.css"
+    ],
+    "commands": [
+      {
+        "command": "antigravity-ui.toggleRtl",
+        "title": "Antigravity UI: Toggle RTL (فعال / غیرفعال)",
+        "category": "Antigravity UI"
+      },
+      {
+        "command": "antigravity-ui.enable",
+        "title": "Antigravity UI: Enable RTL & Typography",
+        "category": "Antigravity UI"
+      },
+      {
+        "command": "antigravity-ui.disable",
+        "title": "Antigravity UI: Disable RTL",
+        "category": "Antigravity UI"
+      },
+      {
+        "command": "antigravity-ui.setupTypography",
+        "title": "Antigravity UI: Configure Editor Typography",
+        "category": "Antigravity UI"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "antigravity-ui.toggleRtl",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:uninstall": "node uninstall.js"
+  }
+}

@@ -1,0 +1,32 @@
+/* Antigravity UI — Markdown Preview Typography & RTL */
+body {
+	font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+th {
+	text-align: start;
+}
+
+blockquote[dir="rtl"] {
+	padding: 0 10px 0 16px;
+	border-left-width: 0;
+	border-right-width: 5px;
+	border-right-style: solid;
+	border-radius: 2px;
+}
+
+table[dir="rtl"] {
+	margin-left: auto;
+}
+
+pre,
+pre code {
+	direction: ltr !important;
+	text-align: left !important;
+	font-family: 'Cascadia Code', Consolas, 'Courier New', monospace !important;
+}
+
+[dir="rtl"] code {
+	direction: ltr !important;
+	unicode-bidi: isolate !important;
+}
