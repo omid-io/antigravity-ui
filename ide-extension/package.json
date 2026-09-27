@@ -2,7 +2,7 @@
   "name": "antigravity-rtl",
   "displayName": "Antigravity RTL",
   "description": "Smart RTL, Vazirmatn typography, and workspace ergonomics for Antigravity IDE (Chat, Agent, Plan, and Markdown)",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "omid-io",
   "license": "MIT",
   "icon": "resources/icon.png",
