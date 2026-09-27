@@ -29,6 +29,7 @@ const contentTypesXml = `<?xml version="1.0" encoding="utf-8"?>
   <Default Extension="js" ContentType="application/javascript"/>
   <Default Extension="cjs" ContentType="application/javascript"/>
   <Default Extension="css" ContentType="text/css"/>
+  <Default Extension="png" ContentType="image/png"/>
 </Types>`;
 fs.writeFileSync(path.join(stagingDir, '[Content_Types].xml'), contentTypesXml, 'utf8');
 
@@ -40,6 +41,7 @@ const vsixManifest = `<?xml version="1.0" encoding="utf-8"?>
     <DisplayName>Antigravity UI — IDE BiDi &amp; Typography Suite</DisplayName>
     <Description>Right-to-Left (RTL/BiDi) support, Vazirmatn typography, and ergonomics for Antigravity IDE</Description>
     <Categories>Other,Formatters</Categories>
+    <Icon>extension/resources/icon.png</Icon>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Code"/>
@@ -48,6 +50,7 @@ const vsixManifest = `<?xml version="1.0" encoding="utf-8"?>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.Code.Manifest" Path="extension/package.json" Addressable="true"/>
     <Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/README.md" Addressable="true"/>
+    <Asset Type="Microsoft.VisualStudio.Services.Icons.Default" Path="extension/resources/icon.png" Addressable="true"/>
   </Assets>
 </PackageManifest>`;
 fs.writeFileSync(path.join(stagingDir, 'extension.vsixmanifest'), vsixManifest, 'utf8');
