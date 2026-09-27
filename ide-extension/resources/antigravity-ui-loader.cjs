@@ -7,7 +7,7 @@
     var homeDir = os.homedir();
     var LOG_FILE = path.join(homeDir, "antigravity-ui.log");
     var LOADER_VERSION = "2.0.0";
-    var EXT_DIR_RE = /^(?:omid-io\.)?antigravity-ui(?:-(\d+)\.(\d+)\.(\d+))?/;
+    var EXT_DIR_RE = /^(?:omid-io\.)?(?:antigravity-rtl|antigravity-ui)(?:-(\d+)\.(\d+)\.(\d+))?/;
 
     function log() {
         var args = Array.prototype.slice.call(arguments);

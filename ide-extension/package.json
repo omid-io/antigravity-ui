@@ -1,6 +1,6 @@
 {
-  "name": "antigravity-ui",
-  "displayName": "Antigravity UI — IDE BiDi & Typography Suite",
+  "name": "antigravity-rtl",
+  "displayName": "Antigravity RTL",
   "description": "Smart RTL, Vazirmatn typography, and workspace ergonomics for Antigravity IDE (Chat, Agent, Plan, and Markdown)",
   "version": "1.0.0",
   "publisher": "omid-io",

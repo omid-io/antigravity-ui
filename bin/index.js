@@ -158,14 +158,18 @@ function handleIdeExtension(isRestore = false) {
         return;
     }
 
-    const vsixPath = path.join(__dirname, '..', 'assets', 'antigravity-ui-1.0.0.vsix');
     if (isRestore) {
         try {
+            execSync(`"${ideBin}" --uninstall-extension omid-io.antigravity-rtl`, { stdio: 'ignore' });
             execSync(`"${ideBin}" --uninstall-extension omid-io.antigravity-ui`, { stdio: 'ignore' });
-            console.log(green('✔ Successfully removed Antigravity UI extension from Antigravity IDE.\n'));
+            console.log(green('✔ Successfully removed Antigravity RTL extension from Antigravity IDE.\n'));
         } catch (e) {}
         return;
     }
+
+    const rtlVsixPath = path.join(__dirname, '..', 'assets', 'antigravity-rtl-1.0.0.vsix');
+    const uiVsixPath = path.join(__dirname, '..', 'assets', 'antigravity-ui-1.0.0.vsix');
+    const vsixPath = fs.existsSync(rtlVsixPath) ? rtlVsixPath : uiVsixPath;
 
     if (!fs.existsSync(vsixPath)) {
         return;
@@ -174,7 +178,7 @@ function handleIdeExtension(isRestore = false) {
     const spinner = ora('Detecting Antigravity IDE and configuring editor extension...').start();
     try {
         execSync(`"${ideBin}" --install-extension "${vsixPath}" --force`, { stdio: 'ignore' });
-        spinner.succeed('Successfully configured Antigravity UI extension for Antigravity IDE!\n');
+        spinner.succeed('Successfully configured Antigravity RTL extension for Antigravity IDE!\n');
     } catch (e) {
         spinner.warn('Antigravity IDE was detected, but extension installation was skipped: ' + e.message);
     }

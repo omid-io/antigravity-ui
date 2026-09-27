@@ -9,7 +9,7 @@ const rootDir = path.resolve(__dirname, '..');
 const ideExtSourceDir = path.join(rootDir, 'ide-extension');
 const stagingDir = path.join(rootDir, 'temp-extension-staging');
 const assetsDir = path.join(rootDir, 'assets');
-const outputVsix = path.join(assetsDir, 'antigravity-ui-1.0.0.vsix');
+const outputVsix = path.join(assetsDir, 'antigravity-rtl-1.0.0.vsix');
 
 if (!fs.existsSync(assetsDir)) {
     fs.mkdirSync(assetsDir, { recursive: true });
@@ -37,9 +37,9 @@ fs.writeFileSync(path.join(stagingDir, '[Content_Types].xml'), contentTypesXml, 
 const vsixManifest = `<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="antigravity-ui" Version="1.0.0" Language="en-US" Publisher="omid-io"/>
-    <DisplayName>Antigravity UI — IDE BiDi &amp; Typography Suite</DisplayName>
-    <Description>Right-to-Left (RTL/BiDi) support, Vazirmatn typography, and ergonomics for Antigravity IDE</Description>
+    <Identity Id="antigravity-rtl" Version="1.0.0" Language="en-US" Publisher="omid-io"/>
+    <DisplayName>Antigravity RTL</DisplayName>
+    <Description>Smart RTL, Vazirmatn typography, and workspace ergonomics for Antigravity IDE</Description>
     <Categories>Other,Formatters</Categories>
     <Icon>extension/resources/icon.png</Icon>
   </Metadata>
@@ -87,6 +87,7 @@ if (fs.existsSync(tempZip)) {
 
 execSync(`powershell -Command "Compress-Archive -Path '${stagingDir}\\*' -DestinationPath '${tempZip}' -Force"`);
 fs.renameSync(tempZip, outputVsix);
+fs.copyFileSync(outputVsix, path.join(assetsDir, 'antigravity-ui-1.0.0.vsix'));
 fs.rmSync(stagingDir, { recursive: true, force: true });
 
-console.log('Successfully created ' + outputVsix);
+console.log('Successfully created ' + outputVsix + ' and ' + path.join(assetsDir, 'antigravity-ui-1.0.0.vsix'));

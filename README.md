@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/antigravity-ui.svg?color=cb3837)](https://www.npmjs.com/package/antigravity-ui)
-[![Open VSX](https://img.shields.io/open-vsx/v/omid-io/antigravity-ui.svg?color=purple)](https://open-vsx.org/extension/omid-io/antigravity-ui)
+[![Open VSX](https://img.shields.io/open-vsx/v/omid-io/antigravity-rtl.svg?color=purple)](https://open-vsx.org/extension/omid-io/antigravity-rtl)
 [![CI](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/omid-io/antigravity-ui?color=blue&label=release)](https://github.com/omid-io/antigravity-ui/releases/latest)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
@@ -16,7 +16,7 @@
   <a href="#-quick-start"><b>🚀 Install</b></a> •
   <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.8)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
-  <a href="https://open-vsx.org/extension/omid-io/antigravity-ui"><b>🌌 Open VSX</b></a> •
+  <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
   <a href="#-visual-tour">Visual Tour</a> •
   <a href="#-version-compatibility-matrix">Compatibility</a> •
