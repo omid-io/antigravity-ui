@@ -1089,6 +1089,7 @@ win.webContents.on('dom-ready', () => {
                                         <button id="rtl-force-btn" type="button" role="switch" class="rtl-toggle-btn-reset relative inline-flex items-center rounded-full transition-colors duration-200 ease-in-out shrink-0 h-5 w-9 \${forceRTL ? 'bg-accent' : 'bg-gray-400 bg-opacity-40'} cursor-pointer">
                                             <span id="rtl-force-knob" class="inline-block rounded-full bg-white transition-transform duration-200 ease-in-out shadow-sm h-3.5 w-3.5" style="transform: translateX(\${forceRTL ? '18px' : '3px'});"></span>
                                         </button>
+                                    </div>
                                 </div>
                             </div>
 

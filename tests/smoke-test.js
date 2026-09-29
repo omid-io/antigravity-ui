@@ -27,7 +27,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const testDir = path.join(rootDir, 'temp-smoke-test');
 
-console.log('🧪 Starting Antigravity UI Real Pipeline Smoke Test (v2.0.8)...');
+console.log('🧪 Starting Antigravity UI Real Pipeline Smoke Test (v2.0.9)...');
 
 try {
     // 1. Setup temporary sandbox

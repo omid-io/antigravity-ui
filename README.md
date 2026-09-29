@@ -14,7 +14,7 @@
 
 <p>
   <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.8)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.9)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
@@ -98,11 +98,11 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :---: | :--- |
-| **Antigravity 2.17.x** (Latest) | `1.107.0+` (Code-OSS) | `v2.0.8` | 🟢 **Verified & Tested** | Full 160px sidebar + VSIX auto-installer |
-| **Antigravity 2.16.x** | `1.107.0+` | `v2.0.8` | 🟢 **Verified & Tested** | Injected via `void win.loadURL(url);` anchor |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v2.0.8` | 🟡 **Compatible** | Expected to work; standard Electron Asar structure |
-| **Antigravity 1.x** (Legacy) | `1.x` | `v2.0.8` | 🟡 **Legacy Compatible** | Basic Asar patch fallback |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v2.0.8` | 🟢 **CI-Verified** | 9-job matrix (Node 18, 20, 22 on Ubuntu, macOS, Windows) & 64-char SHA-256 |
+| **Antigravity 2.17.x** (Latest) | `1.107.0+` (Code-OSS) | `v2.0.9` | 🟢 **Verified & Tested** | Full 160px sidebar + VSIX auto-installer |
+| **Antigravity 2.16.x** | `1.107.0+` | `v2.0.9` | 🟢 **Verified & Tested** | Injected via `void win.loadURL(url);` anchor |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v2.0.9` | 🟡 **Compatible** | Expected to work; standard Electron Asar structure |
+| **Antigravity 1.x** (Legacy) | `1.x` | `v2.0.9` | 🟡 **Legacy Compatible** | Basic Asar patch fallback |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v2.0.9` | 🟢 **CI-Verified** | 9-job matrix (Node 18, 20, 22 on Ubuntu, macOS, Windows) & 64-char SHA-256 |
 
 ---
 
@@ -232,11 +232,11 @@ npx antigravity-ui --restore
 
 | نسخه Antigravity | ادیتور Antigravity IDE | نسخه Antigravity UI | وضعیت | توضیحات فنی |
 | :--- | :--- | :--- | :---: | :--- |
-| **نسخه های 2.17.x (جدیدترین)** | `1.107.0` به بالا | `v2.0.8` | 🟢 **تست شده و فعال** | سایدبار ۱۶۰px و نصب خودکار VSIX |
-| **نسخه های 2.16.x** | سری 1.107.x | `v2.0.8` | 🟢 **تست شده و فعال** | تزریق استاندارد با انکر لودینگ |
-| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v2.0.8` | 🟡 **سازگار** | ساختار سازگار Asar و هسته الکترون |
-| **نسخه های 1.x** | سری 1.x | `v2.0.8` | 🟡 **سازگار قبلی** | پچ پایه با قابلیت بازگردانی |
-| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.8` | 🟢 **تایید شده در CI** | اجرای ماتریس ۹ تایی ابری (نود ۱۸، ۲۰ و ۲۲ روی اوبونتو، مک و ویندوز) |
+| **نسخه های 2.17.x (جدیدترین)** | `1.107.0` به بالا | `v2.0.9` | 🟢 **تست شده و فعال** | سایدبار ۱۶۰px و نصب خودکار VSIX |
+| **نسخه های 2.16.x** | سری 1.107.x | `v2.0.9` | 🟢 **تست شده و فعال** | تزریق استاندارد با انکر لودینگ |
+| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v2.0.9` | 🟡 **سازگار** | ساختار سازگار Asar و هسته الکترون |
+| **نسخه های 1.x** | سری 1.x | `v2.0.9` | 🟡 **سازگار قبلی** | پچ پایه با قابلیت بازگردانی |
+| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.9` | 🟢 **تایید شده در CI** | اجرای ماتریس ۹ تایی ابری (نود ۱۸، ۲۰ و ۲۲ روی اوبونتو، مک و ویندوز) |
 
 ---
 
