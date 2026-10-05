@@ -9,7 +9,7 @@ const rootDir = path.resolve(__dirname, '..');
 const ideExtSourceDir = path.join(rootDir, 'ide-extension');
 const stagingDir = path.join(rootDir, 'temp-extension-staging');
 const assetsDir = path.join(rootDir, 'assets');
-const outputVsix = path.join(assetsDir, 'antigravity-rtl-1.0.2.vsix');
+const outputVsix = path.join(assetsDir, 'antigravity-rtl-1.0.3.vsix');
 
 if (!fs.existsSync(assetsDir)) {
     fs.mkdirSync(assetsDir, { recursive: true });
@@ -37,7 +37,7 @@ fs.writeFileSync(path.join(stagingDir, '[Content_Types].xml'), contentTypesXml, 
 const vsixManifest = `<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="antigravity-rtl" Version="1.0.2" Language="en-US" Publisher="omid-io"/>
+    <Identity Id="antigravity-rtl" Version="1.0.3" Language="en-US" Publisher="omid-io"/>
     <DisplayName>Antigravity RTL</DisplayName>
     <Description>Smart RTL, Vazirmatn typography, and workspace ergonomics for Antigravity IDE</Description>
     <Categories>Other,Formatters</Categories>
@@ -50,6 +50,7 @@ const vsixManifest = `<?xml version="1.0" encoding="utf-8"?>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.Code.Manifest" Path="extension/package.json" Addressable="true"/>
     <Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/README.md" Addressable="true"/>
+    <Asset Type="Microsoft.VisualStudio.Services.Content.Changelog" Path="extension/CHANGELOG.md" Addressable="true"/>
     <Asset Type="Microsoft.VisualStudio.Services.Icons.Default" Path="extension/resources/icon.png" Addressable="true"/>
   </Assets>
 </PackageManifest>`;

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.3] - 2026-10-06
+
+### Added
+- **Official Open VSX Changelog Asset:** Registered `extension/CHANGELOG.md` as an official `Microsoft.VisualStudio.Services.Content.Changelog` asset in VSIX manifest for native Changelog tab rendering on Open VSX Registry.
+
 ## [1.0.2] - 2026-10-06
 
 ### Fixed
