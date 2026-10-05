@@ -176,17 +176,7 @@ function activate(context) {
     context.subscriptions.push(disableCmd);
 
     const setupTypographyCmd = vscode.commands.registerCommand('antigravity-ui.setupTypography', async () => {
-        const config = vscode.workspace.getConfiguration('editor');
-        const currentFont = config.get('fontFamily') || '';
-        const targetFont = "Vazirmatn, 'Segoe UI', Tahoma, Consolas, monospace";
-
-        if (!currentFont.includes('Vazirmatn')) {
-            const newFont = currentFont ? `Vazirmatn, ${currentFont}` : targetFont;
-            await config.update('fontFamily', newFont, vscode.ConfigurationTarget.Global);
-            vscode.window.showInformationMessage('Antigravity UI: فونت وزیرمتن برای ویرایشگر کد ثبت شد.');
-        } else {
-            vscode.window.showInformationMessage('فونت وزیرمتن از قبل در تنظیمات ویرایشگر فعال است.');
-        }
+        vscode.window.showInformationMessage('Antigravity UI: فونت وزیرمتن به صورت خودکار برای بخش چت و هوش مصنوعی فعال است و ادیتور کد بدون تغییر و در حالت پیش فرض باقی می ماند.');
     });
     context.subscriptions.push(setupTypographyCmd);
 

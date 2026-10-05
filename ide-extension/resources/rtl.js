@@ -55,23 +55,15 @@
             font-display: swap;
         }
 
-        /* Entire Workbench UI */
-        body,
-        .monaco-workbench,
-        .monaco-workbench .part,
-        .monaco-workbench .titlebar,
-        .monaco-workbench .activitybar,
-        .monaco-workbench .sidebar,
-        .monaco-workbench .statusbar,
-        .monaco-workbench .panel,
-        .monaco-workbench .quick-input-widget,
-        .monaco-workbench .notifications-toasts,
-        .monaco-menu,
-        .monaco-dialog-box {
-            font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
-        }
-
-        /* Chat, AI Assistant, Composer, Markdown & Plan */
+        /* Chat, AI Assistant, Composer, Markdown & Plan ONLY */
+        .interactive-session,
+        .interactive-session .interactive-item,
+        .interactive-session .interactive-input-part,
+        .interactive-session .monaco-inputbox,
+        .chat-widget,
+        .chat-editor,
+        .chat-list,
+        .chat-row,
         .composer-rendered-message,
         .composer-rendered-message p,
         .composer-rendered-message li,
@@ -90,19 +82,19 @@
             font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
         }
 
-        /* Monospace elements stay monospace */
-        code,
-        code *,
-        pre,
-        pre *,
-        .monaco-editor .view-line,
+        /* Monospace elements inside Chat & Markdown stay monospace */
+        .interactive-session code,
+        .interactive-session pre,
+        .chat-widget code,
+        .chat-widget pre,
+        .composer-rendered-message code,
+        .composer-rendered-message pre,
+        .markdown-root code,
+        .markdown-root pre,
         .cursor-code-block-content,
         .cursor-code-block-content *,
-        .inline-code,
-        .terminal,
-        .xterm,
-        kbd {
-            font-family: 'Cascadia Code', Consolas, 'Courier New', monospace !important;
+        .inline-code {
+            font-family: Consolas, 'Courier New', monospace !important;
         }
 
         .aislash-editor-placeholder {
