@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Automated Deployment Pipeline:** Added `scripts/publish-ovsx.js` and `npm run publish:ovsx` script for zero-prompt, automated deployment to Open VSX Registry.
-- **Companion Extension v1.0.3:** Released `omid-io.antigravity-rtl@1.0.3` to Open VSX Registry and built `antigravity-rtl-1.0.3.vsix`.
+- **Companion Extension v1.0.4:** Released `omid-io.antigravity-rtl@1.0.4` to Open VSX Registry and built `antigravity-rtl-1.0.4.vsix`.
 
 ---
 

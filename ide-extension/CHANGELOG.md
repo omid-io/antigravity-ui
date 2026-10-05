@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.3] - 2026-10-06
+## [1.0.4] - 2026-10-06
 
 ### Fixed
 - **Font Isolation (Chat Only):** Removed broad `body` and `.monaco-workbench` selectors that forced Vazirmatn onto the entire IDE UI.
