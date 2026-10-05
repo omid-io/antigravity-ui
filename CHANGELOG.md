@@ -16,8 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Extension Command Guard:** Patched `setupTypography` command in `ide-extension/extension.js` to ensure it never overrides `editor.fontFamily`.
 
 ### Added
-- **Automated Open VSX Pipeline:** Added `scripts/publish-ovsx.js` and `npm run publish:ovsx` script for zero-prompt, automated deployment to Open VSX Registry.
-- **Companion Extension v1.0.3 & Native Changelog Asset:** Released `omid-io.antigravity-rtl@1.0.3` on Open VSX with full `Microsoft.VisualStudio.Services.Content.Changelog` manifest asset integration and built `antigravity-rtl-1.0.3.vsix`.
+- **Automated Deployment Pipeline:** Added `scripts/publish-ovsx.js` and `npm run publish:ovsx` script for zero-prompt, automated deployment to Open VSX Registry.
+- **Companion Extension v1.0.3:** Released `omid-io.antigravity-rtl@1.0.3` to Open VSX Registry and built `antigravity-rtl-1.0.3.vsix`.
 
 ---
 
