@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Antigravity UI Studio</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/preload.js"></script>
+</head>
+<body>
+  <main class="panel">
+    <!-- Header -->
+    <header class="panel-header">
+      <div class="header-brand">
+        <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M2 12h20"></path>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        <div>
+          <h1>Antigravity UI Studio</h1>
+          <p class="muted small">استودیوی رسمی راست چین و شخصی سازی ظاهر</p>
+        </div>
+      </div>
+      <span id="status-pill" class="pill ok">پلاگین فعال</span>
+    </header>
+
+    <!-- Diagnostics / Status Card -->
+    <section class="card status-card">
+      <div class="card-header">
+        <h2>وضعیت اتصال زنده به سیستم</h2>
+      </div>
+      <div class="diag-grid">
+        <div class="diag-item">
+          <span class="muted small">سایدکار Node.js:</span>
+          <strong id="diag-node">درحال بررسی…</strong>
+        </div>
+        <div class="diag-item">
+          <span class="muted small">پل ارتباطی زنده (CDP):</span>
+          <strong id="diag-cdp" class="accent-text">درحال بررسی…</strong>
+        </div>
+        <div class="diag-item">
+          <span class="muted small">وضعیت فایل Asar:</span>
+          <strong id="diag-asar">نسخه رسمی (بدون پچ دستی)</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab Navigation -->
+    <nav class="tabs-nav">
+      <button type="button" class="tab-btn active" data-tab="tab-typo">راست چین و فونت</button>
+      <button type="button" class="tab-btn" data-tab="tab-theme">ظاهر و حباب ها</button>
+      <button type="button" class="tab-btn" data-tab="tab-sidebar">سایدبار و محیط کار</button>
+    </nav>
+
+    <!-- Tab 1: Typography & RTL -->
+    <div id="tab-typo" class="tab-content active">
+      <section class="card">
+        <div class="control-row">
+          <span>موتور هوشمند راست چین (RTL)</span>
+          <label class="switch">
+            <input type="checkbox" id="cfg-isRTL">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="control-row">
+          <span>اجبار سراسری به راست چین (Force RTL)</span>
+          <label class="switch">
+            <input type="checkbox" id="cfg-forceRTL">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="control-row">
+          <span>اصلاح کلید Shift+2 برای علامت @</span>
+          <label class="switch">
+            <input type="checkbox" id="cfg-fixAtSign">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="control-row">
+          <span>ارتفاع خطوط (Line Height)</span>
+          <div class="range-box">
+            <input type="range" id="cfg-lh" min="1.2" max="2.4" step="0.1">
+            <span id="val-lh" class="badge">1.6</span>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <span>اندازه قلم (Font Size)</span>
+          <div class="range-box">
+            <input type="range" id="cfg-fs" min="12" max="22" step="1">
+            <span id="val-fs" class="badge">16px</span>
+          </div>
+        </div>
+
+        <div class="control-row">
+          <span>فونت فارسی دلخواه</span>
+          <input type="text" id="cfg-faFont" class="text-input" placeholder="پیش فرض: Vazirmatn">
+        </div>
+      </section>
+    </div>
+
+    <!-- Tab 2: Theme & User Message -->
+    <div id="tab-theme" class="tab-content">
+      <section class="card">
+        <div class="control-row">
+          <span>فعال بودن استایل اختصاصی حباب پیام</span>
+          <label class="switch">
+            <input type="checkbox" id="cfg-userMsgEnabled">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="theme-mode-switch">
+          <button type="button" id="btn-theme-dark" class="mode-btn active">حالت تیره (Dark)</button>
+          <button type="button" id="btn-theme-light" class="mode-btn">حالت روشن (Light)</button>
+        </div>
+
+        <!-- Dark controls -->
+        <div id="group-dark">
+          <div class="control-row">
+            <span>رنگ پس زمینه حباب</span>
+            <div class="color-picker-group">
+              <input type="color" id="cfg-dark-bg">
+              <input type="text" id="cfg-dark-bg-hex" class="hex-text" maxlength="7">
+            </div>
+          </div>
+          <div class="control-row">
+            <span>رنگ کادر دور</span>
+            <div class="color-picker-group">
+              <input type="color" id="cfg-dark-border">
+              <input type="text" id="cfg-dark-border-hex" class="hex-text" maxlength="7">
+            </div>
+          </div>
+        </div>
+
+        <!-- Light controls -->
+        <div id="group-light" hidden>
+          <div class="control-row">
+            <span>رنگ پس زمینه حباب</span>
+            <div class="color-picker-group">
+              <input type="color" id="cfg-light-bg">
+              <input type="text" id="cfg-light-bg-hex" class="hex-text" maxlength="7">
+            </div>
+          </div>
+          <div class="control-row">
+            <span>رنگ کادر دور</span>
+            <div class="color-picker-group">
+              <input type="color" id="cfg-light-border">
+              <input type="text" id="cfg-light-border-hex" class="hex-text" maxlength="7">
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Tab 3: Sidebar -->
+    <div id="tab-sidebar" class="tab-content">
+      <section class="card">
+        <div class="control-row">
+          <span>سایدبار فوق فشرده (امکان ریسایز تا ۱۶۰ پیکسل)</span>
+          <label class="switch">
+            <input type="checkbox" id="cfg-compactSidebar">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <p class="muted small">وقتی این گزینه فعال باشد، با درگ کردن خط جداکننده سایدبار سمت چپ می توانید عرض آن را آزادانه تا ۱۶۰ پیکسل باریک کنید.</p>
+      </section>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button id="btn-save" type="button" class="btn primary">ذخیره و اعمال زنده</button>
+      <button id="btn-reload" type="button" class="btn secondary">بارگذاری مجدد</button>
+    </div>
+
+    <p id="toast" class="toast" hidden></p>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
