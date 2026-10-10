@@ -447,12 +447,31 @@ function injectToLiveWindows(config) {
                 method: 'Page.addScriptToEvaluateOnNewDocument',
                 params: { source: popupScript }
               }));
+
+              // 4. Query live config from UI to persist to disk
+              ws.send(JSON.stringify({
+                id: 105,
+                method: 'Runtime.evaluate',
+                params: { expression: 'window.__ANTIGRAVITY_CONFIG__ || null', returnByValue: true }
+              }));
             };
             ws.onmessage = (event) => {
               try {
                 const msg = JSON.parse(event.data);
-                if (msg.id === 103) {
-                  setTimeout(() => { try { ws.close(); } catch (_) {} }, 50);
+                if (msg.id === 105 && msg.result?.result?.value) {
+                  const liveCfg = msg.result.result.value;
+                  const liveStr = JSON.stringify(liveCfg);
+                  if (liveStr !== JSON.stringify(currentActiveConfig)) {
+                    currentActiveConfig = liveCfg;
+                    try {
+                      const jsonPretty = JSON.stringify(liveCfg, null, 2);
+                      writeFileSync(CONFIG_PATH, jsonPretty, 'utf8');
+                      try { writeFileSync(LEGACY_CONFIG_PATH, jsonPretty, 'utf8'); } catch (_) {}
+                    } catch (_) {}
+                  }
+                }
+                if (msg.id === 105 || msg.id === 103) {
+                  setTimeout(() => { try { ws.close(); } catch (_) {} }, 100);
                 }
               } catch (_) {}
             };
