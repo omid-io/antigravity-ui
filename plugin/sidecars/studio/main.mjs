@@ -301,25 +301,24 @@ function generateScript(c) {
       ${inputBoxCSS}
     \`;
 
-    /* Sidebar Resizer & Instant Compact Toggle */
+    /* Compact Sidebar Logic: Unblock min-width without fighting React layout */
     const sidebar = document.querySelector('[role="navigation"][aria-label="Sidebar"]');
     const parent = sidebar ? sidebar.parentElement : null;
     const grandParent = parent ? parent.parentElement : null;
 
     if (grandParent) {
       if (${c.compactSidebar === false}) {
-        // If compact mode is OFF, cleanly restore Antigravity's native 256px
+        // When compact mode is turned OFF, completely clean all inline widths so Antigravity restores its native 256px
         localStorage.removeItem('sidebarWidth');
         grandParent.style.removeProperty('width');
         if (parent) parent.style.removeProperty('width');
-        grandParent.style.setProperty('width', '256px', 'important');
-        if (parent) parent.style.setProperty('width', '256px', 'important');
       } else {
-        // If compact mode is ON, enforce user configured/stored width (min 160px)
-        const targetW = parseInt(localStorage.getItem('sidebarWidth') || '${c.sidebarWidth || 216}', 10);
-        const appliedW = Math.max(160, Math.min(420, targetW));
-        grandParent.style.setProperty('width', appliedW + 'px', 'important');
-        if (parent) parent.style.setProperty('width', appliedW + 'px', 'important');
+        // When compact mode is ON: only restore if user had previously dragged it below 256px
+        const storedW = parseInt(localStorage.getItem('sidebarWidth'), 10);
+        if (storedW && storedW >= 160 && storedW < 256) {
+          grandParent.style.setProperty('width', storedW + 'px', 'important');
+          if (parent) parent.style.setProperty('width', storedW + 'px', 'important');
+        }
       }
     }
 
@@ -336,7 +335,7 @@ function generateScript(c) {
         const delta = ev.clientX - startX;
         let newW = Math.round(startW + delta);
         if (newW < 160) newW = 160;
-        if (newW > 420) newW = 420;
+        if (newW > 450) newW = 450;
         grandParent.style.setProperty('width', newW + 'px', 'important');
         if (parent) parent.style.setProperty('width', newW + 'px', 'important');
       }
@@ -354,6 +353,8 @@ function generateScript(c) {
       }
 
       resizer.addEventListener('pointerdown', (e) => {
+        // Only take over resizing if compactSidebar is enabled
+        const cfg = window.__ANTIGRAVITY_CONFIG__ || {};
         if (e.button !== 0) return;
         e.preventDefault();
         e.stopPropagation();
@@ -475,6 +476,7 @@ app.page('/', () => readLocal('index.html'));
 app.page('/app.js', () => readLocal('app.js'));
 app.api('/styles.css', () => new Response(readLocal('styles.css'), { contentType: 'text/css' }), 'GET');
 app.api('/font.woff2', () => new Response(readFileSync(join(HERE, 'Vazirmatn-Variable.woff2')), { contentType: 'font/woff2' }), 'GET');
+app.api('/logo.svg', () => new Response(readFileSync(join(HERE, 'logo.svg')), { contentType: 'image/svg+xml' }), 'GET');
 
 app.api('/api/status', () => {
   return {

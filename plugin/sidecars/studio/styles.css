@@ -526,10 +526,119 @@ input[type="color"]::-webkit-color-swatch {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* Footer info */
-.footer-text {
-  text-align: center;
-  font-size: 11px;
-  color: var(--rtl-text-muted);
+/* Pinned Footer Styling */
+.panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px 4px;
   margin-top: 6px;
+  border-top: 1px solid var(--rtl-border-subtle);
+  font-size: 11px;
+}
+
+.github-star-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--rtl-text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.github-star-link:hover {
+  color: #fbbf24;
+}
+
+.gh-icon {
+  flex-shrink: 0;
+}
+
+.star-badge {
+  background-color: var(--rtl-surface);
+  border: 1px solid var(--rtl-border);
+  padding: 1px 6px;
+  border-radius: 9999px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+.version-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 10px;
+  color: var(--rtl-text-muted);
+}
+
+/* Header icon styling */
+.header-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.35);
+}
+
+.header-title-box {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.header-title-box h1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-title-box p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Button general */
+.btn.secondary {
+  background: var(--rtl-surface);
+  border: 1px solid var(--rtl-border);
+  color: var(--rtl-text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn.secondary:hover {
+  background: var(--rtl-surface-hover);
+  color: var(--rtl-text);
+}
+
+/* Ultra-Compact Responsive Layout (< 260px width) */
+@container (max-width: 260px) or (max-width: 260px) {
+  .panel {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .card {
+    padding: 10px;
+    gap: 8px;
+  }
+  .tab-btn {
+    font-size: 10.5px;
+    padding: 6px 2px;
+  }
+  .text-input {
+    width: 90px;
+  }
+  input[type="range"] {
+    width: 55px;
+  }
+  .badge {
+    min-width: 32px;
+    padding: 2px 4px;
+    font-size: 10px;
+  }
 }
