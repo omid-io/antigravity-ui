@@ -301,21 +301,28 @@ function generateScript(c) {
       ${inputBoxCSS}
     \`;
 
-    /* Sidebar Resizer */
+    /* Sidebar Resizer & Instant Compact Toggle */
+    const sidebar = document.querySelector('[role="navigation"][aria-label="Sidebar"]');
+    const parent = sidebar ? sidebar.parentElement : null;
+    const grandParent = parent ? parent.parentElement : null;
+
+    if (grandParent) {
+      if (${c.compactSidebar === false}) {
+        // If disabled, reset to standard 256px
+        grandParent.style.removeProperty('width');
+        if (parent) parent.style.removeProperty('width');
+      } else {
+        // If enabled, apply the configured width (default 216px or stored width)
+        const targetW = parseInt(localStorage.getItem('sidebarWidth') || '${c.sidebarWidth || 216}', 10);
+        const appliedW = Math.max(160, Math.min(420, targetW));
+        grandParent.style.setProperty('width', appliedW + 'px', 'important');
+        if (parent) parent.style.setProperty('width', appliedW + 'px', 'important');
+      }
+    }
+
     const resizer = document.querySelector('.cursor-col-resize');
     if (resizer && !resizer.dataset.rtlInit) {
       resizer.dataset.rtlInit = 'true';
-      const sidebar = document.querySelector('[role="navigation"][aria-label="Sidebar"]');
-      const parent = sidebar ? sidebar.parentElement : null;
-      const grandParent = parent ? parent.parentElement : null;
-
-      if (grandParent) {
-        const storedW = parseInt(localStorage.getItem('sidebarWidth') || '${c.sidebarWidth || 256}', 10);
-        if (storedW && storedW >= 160 && storedW < 256) {
-          grandParent.style.setProperty('width', storedW + 'px', 'important');
-          if (parent) parent.style.setProperty('width', storedW + 'px', 'important');
-        }
-      }
 
       let isDragging = false;
       let startX = 0;
