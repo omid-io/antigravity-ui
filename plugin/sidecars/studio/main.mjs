@@ -308,11 +308,14 @@ function generateScript(c) {
 
     if (grandParent) {
       if (${c.compactSidebar === false}) {
-        // If disabled, reset to standard 256px
+        // If compact mode is OFF, cleanly restore Antigravity's native 256px
+        localStorage.removeItem('sidebarWidth');
         grandParent.style.removeProperty('width');
         if (parent) parent.style.removeProperty('width');
+        grandParent.style.setProperty('width', '256px', 'important');
+        if (parent) parent.style.setProperty('width', '256px', 'important');
       } else {
-        // If enabled, apply the configured width (default 216px or stored width)
+        // If compact mode is ON, enforce user configured/stored width (min 160px)
         const targetW = parseInt(localStorage.getItem('sidebarWidth') || '${c.sidebarWidth || 216}', 10);
         const appliedW = Math.max(160, Math.min(420, targetW));
         grandParent.style.setProperty('width', appliedW + 'px', 'important');
@@ -343,8 +346,10 @@ function generateScript(c) {
         isDragging = false;
         window.removeEventListener('pointermove', onMove, true);
         window.removeEventListener('pointerup', onEnd, true);
+        window.removeEventListener('mouseup', onEnd, true);
         if (grandParent) {
-          localStorage.setItem('sidebarWidth', grandParent.offsetWidth);
+          const finalW = grandParent.offsetWidth;
+          localStorage.setItem('sidebarWidth', finalW);
         }
       }
 
@@ -358,6 +363,7 @@ function generateScript(c) {
         startW = grandParent ? grandParent.offsetWidth : 256;
         window.addEventListener('pointermove', onMove, true);
         window.addEventListener('pointerup', onEnd, true);
+        window.addEventListener('mouseup', onEnd, true);
       }, { capture: true });
     }
 
