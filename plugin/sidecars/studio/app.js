@@ -1,10 +1,24 @@
-const sidecar = window.sidecar;
 const $ = (id) => document.getElementById(id);
 
 async function callApi(path, { method = 'GET', body } = {}) {
-  if (!sidecar) throw new Error('Sidecar bridge unavailable');
-  const res = await sidecar.fetch(path, {
+  // If window.sidecar is available, use its fetch method
+  if (window.sidecar && typeof window.sidecar.fetch === 'function') {
+    const res = await window.sidecar.fetch(path, {
+      method,
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+    return await res.json();
+  }
+
+  // Fallback: extract token directly from iframe query params
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['X-Sidecar-Token'] = token;
+
+  const res = await fetch(path, {
     method,
+    headers,
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   return await res.json();
@@ -12,13 +26,22 @@ async function callApi(path, { method = 'GET', body } = {}) {
 
 let syncTimeout = null;
 function liveSync() {
+  const dot = document.querySelector('.live-dot');
+  if (dot) dot.style.opacity = '1';
+
   clearTimeout(syncTimeout);
   syncTimeout = setTimeout(async () => {
     const updated = collectConfig();
     try {
       await callApi('/api/config', { method: 'POST', body: updated });
-    } catch (_) {}
-  }, 35);
+      if (dot) {
+        dot.style.transform = 'scale(1.4)';
+        setTimeout(() => { if (dot) dot.style.transform = 'scale(1)'; }, 150);
+      }
+    } catch (err) {
+      console.error('[UI Studio] liveSync error:', err);
+    }
+  }, 25);
 }
 
 // ---------------------------------------------------------------------------
