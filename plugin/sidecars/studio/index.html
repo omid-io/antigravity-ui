@@ -22,34 +22,16 @@
           <p class="muted small">استودیوی رسمی راست چین و شخصی سازی ظاهر</p>
         </div>
       </div>
-      <span id="status-pill" class="pill ok">پلاگین فعال</span>
+      <div class="live-indicator">
+        <span class="live-dot"></span>
+        <span>اعمال زنده</span>
+      </div>
     </header>
-
-    <!-- Diagnostics / Status Card -->
-    <section class="card status-card">
-      <div class="card-header">
-        <h2>وضعیت اتصال زنده به سیستم</h2>
-      </div>
-      <div class="diag-grid">
-        <div class="diag-item">
-          <span class="muted small">سایدکار Node.js:</span>
-          <strong id="diag-node">درحال بررسی…</strong>
-        </div>
-        <div class="diag-item">
-          <span class="muted small">پل ارتباطی زنده (CDP):</span>
-          <strong id="diag-cdp" class="accent-text">درحال بررسی…</strong>
-        </div>
-        <div class="diag-item">
-          <span class="muted small">وضعیت فایل Asar:</span>
-          <strong id="diag-asar">نسخه رسمی (بدون پچ دستی)</strong>
-        </div>
-      </div>
-    </section>
 
     <!-- Tab Navigation -->
     <nav class="tabs-nav">
-      <button type="button" class="tab-btn active" data-tab="tab-typo">راست چین و فونت</button>
-      <button type="button" class="tab-btn" data-tab="tab-theme">ظاهر و حباب ها</button>
+      <button type="button" class="tab-btn active" data-tab="tab-typo">راست چین و تایپوگرافی</button>
+      <button type="button" class="tab-btn" data-tab="tab-theme">طراحی و حباب ها</button>
       <button type="button" class="tab-btn" data-tab="tab-sidebar">سایدبار و محیط کار</button>
     </nav>
 
@@ -73,32 +55,48 @@
         </div>
 
         <div class="control-row">
-          <span>اصلاح کلید Shift+2 برای علامت @</span>
-          <label class="switch">
-            <input type="checkbox" id="cfg-fixAtSign">
-            <span class="slider"></span>
-          </label>
+          <span>فونت فارسی (FA Font)</span>
+          <input type="text" id="cfg-faFont" class="text-input" placeholder="پیش فرض: Vazirmatn">
+        </div>
+
+        <div class="control-row">
+          <span>فونت انگلیسی (EN Font)</span>
+          <input type="text" id="cfg-enFont" class="text-input" placeholder="پیش فرض: System">
+        </div>
+
+        <div class="control-row">
+          <span>فونت کدها (Code Font)</span>
+          <input type="text" id="cfg-codeFont" class="text-input" placeholder="پیش فرض: Monospace">
         </div>
 
         <div class="control-row">
           <span>ارتفاع خطوط (Line Height)</span>
           <div class="range-box">
-            <input type="range" id="cfg-lh" min="1.2" max="2.4" step="0.1">
+            <input type="range" id="cfg-lh" min="1.2" max="2.5" step="0.1">
             <span id="val-lh" class="badge">1.6</span>
+            <button type="button" id="btn-reset-lh" class="reset-icon-btn" title="بازنشانی به 1.6">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            </button>
           </div>
         </div>
 
         <div class="control-row">
           <span>اندازه قلم (Font Size)</span>
           <div class="range-box">
-            <input type="range" id="cfg-fs" min="12" max="22" step="1">
+            <input type="range" id="cfg-fs" min="11" max="22" step="1">
             <span id="val-fs" class="badge">16px</span>
+            <button type="button" id="btn-reset-fs" class="reset-icon-btn" title="بازنشانی به 16px">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            </button>
           </div>
         </div>
 
         <div class="control-row">
-          <span>فونت فارسی دلخواه</span>
-          <input type="text" id="cfg-faFont" class="text-input" placeholder="پیش فرض: Vazirmatn">
+          <span>اصلاح کلید Shift+2 برای علامت @</span>
+          <label class="switch">
+            <input type="checkbox" id="cfg-fixAtSign">
+            <span class="slider"></span>
+          </label>
         </div>
       </section>
     </div>
@@ -106,26 +104,40 @@
     <!-- Tab 2: Theme & User Message -->
     <div id="tab-theme" class="tab-content">
       <section class="card">
-        <div class="control-row">
-          <span>فعال بودن استایل اختصاصی حباب پیام</span>
-          <label class="switch">
-            <input type="checkbox" id="cfg-userMsgEnabled">
-            <span class="slider"></span>
-          </label>
+        <div class="card-header">
+          <div class="control-row" style="width: 100%;">
+            <span>استایل اختصاصی حباب پیام کاربر</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <button type="button" id="btn-reset-usermsg" class="reset-icon-btn" title="بازنشانی حباب">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              </button>
+              <label class="switch">
+                <input type="checkbox" id="cfg-userMsgEnabled">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
         </div>
 
         <div class="theme-mode-switch">
-          <button type="button" id="btn-theme-dark" class="mode-btn active">حالت تیره (Dark)</button>
-          <button type="button" id="btn-theme-light" class="mode-btn">حالت روشن (Light)</button>
+          <button type="button" id="btn-theme-dark" class="mode-btn active">حالت تاریک (Dark Mode)</button>
+          <button type="button" id="btn-theme-light" class="mode-btn">حالت روشن (Light Mode)</button>
         </div>
 
         <!-- Dark controls -->
-        <div id="group-dark">
+        <div id="group-dark" style="display: flex; flex-direction: column; gap: 8px;">
           <div class="control-row">
-            <span>رنگ پس زمینه حباب</span>
+            <span>رنگ پس زمینه</span>
             <div class="color-picker-group">
               <input type="color" id="cfg-dark-bg">
               <input type="text" id="cfg-dark-bg-hex" class="hex-text" maxlength="7">
+            </div>
+          </div>
+          <div class="control-row">
+            <span>رنگ متن</span>
+            <div class="color-picker-group">
+              <input type="color" id="cfg-dark-text">
+              <input type="text" id="cfg-dark-text-hex" class="hex-text" maxlength="7">
             </div>
           </div>
           <div class="control-row">
@@ -135,15 +147,38 @@
               <input type="text" id="cfg-dark-border-hex" class="hex-text" maxlength="7">
             </div>
           </div>
+          <div class="control-row">
+            <span>ضخامت کادر</span>
+            <div class="range-box">
+              <input type="range" id="cfg-dark-bw" min="0" max="4" step="0.5">
+              <span id="val-dark-bw" class="badge">1.5px</span>
+            </div>
+          </div>
+          <div class="control-row">
+            <span>سایه و عمق حباب</span>
+            <div class="shadow-group" id="dark-shadow-group">
+              <button type="button" class="shadow-btn" data-val="none">None</button>
+              <button type="button" class="shadow-btn" data-val="soft">Soft</button>
+              <button type="button" class="shadow-btn" data-val="3d">3D</button>
+              <button type="button" class="shadow-btn" data-val="glow">Glow</button>
+            </div>
+          </div>
         </div>
 
         <!-- Light controls -->
-        <div id="group-light" hidden>
+        <div id="group-light" style="display: none; flex-direction: column; gap: 8px;">
           <div class="control-row">
-            <span>رنگ پس زمینه حباب</span>
+            <span>رنگ پس زمینه</span>
             <div class="color-picker-group">
               <input type="color" id="cfg-light-bg">
               <input type="text" id="cfg-light-bg-hex" class="hex-text" maxlength="7">
+            </div>
+          </div>
+          <div class="control-row">
+            <span>رنگ متن</span>
+            <div class="color-picker-group">
+              <input type="color" id="cfg-light-text">
+              <input type="text" id="cfg-light-text-hex" class="hex-text" maxlength="7">
             </div>
           </div>
           <div class="control-row">
@@ -153,6 +188,36 @@
               <input type="text" id="cfg-light-border-hex" class="hex-text" maxlength="7">
             </div>
           </div>
+          <div class="control-row">
+            <span>ضخامت کادر</span>
+            <div class="range-box">
+              <input type="range" id="cfg-light-bw" min="0" max="4" step="0.5">
+              <span id="val-light-bw" class="badge">1.5px</span>
+            </div>
+          </div>
+          <div class="control-row">
+            <span>سایه و عمق حباب</span>
+            <div class="shadow-group" id="light-shadow-group">
+              <button type="button" class="shadow-btn" data-val="none">None</button>
+              <button type="button" class="shadow-btn" data-val="soft">Soft</button>
+              <button type="button" class="shadow-btn" data-val="3d">3D</button>
+              <button type="button" class="shadow-btn" data-val="glow">Glow</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Input box border -->
+      <section class="card">
+        <div class="control-row">
+          <div>
+            <span>کادر دور باکس ورودی چت</span>
+            <p class="muted small" style="margin: 2px 0 0 0;">همگام‌سازی استایل کادر با پیام کاربر</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfg-inputBoxEnabled">
+            <span class="slider"></span>
+          </label>
         </div>
       </section>
     </div>
@@ -168,13 +233,10 @@
           </label>
         </div>
         <p class="muted small">وقتی این گزینه فعال باشد، با درگ کردن خط جداکننده سایدبار سمت چپ می توانید عرض آن را آزادانه تا ۱۶۰ پیکسل باریک کنید.</p>
+        <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+          <button type="button" id="btn-reset-sidebar-w" class="btn secondary">بازنشانی به ۲۵۶ پیکسل پیش‌فرض</button>
+        </div>
       </section>
-    </div>
-
-    <!-- Actions -->
-    <div class="actions">
-      <button id="btn-save" type="button" class="btn primary">ذخیره و اعمال زنده</button>
-      <button id="btn-reload" type="button" class="btn secondary">بارگذاری مجدد</button>
     </div>
 
     <p id="toast" class="toast" hidden></p>
