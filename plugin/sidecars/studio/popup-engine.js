@@ -647,6 +647,14 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
   // Attach Sidebar Button
   function attachSidebarBtn() {
+    const oldBtn = document.getElementById('cdp-sidebar-btn');
+    if (oldBtn) oldBtn.remove();
+    const existingBtns = document.querySelectorAll('#antigravity-ui-sidebar-btn');
+    if (existingBtns.length > 1) {
+      for (let i = 1; i < existingBtns.length; i++) existingBtns[i].remove();
+    }
+    if (existingBtns.length === 1) return;
+
     const sidebar = document.querySelector('[role="navigation"][aria-label="Sidebar"]');
     if (!sidebar) return;
     let settingsBtn = null;
@@ -654,7 +662,6 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       if (b.textContent.includes('Settings')) settingsBtn = b;
     });
     if (!settingsBtn) return;
-    if (document.getElementById('antigravity-ui-sidebar-btn')) return;
 
     const btn = document.createElement('button');
     btn.id = 'antigravity-ui-sidebar-btn';
