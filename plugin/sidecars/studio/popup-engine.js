@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 5;
+  const POPUP_ENGINE_VERSION = 6;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -14,6 +14,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     return;
   }
   window.__ANTIGRAVITY_UI_POPUP_LOADED__ = POPUP_ENGINE_VERSION;
+  window.__ANTIGRAVITY_POPUP_VERSION__ = POPUP_ENGINE_VERSION;
   const prevContainer = document.getElementById('antigravity-ui-widget-container');
   if (prevContainer) prevContainer.remove();
   const prevBtn = document.getElementById('antigravity-ui-sidebar-btn');
@@ -101,7 +102,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         switch (type) {
           case 'soft': return '0 4px 14px -1px rgba(15, 23, 42, 0.12), 0 2px 6px -1px rgba(15, 23, 42, 0.08)';
           case '3d':
-          case 'medium': return '0 5px 0 0 rgba(0, 0, 0, 0.18), 0 12px 24px -2px rgba(15, 23, 42, 0.22)';
+          case 'medium': return '0 4px 0 0 rgba(15, 23, 42, 0.28), 0 10px 22px -2px rgba(15, 23, 42, 0.22)';
           case 'glow': return '0 0 0 1.5px ' + borderCol + ', 0 6px 22px 3px ' + borderCol + '66, 0 2px 6px ' + borderCol + '40';
           default: return 'none';
         }
@@ -218,6 +219,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         font-family: 'Vazirmatn';
         src: url('data:font/woff2;base64,' + FONT_BASE64 + ')') format('woff2');
         font-weight: 100 900;
+        font-display: swap;
         unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
       }
       \${faFontRule}
@@ -246,6 +248,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       /* Typography & Fonts */
       :root, :host, html, body {
         font-family: \${faFontName}, \${enFontStr} !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
       }
       .prose, .prose p, .prose li, [data-testid="chat-message"], [data-testid="chat-message"] p,
       .markdown-body, .markdown-body p, .leading-relaxed, .leading-relaxed p,
@@ -304,49 +309,60 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   // Initial apply right now!
   applyConfigDirectly(currentConfig);
 
-  // 1. Permanent Widget & Popup Styles
-  if (!document.getElementById('antigravity-popup-styles')) {
-    const s = document.createElement('style');
+  // 1. Permanent Widget & Popup Styles (Vibe UI Spec & Anti AI-Slop Crisp Typography)
+  let s = document.getElementById('antigravity-popup-styles');
+  if (!s) {
+    s = document.createElement('style');
     s.id = 'antigravity-popup-styles';
-    s.textContent = \`
-      /* Light Mode Tokens */
-      :root, body, body.light, body.theme-light, body.vscode-light {
+    document.head.appendChild(s);
+  }
+  s.textContent = \`
+      @font-face {
+        font-family: 'Vazirmatn';
+        src: url('data:font/woff2;base64,' + FONT_BASE64 + ')') format('woff2');
+        font-weight: 100 900;
+        font-display: swap;
+        unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+      }
+
+      /* Light Mode Tokens (Sharp & High Contrast) */
+      :root, body, body.light, body.theme-light, body.vscode-light, .rtl-widget-panel.rtl-is-light {
         --rtl-bg: #ffffff;
         --rtl-surface: #f1f5f9;
         --rtl-surface-hover: #e2e8f0;
         --rtl-card-bg: #f8fafc;
-        --rtl-card-border: #e2e8f0;
+        --rtl-card-border: #cbd5e1;
         --rtl-text: #0f172a;
         --rtl-text-secondary: #334155;
         --rtl-text-muted: #64748b;
-        --rtl-border: #e2e8f0;
-        --rtl-border-subtle: #f1f5f9;
+        --rtl-border: #cbd5e1;
+        --rtl-border-subtle: #e2e8f0;
         --rtl-input-bg: #ffffff;
-        --rtl-input-border: #cbd5e1;
+        --rtl-input-border: #94a3b8;
         --rtl-accent: #4f46e5;
         --rtl-accent-hover: #4338ca;
-        --rtl-toggle-off: #cbd5e1;
-        --rtl-shadow-panel: 0 16px 36px -6px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(15, 23, 42, 0.08);
+        --rtl-toggle-off: #94a3b8;
+        --rtl-shadow-panel: 0 16px 40px -6px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(15, 23, 42, 0.1);
       }
 
-      /* Dark Mode Tokens */
-      body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark {
-        --rtl-bg: #141824;
-        --rtl-surface: #1e2638;
-        --rtl-surface-hover: #273147;
-        --rtl-card-bg: #181f30;
-        --rtl-card-border: #2b364d;
+      /* Dark Mode Tokens (Deep, Rich & Crisp) */
+      body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark, .rtl-widget-panel.rtl-is-dark {
+        --rtl-bg: #131722;
+        --rtl-surface: #1a2030;
+        --rtl-surface-hover: #232c42;
+        --rtl-card-bg: #171d2b;
+        --rtl-card-border: #29354e;
         --rtl-text: #f8fafc;
         --rtl-text-secondary: #cbd5e1;
         --rtl-text-muted: #94a3b8;
-        --rtl-border: #2a3449;
-        --rtl-border-subtle: #1e2638;
-        --rtl-input-bg: #111520;
-        --rtl-input-border: #374461;
+        --rtl-border: #29354e;
+        --rtl-border-subtle: #1e263a;
+        --rtl-input-bg: #10141f;
+        --rtl-input-border: #3b4b6d;
         --rtl-accent: #6366f1;
         --rtl-accent-hover: #4f46e5;
         --rtl-toggle-off: #475569;
-        --rtl-shadow-panel: 0 20px 40px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+        --rtl-shadow-panel: 0 24px 50px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
       }
 
       .rtl-widget-container {
@@ -359,34 +375,38 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         overflow: visible !important;
       }
 
+      /* Pixel-Crisp Popup Panel (Zero Fractional GPU Blur) */
       .rtl-widget-panel {
         font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
         position: fixed !important;
         bottom: 56px !important;
         left: 16px !important;
         right: auto !important;
-        width: 320px !important;
-        height: 520px !important;
+        width: 326px !important;
+        height: 524px !important;
         max-height: 85vh !important;
         background-color: var(--rtl-bg) !important;
         color: var(--rtl-text) !important;
         border: 1px solid var(--rtl-border) !important;
         box-shadow: var(--rtl-shadow-panel) !important;
-        border-radius: 16px !important;
-        backdrop-filter: blur(16px) !important;
-        transform: scale(0.92) translateY(12px);
+        border-radius: 14px !important;
         opacity: 0 !important;
         visibility: hidden !important;
         pointer-events: none !important;
-        transition: transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease, visibility 0.2s;
+        transition: opacity 0.16s ease, visibility 0.16s, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateY(8px);
         transform-origin: bottom left;
         display: flex !important;
         flex-direction: column !important;
         overflow: hidden !important;
+        box-sizing: border-box !important;
       }
 
       .rtl-widget-panel.rtl-panel-open {
-        transform: scale(1) translateY(0) !important;
+        transform: none !important;
         opacity: 1 !important;
         visibility: visible !important;
         pointer-events: auto !important;
@@ -396,7 +416,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         display: none;
         flex-direction: column;
         gap: 10px;
-        animation: fadeInTab 0.16s ease-out;
+        animation: fadeInTab 0.14s ease-out;
       }
 
       .rtl-tab-view.active {
@@ -404,14 +424,14 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       }
 
       @keyframes fadeInTab {
-        from { opacity: 0; transform: translateY(4px); }
+        from { opacity: 0; transform: translateY(3px); }
         to { opacity: 1; transform: translateY(0); }
       }
 
-      /* Custom Scrollbar */
+      /* Custom Crisp Scrollbar */
       .rtl-panel-body {
         scrollbar-width: thin !important;
-        scrollbar-color: rgba(140, 150, 170, 0.35) transparent !important;
+        scrollbar-color: rgba(140, 150, 170, 0.45) transparent !important;
         flex: 1 1 0;
         overflow-y: auto;
         padding: 10px;
@@ -420,7 +440,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         gap: 10px;
       }
       .rtl-panel-body::-webkit-scrollbar { width: 4px; }
-      .rtl-panel-body::-webkit-scrollbar-thumb { background: rgba(140, 150, 170, 0.35); border-radius: 9999px; }
+      .rtl-panel-body::-webkit-scrollbar-thumb { background: rgba(140, 150, 170, 0.45); border-radius: 9999px; }
 
       /* Tabs Nav */
       .rtl-main-nav {
@@ -455,7 +475,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       .rtl-card {
         background-color: var(--rtl-card-bg);
         border: 1px solid var(--rtl-card-border);
-        border-radius: 12px;
+        border-radius: 11px;
         padding: 10px 12px;
         display: flex;
         flex-direction: column;
@@ -468,7 +488,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         gap: 8px;
         font-size: 11.5px;
         font-weight: 500;
-        color: var(--rtl-text-secondary);
+        color: var(--rtl-text);
         min-height: 26px;
       }
       .rtl-control-row > span {
@@ -478,7 +498,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         flex: 1 1 auto;
       }
 
-      /* Switch */
+      /* Switch (Sharp & Clean) */
       .rtl-switch {
         position: relative;
         display: inline-block;
@@ -492,7 +512,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         cursor: pointer;
         top: 0; left: 0; right: 0; bottom: 0;
         background-color: var(--rtl-toggle-off);
-        transition: .2s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: .18s cubic-bezier(0.16, 1, 0.3, 1);
         border-radius: 20px;
       }
       .rtl-slider:before {
@@ -504,7 +524,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         bottom: 3px;
         background-color: #ffffff;
         box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        transition: .2s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: .18s cubic-bezier(0.16, 1, 0.3, 1);
         border-radius: 50%;
       }
       .rtl-switch input:checked + .rtl-slider {
@@ -602,7 +622,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         border: none;
         background: transparent;
         color: var(--rtl-text-secondary);
-        font-size: 10px;
+        font-size: 10.5px;
         font-weight: 500;
         border-radius: 5px;
         cursor: pointer;
@@ -660,8 +680,6 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       }
       .rtl-footer-link:hover { color: #f59e0b; }
     \`;
-    document.head.appendChild(s);
-  }
 
   // 2. Mount Container & Popup DOM
   const existingContainer = document.getElementById('antigravity-ui-widget-container');

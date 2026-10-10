@@ -397,7 +397,7 @@ function generateScript(c) {
 // ---------------------------------------------------------------------------
 let currentActiveConfig = loadConfig();
 
-function injectToLiveWindows(config) {
+function injectToLiveWindows(config, force = false) {
   currentActiveConfig = config;
   const port = getDevToolsPort();
   if (!port) {
@@ -423,54 +423,58 @@ function injectToLiveWindows(config) {
           try {
             const ws = new WebSocket(page.webSocketDebuggerUrl);
             ws.onopen = () => {
-              // 1. Inject Style sheet
+              // 1. Check health of live page before doing any DOM manipulation
               ws.send(JSON.stringify({
-                id: 101,
+                id: 100,
                 method: 'Runtime.evaluate',
-                params: { expression: script, returnByValue: true }
-              }));
-              // 2. Add style sheet for page navigations
-              ws.send(JSON.stringify({
-                id: 102,
-                method: 'Page.addScriptToEvaluateOnNewDocument',
-                params: { source: script }
-              }));
-
-              // 3. Inject Native Sidebar Button and Settings Popup!
-              ws.send(JSON.stringify({
-                id: 103,
-                method: 'Runtime.evaluate',
-                params: { expression: popupScript, returnByValue: true }
-              }));
-              ws.send(JSON.stringify({
-                id: 104,
-                method: 'Page.addScriptToEvaluateOnNewDocument',
-                params: { source: popupScript }
-              }));
-
-              // 4. Query live config from UI to persist to disk
-              ws.send(JSON.stringify({
-                id: 105,
-                method: 'Runtime.evaluate',
-                params: { expression: 'window.__ANTIGRAVITY_CONFIG__ || null', returnByValue: true }
+                params: {
+                  expression: '({ hasStyle: Boolean(document.getElementById("antigravity-ui-style")), hasBtn: Boolean(document.getElementById("antigravity-ui-sidebar-btn")), hasPopup: Boolean(document.getElementById("antigravity-ui-popup")), popupVersion: window.__ANTIGRAVITY_POPUP_VERSION__ || 0, config: window.__ANTIGRAVITY_CONFIG__ || null })',
+                  returnByValue: true
+                }
               }));
             };
             ws.onmessage = (event) => {
               try {
                 const msg = JSON.parse(event.data);
-                if (msg.id === 105 && msg.result?.result?.value) {
-                  const liveCfg = msg.result.result.value;
-                  const liveStr = JSON.stringify(liveCfg);
-                  if (liveStr !== JSON.stringify(currentActiveConfig)) {
-                    currentActiveConfig = liveCfg;
+                if (msg.id === 100) {
+                  const val = msg.result?.result?.value || {};
+                  // Sync config changes to disk
+                  if (val.config && JSON.stringify(val.config) !== JSON.stringify(currentActiveConfig)) {
+                    currentActiveConfig = val.config;
                     try {
-                      const jsonPretty = JSON.stringify(liveCfg, null, 2);
+                      const jsonPretty = JSON.stringify(val.config, null, 2);
                       writeFileSync(CONFIG_PATH, jsonPretty, 'utf8');
                       try { writeFileSync(LEGACY_CONFIG_PATH, jsonPretty, 'utf8'); } catch (_) {}
                     } catch (_) {}
                   }
+
+                  // ONLY touch DOM/evaluate if missing or outdated version or forced
+                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 6) {
+                    ws.send(JSON.stringify({
+                      id: 101,
+                      method: 'Runtime.evaluate',
+                      params: { expression: script, returnByValue: true }
+                    }));
+                    ws.send(JSON.stringify({
+                      id: 102,
+                      method: 'Page.addScriptToEvaluateOnNewDocument',
+                      params: { source: script }
+                    }));
+                    ws.send(JSON.stringify({
+                      id: 103,
+                      method: 'Runtime.evaluate',
+                      params: { expression: popupScript, returnByValue: true }
+                    }));
+                    ws.send(JSON.stringify({
+                      id: 104,
+                      method: 'Page.addScriptToEvaluateOnNewDocument',
+                      params: { source: popupScript }
+                    }));
+                  } else {
+                    setTimeout(() => { try { ws.close(); } catch (_) {} }, 50);
+                  }
                 }
-                if (msg.id === 105 || msg.id === 103) {
+                if (msg.id === 103) {
                   setTimeout(() => { try { ws.close(); } catch (_) {} }, 100);
                 }
               } catch (_) {}
@@ -483,13 +487,13 @@ function injectToLiveWindows(config) {
   }).on('error', () => {});
 }
 
-// Continuous background auto-healer guard (every 2.5s)
+// Continuous background health check (every 3s, zero reflow, zero DOM touch unless missing)
 setInterval(() => {
-  injectToLiveWindows(currentActiveConfig);
-}, 2500);
+  injectToLiveWindows(currentActiveConfig, false);
+}, 3000);
 
-// Initial injection
-injectToLiveWindows(currentActiveConfig);
+// Initial forced injection
+injectToLiveWindows(currentActiveConfig, true);
 
 // ---------------------------------------------------------------------------
 // Sidecar Application Routes
