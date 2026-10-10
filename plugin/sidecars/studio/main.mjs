@@ -4,6 +4,7 @@ import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import http from 'node:http';
 import { SidecarApp, Response } from 'sidecar_sdk';
+import { generatePopupBundle } from './popup-engine.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CONFIG_PATH = join(homedir(), '.antigravity-ui.json');
@@ -405,6 +406,9 @@ function injectToLiveWindows(config) {
   }
 
   const script = generateScript(config);
+  const myPort = process.env.ANTIGRAVITY_SIDECAR_WEB_PORT || 0;
+  const myToken = process.env.ANTIGRAVITY_SIDECAR_UI_TOKEN || '';
+  const popupScript = generatePopupBundle(config, fontBase64, myPort, myToken);
 
   http.get(`http://127.0.0.1:${port}/json/list`, (res) => {
     let raw = '';
@@ -417,44 +421,47 @@ function injectToLiveWindows(config) {
         for (const page of pages) {
           if (!page.webSocketDebuggerUrl) continue;
           try {
-            console.log(`[antigravity-ui] Connecting to page target: ${page.title}`);
             const ws = new WebSocket(page.webSocketDebuggerUrl);
             ws.onopen = () => {
-              console.log(`[antigravity-ui] Sending Runtime.evaluate (fs: ${config?.fs || 'def'}) to ${page.title}`);
+              // 1. Inject Style sheet
               ws.send(JSON.stringify({
                 id: 101,
                 method: 'Runtime.evaluate',
                 params: { expression: script, returnByValue: true }
               }));
+              // 2. Add style sheet for page navigations
               ws.send(JSON.stringify({
                 id: 102,
                 method: 'Page.addScriptToEvaluateOnNewDocument',
                 params: { source: script }
               }));
+
+              // 3. Inject Native Sidebar Button and Settings Popup!
+              ws.send(JSON.stringify({
+                id: 103,
+                method: 'Runtime.evaluate',
+                params: { expression: popupScript, returnByValue: true }
+              }));
+              ws.send(JSON.stringify({
+                id: 104,
+                method: 'Page.addScriptToEvaluateOnNewDocument',
+                params: { source: popupScript }
+              }));
             };
             ws.onmessage = (event) => {
               try {
                 const msg = JSON.parse(event.data);
-                if (msg.id === 101) {
-                  console.log('[antigravity-ui] Evaluate result on page:', JSON.stringify(msg.result || msg.error));
+                if (msg.id === 103) {
                   setTimeout(() => { try { ws.close(); } catch (_) {} }, 50);
                 }
               } catch (_) {}
             };
-            ws.onerror = (e) => {
-              console.error('[antigravity-ui] WebSocket error:', e?.message || e);
-            };
-          } catch (err) {
-            console.error('[antigravity-ui] Failed to create WebSocket:', err.message);
-          }
+            ws.onerror = () => {};
+          } catch (_) {}
         }
-      } catch (e) {
-        console.error('[antigravity-ui] Targets parse error:', e.message);
-      }
+      } catch (_) {}
     });
-  }).on('error', (e) => {
-    console.error('[antigravity-ui] HTTP get DevTools error:', e.message);
-  });
+  }).on('error', () => {});
 }
 
 // Continuous background auto-healer guard (every 2.5s)
