@@ -140,6 +140,21 @@ class ResilientCdpBridge {
         min-width: 0 !important;
       }
 
+      /* Sidebar Navigation & Chat Titles: Left-Aligned LTR Mandate (Opposite of Chat) */
+      [role="navigation"][aria-label="Sidebar"],
+      [role="navigation"][aria-label="Sidebar"] *,
+      nav.bg-sidebar,
+      nav.bg-sidebar * {
+        direction: ltr !important;
+        text-align: left !important;
+      }
+      [role="navigation"][aria-label="Sidebar"] .truncate,
+      nav.bg-sidebar .truncate {
+        direction: ltr !important;
+        text-align: left !important;
+        unicode-bidi: plaintext !important;
+      }
+
       /* Typography & Fonts */
       :root, :host, html, body {
         font-family: ${faFontName}, ui-sans-serif, system-ui, sans-serif !important;
