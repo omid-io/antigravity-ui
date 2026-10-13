@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 9;
+  const POPUP_ENGINE_VERSION = 10;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -390,7 +390,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         left: 16px !important;
         right: auto !important;
         width: 330px !important;
-        height: auto !important;
+        height: 480px !important;
         max-height: calc(100vh - 75px) !important;
         background-color: var(--rtl-bg) !important;
         color: var(--rtl-text) !important;
@@ -432,13 +432,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         to { opacity: 1; transform: translateY(0); }
       }
 
-      /* Custom Crisp Scrollbar & Fluid Body */
+      /* Custom Crisp Scrollbar & Fixed-Frame Body */
       .rtl-panel-body {
         scrollbar-width: thin !important;
         scrollbar-color: rgba(140, 150, 170, 0.45) transparent !important;
-        flex: 1 1 auto;
-        overflow-y: auto;
-        max-height: calc(100vh - 160px);
+        flex: 1 1 0 !important;
+        overflow-y: auto !important;
         padding: 10px;
         display: flex;
         flex-direction: column;
