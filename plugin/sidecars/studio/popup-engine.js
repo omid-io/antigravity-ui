@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 8;
+  const POPUP_ENGINE_VERSION = 9;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -970,6 +970,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   function togglePopup(open) {
     isPopupOpen = open !== undefined ? open : !isPopupOpen;
     popup.classList.toggle('rtl-panel-open', isPopupOpen);
+    if (isPopupOpen && typeof window.__ANTIGRAVITY_SYNC_THEME_MODE__ === 'function') {
+      try { window.__ANTIGRAVITY_SYNC_THEME_MODE__(); } catch (_) {}
+    }
   }
 
   document.getElementById('p-btn-close').addEventListener('click', (e) => {
@@ -1127,23 +1130,61 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     });
   }
 
-  // Dark/Light tabs
+  // Dynamic Antigravity Theme Detection & Auto Sync
+  function detectAntigravityTheme() {
+    const isLight = document.body.classList.contains('theme-light') || 
+                    document.body.classList.contains('light') || 
+                    document.documentElement.classList.contains('light') || 
+                    document.body.classList.contains('vscode-light');
+    return isLight ? 'light' : 'dark';
+  }
+
+  function setMode(mode) {
+    const bDark = $('p-btn-dark');
+    const bLight = $('p-btn-light');
+    const grpDark = $('p-group-dark');
+    const grpLight = $('p-group-light');
+    const panel = $('antigravity-ui-popup');
+
+    if (panel) {
+      panel.classList.toggle('rtl-is-light', mode === 'light');
+      panel.classList.toggle('rtl-is-dark', mode === 'dark');
+    }
+
+    if (mode === 'light') {
+      bLight?.classList.add('active');
+      bDark?.classList.remove('active');
+      if (grpDark) grpDark.style.display = 'none';
+      if (grpLight) grpLight.style.display = 'flex';
+    } else {
+      bDark?.classList.add('active');
+      bLight?.classList.remove('active');
+      if (grpDark) grpDark.style.display = 'flex';
+      if (grpLight) grpLight.style.display = 'none';
+    }
+  }
+
+  window.__ANTIGRAVITY_SYNC_THEME_MODE__ = () => {
+    setMode(detectAntigravityTheme());
+  };
+
   const btnDark = $('p-btn-dark');
   const btnLight = $('p-btn-light');
   if (btnDark && btnLight) {
-    btnDark.addEventListener('click', () => {
-      btnDark.classList.add('active');
-      btnLight.classList.remove('active');
-      if ($('p-group-dark')) $('p-group-dark').style.display = 'flex';
-      if ($('p-group-light')) $('p-group-light').style.display = 'none';
-    });
-    btnLight.addEventListener('click', () => {
-      btnLight.classList.add('active');
-      btnDark.classList.remove('active');
-      if ($('p-group-dark')) $('p-group-dark').style.display = 'none';
-      if ($('p-group-light')) $('p-group-light').style.display = 'flex';
-    });
+    btnDark.addEventListener('click', () => setMode('dark'));
+    btnLight.addEventListener('click', () => setMode('light'));
   }
+
+  // Initial automatic mode sync to current Antigravity theme
+  setMode(detectAntigravityTheme());
+
+  // Dynamic observer for live Antigravity theme switches
+  try {
+    const themeObserver = new MutationObserver(() => {
+      setMode(detectAntigravityTheme());
+    });
+    themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+  } catch (_) {}
 
   // 3 Tabs Switcher
   document.querySelectorAll('.rtl-main-nav-btn').forEach(b => {
