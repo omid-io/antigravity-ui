@@ -2,7 +2,7 @@
 
 # 🌌 Antigravity UI Studio
 
-**The complete UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.**
+**The complete zero-patch UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/antigravity-ui.svg?color=cb3837)](https://www.npmjs.com/package/antigravity-ui)
@@ -14,7 +14,7 @@
 
 <p>
   <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v2.0.9)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.0.0)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
@@ -34,13 +34,14 @@
 
 ## 💡 Why Antigravity UI? (The Problems We Solve)
 
-| Default Google Antigravity | With Antigravity UI Studio |
+| Default Google Antigravity | With Antigravity UI Studio (v3.0 Native) |
 | :--- | :--- |
+| **Invasive Binary Patches:** Vulnerable to desktop app updates wiping custom changes. | **100% Zero-Patch Plugin:** Official Google Plugin architecture that safely survives app updates. |
 | **Fixed 256px Sidebar:** Wastes ~100px of valuable screen space on laptop displays. | **Fluid 160px–420px Sidebar:** Smooth mouse dragging with anti-clipping text layout. |
-| **Rigid Chat Styling:** Fixed colors with no control over message contrast or borders. | **Dual Dark Glow & Light 3D Studio:** Custom colors, borders, shadows & live sliders. |
-| **Fragmented Multilingual Text:** Persian/Arabic letters reversed, punctuation broken. | **Smart BiDi Engine:** Paragraph-level language detection + built-in Vazirmatn font. |
+| **Rigid Chat Styling:** Fixed colors with no control over message contrast or borders. | **Dual Dark Glow & Light 3D Studio:** Custom colors, borders, shadows & live sliders with 0ms lag. |
+| **Manual Theme Synchronization:** User must manually align settings to light/dark. | **Active Theme Auto-Detection:** Automatically switches to active theme (Light/Dark) in real time. |
+| **Fragmented Multilingual Text:** Persian/Arabic letters reversed, punctuation broken. | **Smart BiDi Engine:** Paragraph-level language detection + built-in Vazirmatn variable font. |
 | **Disconnected IDE:** No unified typography between Chat and Code Editor. | **Companion IDE Extension:** Native VS Code status bar toggle and `Ctrl+Alt+R` hotkey. |
-| **Zero Setup Agony:** No manual builds, cloning, or dependency friction. | **Single Command:** Instant execution via `npx antigravity-ui` across macOS, Linux, and Windows. |
 
 ---
 
@@ -75,20 +76,20 @@
 
 ---
 
-## ⚡ Dual-Engine Architecture
+## ⚡ Dual-Engine Architecture (Zero-Patch Ecosystem)
 
-**Antigravity UI** is engineered to provide a cohesive, unified workspace across your entire Google Antigravity workflow:
+**Antigravity UI** is engineered to provide a cohesive, unified workspace across your entire Google Antigravity workflow without touching Google's core binaries:
 
 ```mermaid
 flowchart LR
-    A["CLI: npx antigravity-ui"] --> B["Desktop Patcher (Asar)"]
+    A["Antigravity UI v3.0"] --> B["Official Plugin Sidecar<br/>(Zero Asar Patches)"]
     A --> C["IDE Extension Installer"]
-    B --> D["Antigravity Desktop App<br/>• 160px Compact Sidebar<br/>• Live Customizer Studio<br/>• Vazirmatn Variable Font<br/>• Dark Glow & Light 3D Themes"]
+    B --> D["Antigravity Desktop App<br/>• Native Sidebar 🌌 Button<br/>• 480px Fixed-Height Studio<br/>• 0ms Direct In-Memory Styling<br/>• Active Theme Auto-Sync<br/>• 160px Fluid Resizer"]
     C --> E["Antigravity IDE (VS Code Fork)<br/>• Status Bar RTL/LTR Toggle<br/>• Ctrl+Alt+R Shortcut<br/>• Editor Typography Injection<br/>• Unicode BiDi Markers"]
 ```
 
-1. **Antigravity Desktop App:** Injects the live visual customizer studio, ergonomic sidebar resizer, dynamic font sliders, and smart bidirectional text engine.
-2. **Antigravity IDE (VS Code Fork):** Automatically detects `antigravity-ide` and installs the native companion extension (`assets/antigravity-ui-1.0.0.vsix`), adding a status bar direction switch and `Ctrl+Alt+R` hotkey for code, markdown, and prompt editing.
+1. **Antigravity Desktop App (Native Plugin Engine):** Loads as an official Antigravity plugin. Injects the native 🌌 studio button directly into the chat sidebar, enables 0ms in-memory theme and font mutations, smart bidirectional text, and the fluid 160px sidebar resizer.
+2. **Antigravity IDE (VS Code Fork):** Automatically detects `antigravity-ide` and installs the native companion extension, adding a status bar direction switch and `Ctrl+Alt+R` hotkey for code, markdown, and prompt editing.
 
 ---
 
@@ -97,12 +98,11 @@ flowchart LR
 Antigravity UI Studio is version-aware and continuously validated against upstream Google releases:
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
-| :--- | :--- | :--- | :---: | :--- |
-| **Antigravity 2.17.x** (Latest) | `1.107.0+` (Code-OSS) | `v2.0.9` | 🟢 **Verified & Tested** | Full 160px sidebar + VSIX auto-installer |
-| **Antigravity 2.16.x** | `1.107.0+` | `v2.0.9` | 🟢 **Verified & Tested** | Injected via `void win.loadURL(url);` anchor |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v2.0.9` | 🟡 **Compatible** | Expected to work; standard Electron Asar structure |
-| **Antigravity 1.x** (Legacy) | `1.x` | `v2.0.9` | 🟡 **Legacy Compatible** | Basic Asar patch fallback |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v2.0.9` | 🟢 **CI-Verified** | 9-job matrix (Node 18, 20, 22 on Ubuntu, macOS, Windows) & 64-char SHA-256 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.0.0` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + 480px Studio + VSIX Companion |
+| **Antigravity 2.16.x** | `1.107.0+` | `v3.0.0` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.0.0` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v3.0.0` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
 
 ---
 
@@ -240,27 +240,29 @@ npx antigravity-ui --restore
 
 ---
 
-### 🌟 قابلیت های کلیدی
+### 🌟 قابلیت های کلیدی (نسخه ۳.۰ نیتِیو)
 
-#### ۱. معماری موتور دوگانه (Desktop + IDE)
-* **اپلیکیشن دسکتاپ Antigravity:** پچ امن و خودکار فایلهای هسته، فعال سازی استودیو کاستومایزر، تنظیم اسلایدرهای فونت و پشتیبانی از سایدبار ۱۶۰ پیکسلی.
-* **ادیتور کد Antigravity IDE:** شناسایی خودکار ادیتور کد (بر پایه VS Code) و نصب افزونه اختصاصی با کلید میانبر `Ctrl+Alt+R` و دکمه تغییر جهت در نوار وضعیت (Status Bar).
+#### ۱. معماری ۱۰۰٪ بدون پچ (Zero-Patch Architecture)
+* **پلاگین رسمی Antigravity:** بدون هیچ گونه دستکاری یا پچ کردن فایلهای باینری هسته گوگل (app.asar)؛ افزونه به صورت پلاگین رسمی اجرا شده و با به روزرسانی های نرم افزار پاک نمی شود.
+* **دکمه یکپارچه در سایدبار 🌌:** اضافه شدن دکمه استودیو مستقیماً در سایدبار اصلی بالای دکمه Settings با طراحی کاملاً بومی.
+* **ادیتور کد Antigravity IDE:** شناسایی خودکار ادیتور کد و نصب افزونه اختصاصی با کلید میانبر `Ctrl+Alt+R` و دکمه تغییر جهت در نوار وضعیت (Status Bar).
 
-#### ۲. استودیو شخصی سازی پیام ها (Dual Dark/Light UI)
-* **دو تب مستقل برای دارک مود و لایت مود:** تنظیم مجزای استایل پیام ها در تم تیره (با افکت درخشش نئونی / Neon Glow) و تم روشن (با سایه برجسته سه بعدی / 3D Shadow).
+#### ۲. استودیو شخصی سازی و انطباق خودکار تم (Dynamic Theme Auto-Sync)
+* **تشخیص هوشمند تم فعال:** استودیو به صورت خودکار تم جاری پنجره (روشن یا تاریک) را شناسایی کرده و تب مربوطه را باز می کند.
+* **تغییرات زنده بدون تاخیر (0ms In-Memory Mutation):** کلیه تغییرات رنگ، سایه و کادرها در لحظه در حافظه مرورگر اعمال می شوند بدون نیاز به ریستارت یا درخواست شبکه.
+* **ارتفاع ثابت و پایدار ۴۸۰ پیکسل:** فریم پنجره پاپ آپ در تمامی تب ها روی ۴۸۰ پیکسل ثابت مانده و حین تغییر تب هیچ پرشی ندارد.
 * **کنتراست استاندارد WCAG AAA:** تضمین خوانایی ۱۰۰٪ متون و لیبل ها در هر دو تم بدون هیچ گونه وارونگی یا محو شدگی.
-* **کنترل کامل المان های بصری:** شخصی سازی رنگ پس زمینه، رنگ متن، رنگ و ضخامت کادر و شدت سایه.
-* **استقلال کامل از موتور RTL:** اگر تمایلی به راست چین کردن متون نداشته باشید، می توانید موتور RTL را خاموش کرده و صرفاً از سایدبار ۱۶۰ پیکسلی و کاستومایزر ظاهر استفاده کنید.
+* **فوتر حمایتی با ستاره گیت هاب:** دکمه تعاملی برای ستاره دادن و حمایت از توسعه پروژه.
 
 #### ۳. سایدبار ارگونومیک فشرده (Compact 160px)
-* **جای گیری شیک در سایدبار بالای Settings:** خلوت ماندن محیط کار بدون مزاحمت دکمه های شناور.
 * **درگ آزاد و روان موس بین ۱۶۰ تا ۴۲۰ پیکسل:** شکستن محدودیت ۲۵۶ پیکسلی پیش فرض نرم افزار و صرفه جویی در فضای مانیتور لپ تاپ ها.
 * **بدون بریدگی متون:** چیدمان پین شده به چپ برای حفظ خوانایی منوها حتی در عرض ۱۶۰ پیکسل.
 
-#### ۴. تایپوگرافی هوشمند و فونت وزیرمتن
+#### ۴. تایپوگرافی کریستالی و فونت وزیرمتن
+* **رندرینگ ساب پیکسل بدون تاری:** حذف فیلترهای بلور و ترنسفرم های کسری جهت دستیابی به حداکثر شفافیت ClearType.
 * **راست چین خودکار پاراگراف ها:** تشخیص هوشمند زبان هر پاراگراف؛ متن فارسی راست چین و کدهای انگلیسی چپ چین می مانند.
-* **فونت توکار Vazirmatn Variable:** بالاترین سطح وضوح و خوانایی بدون نیاز به نصب دستی فونت در سیستم عامل.
-* **حل مشکل کیبورد فارسی:** نگاشت خودکار کلید ترکیبی `Shift + 2` برای تایپ کاراکتر `@` به جای «٬» در چیدمان فارسی.
+* **فونت توکار Vazirmatn Variable:** بالاترین سطح وضوح و خوانایی با وزن ۴۰۰ متعادل.
+* **حل مشکل کیبورد فارسی:** نگاشت خودکار کلید ترکیبی `Shift + 2` برای تایپ کاراکتر `@` در چیدمان فارسی.
 
 ---
 

@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.0.0] - 2026-10-13
+
+### Added
+- **Zero-Patch Native Plugin Architecture:** Transitioned from invasive `app.asar` extraction and patching to a 100% official Google Antigravity Plugin structure. Completely eliminates binary tampering and survives desktop updates without breaking.
+- **Native Sidebar Activity Docking:** Injected a sleek, integrated Galaxy 🌌 button directly above Settings in the primary chat sidebar.
+- **Direct In-Memory Mutation (0ms Latency):** Eliminated network HTTP roundtrips between the main window and sidecar. Toggles, sliders, and color pickers instantly mutate CSS styles and variables directly in client DOM with zero lag.
+- **Dynamic Active Theme Auto-Sync:** Integrated real-time Antigravity window theme detection (`theme-light` vs `theme-dark`). The popup customizer automatically defaults to the active theme tab (Light or Dark) upon opening, powered by a reactive `MutationObserver`.
+- **Pixel-Crisp Subpixel Typography (Anti AI-Slop Standard):** Removed destructive `backdrop-filter: blur(...)` and fractional GPU matrix scalings (`transform: scale(...)`). When open, the panel enforces `transform: none !important;` with `-webkit-font-smoothing: antialiased;` and Vazirmatn variable font for razor-sharp ClearType readability.
+- **Stable 480px Fixed-Height Frame:** Replaced erratic tab-jumping heights with a balanced, rock-solid 480px fixed height frame across all 3 tabs, eliminating visual jitter during tab switching.
+- **Interactive GitHub Star Badge Footer:** Replaced basic text link with a polished capsule badge featuring gold animated star SVG (`#f59e0b`), subtle hover elevation, and a minimalist `v3.0 Native` version pill.
+
+### Fixed
+- **Periodic 2.5s Reflow Flicker:** Replaced destructive periodic `Runtime.evaluate` stylesheet overwrites with a non-destructive DOM health check. If styles and buttons exist, the DOM is left untouched, permanently resolving shadow blinking and sidebar jumps.
+- **Bidirectional Inversion Fix:** Enforced strict `direction: rtl` and `unicode-bidi: isolate` on panel labels, preventing parenthesis inversion (e.g. `(RTL)`) in Persian UI text.
+
+---
+
 ## [2.0.10] - 2026-10-06
 
 ### Fixed
