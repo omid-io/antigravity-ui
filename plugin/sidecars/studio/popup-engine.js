@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 6;
+  const POPUP_ENGINE_VERSION = 8;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -375,9 +375,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         overflow: visible !important;
       }
 
-      /* Pixel-Crisp Popup Panel (Zero Fractional GPU Blur) */
+      /* Pixel-Crisp Popup Panel (Zero Fractional GPU Blur & Natural Height) */
       .rtl-widget-panel {
         font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-weight: 400 !important;
+        font-synthesis: none !important;
+        direction: rtl !important;
+        text-align: right !important;
         -webkit-font-smoothing: antialiased !important;
         -moz-osx-font-smoothing: grayscale !important;
         text-rendering: optimizeLegibility !important;
@@ -385,9 +389,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         bottom: 56px !important;
         left: 16px !important;
         right: auto !important;
-        width: 326px !important;
-        height: 524px !important;
-        max-height: 85vh !important;
+        width: 330px !important;
+        height: auto !important;
+        max-height: calc(100vh - 75px) !important;
         background-color: var(--rtl-bg) !important;
         color: var(--rtl-text) !important;
         border: 1px solid var(--rtl-border) !important;
@@ -428,12 +432,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         to { opacity: 1; transform: translateY(0); }
       }
 
-      /* Custom Crisp Scrollbar */
+      /* Custom Crisp Scrollbar & Fluid Body */
       .rtl-panel-body {
         scrollbar-width: thin !important;
         scrollbar-color: rgba(140, 150, 170, 0.45) transparent !important;
-        flex: 1 1 0;
+        flex: 1 1 auto;
         overflow-y: auto;
+        max-height: calc(100vh - 160px);
         padding: 10px;
         display: flex;
         flex-direction: column;
@@ -453,12 +458,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       }
       .rtl-main-nav-btn {
         flex: 1 1 0;
-        padding: 6px 4px;
+        padding: 5px 3px;
         border: none;
         background: transparent;
         color: var(--rtl-text-secondary);
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 500 !important;
         border-radius: 7px;
         cursor: pointer;
         transition: all 0.15s ease;
@@ -468,6 +473,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       .rtl-main-nav-btn.active {
         background-color: var(--rtl-accent) !important;
         color: #ffffff !important;
+        font-weight: 600 !important;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       }
 
@@ -487,7 +493,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         justify-content: space-between;
         gap: 8px;
         font-size: 11.5px;
-        font-weight: 500;
+        font-weight: 400 !important;
         color: var(--rtl-text);
         min-height: 26px;
       }
@@ -496,6 +502,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         overflow: hidden;
         text-overflow: ellipsis;
         flex: 1 1 auto;
+        font-weight: 400 !important;
+        direction: rtl !important;
+        text-align: right !important;
+        unicode-bidi: isolate !important;
+        letter-spacing: -0.1px;
       }
 
       /* Switch (Sharp & Clean) */
@@ -660,25 +671,67 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         color: #ffffff;
       }
 
-      /* Footer */
+      /* Footer (Enhanced GitHub Star Invite & Clean Badge) */
       .rtl-panel-footer {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 8px 12px;
+        padding: 9px 12px;
         border-top: 1px solid var(--rtl-border-subtle);
         background-color: var(--rtl-surface);
-        font-size: 11px;
+        direction: rtl !important;
       }
       .rtl-footer-link {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        color: var(--rtl-text-secondary);
         text-decoration: none;
-        font-weight: 500;
+        color: var(--rtl-text);
       }
-      .rtl-footer-link:hover { color: #f59e0b; }
+      .rtl-star-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        background: var(--rtl-card-bg);
+        border: 1px solid var(--rtl-border);
+        font-size: 11px;
+        font-weight: 450;
+        color: var(--rtl-text);
+        transition: all 0.16s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .rtl-star-badge:hover {
+        background: var(--rtl-surface-hover);
+        border-color: #f59e0b;
+        color: #f59e0b;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.22);
+      }
+      .rtl-star-icon {
+        filter: drop-shadow(0 1px 2px rgba(245, 158, 11, 0.4));
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .rtl-star-badge:hover .rtl-star-icon {
+        transform: scale(1.2) rotate(15deg);
+      }
+      .rtl-gh-icon {
+        opacity: 0.75;
+        transition: opacity 0.15s ease;
+      }
+      .rtl-star-badge:hover .rtl-gh-icon {
+        opacity: 1;
+      }
+      .rtl-version-pill {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+        font-size: 10px;
+        color: var(--rtl-text-muted);
+        background: var(--rtl-card-bg);
+        padding: 2.5px 7px;
+        border-radius: 6px;
+        border: 1px solid var(--rtl-border-subtle);
+        direction: ltr !important;
+      }
     \`;
 
   // 2. Mount Container & Popup DOM
@@ -691,13 +744,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   container.innerHTML = \`
     <div id="antigravity-ui-popup" class="rtl-widget-panel">
       <!-- Pinned Top Header -->
-      <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 8px; border-bottom: 1px solid var(--rtl-border-subtle);">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 8px; border-bottom: 1px solid var(--rtl-border-subtle); direction: rtl !important;">
         <div style="display: flex; align-items: center; justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px;">
-            <span style="font-size: 16px;">🌌</span>
+          <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; color: var(--rtl-text);">
+            <span style="font-size: 16px; line-height: 1;">🌌</span>
             <span>Antigravity UI Studio</span>
           </div>
-          <button id="p-btn-close" type="button" style="background: none; border: none; cursor: pointer; color: var(--rtl-text-muted); font-size: 16px; padding: 2px 6px;">✕</button>
+          <button id="p-btn-close" type="button" style="background: none; border: none; cursor: pointer; color: var(--rtl-text-muted); font-size: 16px; padding: 2px 6px; line-height: 1;" title="بستن">✕</button>
         </div>
 
         <!-- 3 Tabs Switcher -->
@@ -767,7 +820,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         <div id="ptab-theme" class="rtl-tab-view">
           <div class="rtl-card">
             <div class="rtl-control-row">
-              <span style="font-weight: 600;">استایل اختصاصی حباب پیام کاربر</span>
+              <span>استایل اختصاصی حباب پیام کاربر</span>
               <label class="rtl-switch">
                 <input type="checkbox" id="p-userMsgEnabled">
                 <span class="rtl-slider"></span>
@@ -865,7 +918,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           <div class="rtl-card">
             <div class="rtl-control-row">
               <div>
-                <span style="font-weight: 500;">کادر دور باکس ورودی چت</span>
+                <span>کادر دور باکس ورودی چت</span>
                 <p style="margin: 2px 0 0 0; font-size: 10px; color: var(--rtl-text-muted);">همگام‌سازی کادر با پیام کاربر</p>
               </div>
               <label class="rtl-switch">
@@ -896,14 +949,16 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         </div>
       </div>
 
-      <!-- Pinned Footer -->
+      <!-- Pinned Footer (Enhanced GitHub Star Invite & Clean Badge) -->
       <div class="rtl-panel-footer">
-        <a href="https://github.com/omid-io/antigravity-ui" target="_blank" class="rtl-footer-link">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
-          <span>پروژه در گیت‌هاب</span>
-          <span style="color: #f59e0b; font-weight: 700; margin-right: 4px;">★ Star</span>
+        <a href="https://github.com/omid-io/antigravity-ui" target="_blank" class="rtl-footer-link" title="مشاهده ریپازیتوری در گیت‌هاب و ثبت ستاره">
+          <span class="rtl-star-badge">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" class="rtl-gh-icon"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+            <span>حمایت با ستاره در گیت‌هاب</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" class="rtl-star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          </span>
         </a>
-        <span style="font-family: ui-monospace, monospace; font-size: 10px; color: var(--rtl-text-muted);">v3.0 Native</span>
+        <span class="rtl-version-pill">v3.0 Native</span>
       </div>
     </div>
   \`;
