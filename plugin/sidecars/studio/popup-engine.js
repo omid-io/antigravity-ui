@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 21;
+  const POPUP_ENGINE_VERSION = 22;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -907,56 +907,71 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       .rtl-star-badge:hover .rtl-gh-icon {
         opacity: 1;
       }
-      .rtl-version-btn {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-        font-size: 10px;
+      .rtl-update-action-btn {
+        font-family: inherit !important;
+        font-size: 11px;
         font-weight: 500;
-        color: var(--rtl-text-muted);
+        color: var(--rtl-text);
         background: var(--rtl-card-bg);
-        padding: 2.5px 8px;
-        border-radius: 6px;
-        border: 1px solid var(--rtl-border-subtle);
+        padding: 4px 10px;
+        border-radius: 7px;
+        border: 1px solid var(--rtl-border);
         direction: ltr !important;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 6px;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         user-select: none;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       }
-      .rtl-version-btn:hover {
+      .rtl-update-action-btn:hover {
         background: var(--rtl-surface);
-        border-color: var(--rtl-border);
-        color: var(--rtl-text);
+        border-color: var(--rtl-primary, #6366f1);
+        color: var(--rtl-primary, #6366f1);
         transform: translateY(-1px);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 3px 8px rgba(99, 102, 241, 0.15);
       }
-      .rtl-version-btn:active {
+      .rtl-update-action-btn:active {
         transform: translateY(0);
       }
-      .rtl-version-btn.rtl-update-available {
+      .rtl-update-action-btn .rtl-refresh-icon {
+        transition: transform 0.4s ease;
+      }
+      .rtl-update-action-btn:hover .rtl-refresh-icon {
+        transform: rotate(90deg);
+      }
+      .rtl-update-action-btn.rtl-checking .rtl-refresh-icon {
+        animation: rtlSpin 1s linear infinite;
+      }
+      .rtl-update-action-btn.rtl-update-available {
         background: rgba(245, 158, 11, 0.15) !important;
-        border-color: rgba(245, 158, 11, 0.5) !important;
-        color: #f59e0b !important;
+        border-color: rgba(245, 158, 11, 0.7) !important;
+        color: #d97706 !important;
         font-weight: 600 !important;
         animation: rtlUpdatePulse 2s infinite ease-in-out;
       }
-      .rtl-version-btn.rtl-updating {
-        pointer-events: none;
-        opacity: 0.8;
+      .rtl-version-tag {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+        font-size: 10px;
+        color: var(--rtl-text-muted);
+        opacity: 0.85;
+      }
+      @keyframes rtlSpin {
+        100% { transform: rotate(360deg); }
       }
       @keyframes rtlUpdatePulse {
         0% {
-          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
-          border-color: rgba(245, 158, 11, 0.4);
+          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6);
+          border-color: rgba(245, 158, 11, 0.5);
         }
         50% {
           box-shadow: 0 0 0 5px rgba(245, 158, 11, 0);
-          border-color: rgba(245, 158, 11, 0.9);
+          border-color: rgba(245, 158, 11, 1);
         }
         100% {
-          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
-          border-color: rgba(245, 158, 11, 0.4);
+          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6);
+          border-color: rgba(245, 158, 11, 0.5);
         }
       }
     \`;
@@ -1185,10 +1200,15 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" class="rtl-star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           </span>
         </a>
-        <button id="p-btn-version" type="button" class="rtl-version-btn" title="Click to check for updates">
-          <span id="p-version-icon" style="font-size: 11px; line-height: 1;">🏷️</span>
-          <span id="p-version-text">v3.0.1</span>
-        </button>
+        <div style="display: inline-flex; align-items: center; gap: 8px;">
+          <span class="rtl-version-tag">v3.0.1</span>
+          <button id="p-btn-check-update" type="button" class="rtl-update-action-btn" title="Check GitHub for newer releases">
+            <svg class="rtl-refresh-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            <span id="p-update-btn-label">Check Updates</span>
+          </button>
+        </div>
       </div>
     </div>
   \`;
@@ -1494,9 +1514,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   }
 
   // Version & GitHub 1-Click Update System
-  const versionBtn = $('p-btn-version');
-  const versionIcon = $('p-version-icon');
-  const versionText = $('p-version-text');
+  const updateBtn = $('p-btn-check-update');
+  const updateLabel = $('p-update-btn-label');
   let isCheckingUpdate = false;
   let isPerformingUpdate = false;
   let availableUpdateInfo = null;
@@ -1504,7 +1523,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   async function checkUpdateStatus(quiet = false) {
     if (isCheckingUpdate || isPerformingUpdate) return;
     isCheckingUpdate = true;
-    if (!quiet && versionText) versionText.textContent = 'Checking...';
+    if (updateBtn) updateBtn.classList.add('rtl-checking');
+    if (!quiet && updateLabel) updateLabel.textContent = 'Checking...';
 
     const currentVer = '3.0.1';
     let updateFound = false;
@@ -1539,36 +1559,35 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
       if (updateFound && remoteVer) {
         availableUpdateInfo = { updateAvailable: true, remoteVersion: remoteVer, currentVersion: currentVer };
-        if (versionBtn) {
-          versionBtn.classList.add('rtl-update-available');
-          versionBtn.title = \`Update available (v\${remoteVer})! Click to update now.\`;
+        if (updateBtn) {
+          updateBtn.classList.add('rtl-update-available');
+          updateBtn.title = \`New version v\${remoteVer} is available! Click to update now.\`;
         }
-        if (versionIcon) versionIcon.textContent = '✨';
-        if (versionText) versionText.textContent = \`Update v\${remoteVer}\`;
+        if (updateLabel) updateLabel.textContent = \`Update to v\${remoteVer} ✨\`;
       } else {
         availableUpdateInfo = null;
-        if (versionBtn) {
-          versionBtn.classList.remove('rtl-update-available');
-          versionBtn.title = 'Click to check for updates';
+        if (updateBtn) {
+          updateBtn.classList.remove('rtl-update-available');
+          updateBtn.title = 'Check GitHub for newer releases';
         }
-        if (versionIcon) versionIcon.textContent = '🏷️';
-        if (versionText) {
-          versionText.textContent = quiet ? \`v\${currentVer}\` : 'Up to date ✔';
+        if (updateLabel) {
+          updateLabel.textContent = quiet ? 'Check Updates' : 'Up to date ✔';
           if (!quiet) {
             setTimeout(() => {
-              if (!availableUpdateInfo && versionText) versionText.textContent = \`v\${currentVer}\`;
+              if (!availableUpdateInfo && updateLabel) updateLabel.textContent = 'Check Updates';
             }, 2500);
           }
         }
       }
     } catch (e) {
-      if (!quiet && versionText) {
-        versionText.textContent = 'Up to date ✔';
+      if (!quiet && updateLabel) {
+        updateLabel.textContent = 'Up to date ✔';
         setTimeout(() => {
-          if (versionText) versionText.textContent = \`v\${currentVer}\`;
+          if (updateLabel) updateLabel.textContent = 'Check Updates';
         }, 2000);
       }
     } finally {
+      if (updateBtn) updateBtn.classList.remove('rtl-checking');
       isCheckingUpdate = false;
     }
   }
@@ -1576,50 +1595,52 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   async function triggerUpdateFlow() {
     if (isPerformingUpdate) return;
     isPerformingUpdate = true;
-    if (versionBtn) versionBtn.classList.add('rtl-updating');
-    if (versionIcon) versionIcon.textContent = '⏳';
-    if (versionText) versionText.textContent = 'Updating...';
+    if (updateBtn) {
+      updateBtn.classList.add('rtl-updating');
+      updateBtn.classList.add('rtl-checking');
+    }
+    if (updateLabel) updateLabel.textContent = 'Updating...';
 
     try {
       if (SIDECAR_PORT > 0) {
         const res = await fetch(\`http://localhost:\${SIDECAR_PORT}/api/perform-update\`, { method: 'POST' });
         const result = await res.json();
         if (result.success) {
-          if (versionBtn) {
-            versionBtn.classList.remove('rtl-update-available');
-            versionBtn.classList.remove('rtl-updating');
+          if (updateBtn) {
+            updateBtn.classList.remove('rtl-update-available');
+            updateBtn.classList.remove('rtl-updating');
+            updateBtn.classList.remove('rtl-checking');
           }
-          if (versionIcon) versionIcon.textContent = '🎉';
-          if (versionText) versionText.textContent = \`Updated to v\${result.version}!\`;
+          if (updateLabel) updateLabel.textContent = \`Updated to v\${result.version}! 🎉\`;
           availableUpdateInfo = null;
           setTimeout(() => {
-            if (versionText) versionText.textContent = \`v\${result.version}\`;
-            if (versionIcon) versionIcon.textContent = '🏷️';
+            if (updateLabel) updateLabel.textContent = 'Check Updates';
           }, 3000);
           return;
         }
       }
       // If sidecar API unavailable, open GitHub releases in browser
       window.open('https://github.com/omid-io/antigravity-ui/releases', '_blank');
-      if (versionBtn) versionBtn.classList.remove('rtl-updating');
-      if (versionIcon) versionIcon.textContent = '🔗';
-      if (versionText) versionText.textContent = 'Opened GitHub';
+      if (updateBtn) {
+        updateBtn.classList.remove('rtl-updating');
+        updateBtn.classList.remove('rtl-checking');
+      }
+      if (updateLabel) updateLabel.textContent = 'Opened GitHub 🔗';
       setTimeout(() => {
-        if (versionIcon) versionIcon.textContent = '✨';
-        if (versionText && availableUpdateInfo) versionText.textContent = \`Update v\${availableUpdateInfo.remoteVersion}\`;
+        if (updateLabel && availableUpdateInfo) updateLabel.textContent = \`Update to v\${availableUpdateInfo.remoteVersion} ✨\`;
       }, 3000);
     } catch (err) {
-      if (versionBtn) versionBtn.classList.remove('rtl-updating');
-      if (versionIcon) versionIcon.textContent = '⚠️';
-      if (versionText) versionText.textContent = 'Update Error';
+      if (updateBtn) {
+        updateBtn.classList.remove('rtl-updating');
+        updateBtn.classList.remove('rtl-checking');
+      }
+      if (updateLabel) updateLabel.textContent = 'Update Error ⚠️';
       setTimeout(() => {
         if (availableUpdateInfo) {
-          if (versionBtn) versionBtn.classList.add('rtl-update-available');
-          if (versionIcon) versionIcon.textContent = '✨';
-          if (versionText) versionText.textContent = \`Update v\${availableUpdateInfo.remoteVersion}\`;
+          if (updateBtn) updateBtn.classList.add('rtl-update-available');
+          if (updateLabel) updateLabel.textContent = \`Update to v\${availableUpdateInfo.remoteVersion} ✨\`;
         } else {
-          if (versionIcon) versionIcon.textContent = '🏷️';
-          if (versionText) versionText.textContent = 'v3.0.1';
+          if (updateLabel) updateLabel.textContent = 'Check Updates';
         }
       }, 3000);
     } finally {
@@ -1627,8 +1648,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     }
   }
 
-  if (versionBtn) {
-    versionBtn.addEventListener('click', (e) => {
+  if (updateBtn) {
+    updateBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (availableUpdateInfo) {
         triggerUpdateFlow();
