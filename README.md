@@ -14,7 +14,7 @@
 
 <p>
   <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.0.1)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.2.0)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
@@ -51,8 +51,8 @@
 <table>
   <tr>
     <td align="center" width="46%" valign="top">
-      <h4>🎛️ Dual-Theme UI Studio</h4>
-      <p><sub>Independent Dark (Glow) & Light (3D Shadow) modes with smooth tab physics</sub></p>
+      <h4>🎛️ Tactile UI Studio & Dual-Theme Engine</h4>
+      <p><sub>Claymorphism 3D Soft HUD, Dark (Glow) & Light modes, and Clay bubble depth preset</sub></p>
       <img src="assets/tab-switch.gif" width="270" alt="Tab Switch Preview">
     </td>
     <td align="center" width="54%" valign="top">
@@ -99,20 +99,21 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.0.1` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Pure CSS Sidebar + BiDi Questions + VSIX Companion |
-| **Antigravity 2.16.x** | `1.107.0+` | `v3.0.1` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.0.1` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v3.0.1` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
+| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.2.0` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Pure CSS Sidebar + BiDi Questions + VSIX Companion |
+| **Antigravity 2.16.x** | `1.107.0+` | `v3.2.0` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.2.0` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v3.2.0` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
 
 ---
 
 ## ✨ Features
 
 ### 🎨 Dual-Theme UI & Styling Engine
-- **Independent Theme Tabs**: Customize user message bubbles separately for **Dark Mode** (with vibrant Neon Glow) and **Light Mode** (with elevated 3D shadow).
+- **Independent Theme Tabs**: Customize user message bubbles separately for **Dark Mode** (with vibrant Neon Glow) and **Light Mode** (with elevated 3D shadow and tactile Clay presets).
 - **Zero-Inversion Contrast (WCAG AAA)**: Text and labels stay crystal clear across all themes without washed-out labels or inverted colors.
-- **Granular Visual Controls**: Custom background color, text color, border width, border color, and shadow intensity presets (`None`, `Soft`, `3D`, `Glow`).
+- **Granular Visual Controls**: Custom background color, text color, border width, border color, and shadow intensity presets (`None`, `Soft`, `3D`, `Clay`, `Glow`).
 - **Synchronized Chat Input**: Automatically harmonizes the active prompt input box border with your personalized bubble styling.
+- **Autonomous 1-Click In-Place Updates**: Instant background updates streamed directly into the sidecar environment without opening external browser tabs.
 - **Decoupled Architecture**: Custom UI styling stays 100% active even when the RTL engine is toggled off (ideal for English-only developers who only want the UI perks!).
 
 ### 📐 Ergonomic Workspace & Pure CSS Compact Sidebar (160px)
