@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 16;
+  const POPUP_ENGINE_VERSION = 20;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -24,6 +24,15 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const SIDECAR_TOKEN = "${sidecarToken || ''}";
   const FONT_BASE64 = "${fontBase64 || ''}";
   let currentConfig = ${cfgJson};
+  try {
+    const cached = localStorage.getItem('__antigravity_ui_config__');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (parsed && typeof parsed === 'object') {
+        currentConfig = Object.assign({}, currentConfig, parsed);
+      }
+    }
+  } catch (_) {}
 
   // 0. Direct in-memory styling engine (0ms latency, zero network dependency)
   function applyConfigDirectly(c) {
@@ -555,11 +564,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
       /* Pixel-Crisp Popup Panel (Zero Fractional GPU Blur & Natural Height) */
       .rtl-widget-panel {
-        font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
         font-weight: 400 !important;
         font-synthesis: none !important;
-        direction: rtl !important;
-        text-align: right !important;
+        direction: ltr !important;
+        text-align: left !important;
         -webkit-font-smoothing: antialiased !important;
         -moz-osx-font-smoothing: grayscale !important;
         text-rendering: optimizeLegibility !important;
@@ -680,9 +689,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         text-overflow: ellipsis;
         flex: 1 1 auto;
         font-weight: 400 !important;
-        direction: rtl !important;
-        text-align: right !important;
-        unicode-bidi: isolate !important;
+        direction: ltr !important;
+        text-align: left !important;
         letter-spacing: -0.1px;
       }
 
@@ -856,7 +864,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         padding: 9px 12px;
         border-top: 1px solid var(--rtl-border-subtle);
         background-color: var(--rtl-surface);
-        direction: rtl !important;
+        direction: ltr !important;
       }
       .rtl-footer-link {
         display: inline-flex;
@@ -921,20 +929,20 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   container.innerHTML = \`
     <div id="antigravity-ui-popup" class="rtl-widget-panel">
       <!-- Pinned Top Header -->
-      <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 8px; border-bottom: 1px solid var(--rtl-border-subtle); direction: rtl !important;">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 8px; border-bottom: 1px solid var(--rtl-border-subtle); direction: ltr !important;">
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; color: var(--rtl-text);">
             <span style="font-size: 16px; line-height: 1;">🌌</span>
             <span>Antigravity UI Studio</span>
           </div>
-          <button id="p-btn-close" type="button" style="background: none; border: none; cursor: pointer; color: var(--rtl-text-muted); font-size: 16px; padding: 2px 6px; line-height: 1;" title="بستن">✕</button>
+          <button id="p-btn-close" type="button" style="background: none; border: none; cursor: pointer; color: var(--rtl-text-muted); font-size: 16px; padding: 2px 6px; line-height: 1;" title="Close">✕</button>
         </div>
 
         <!-- 3 Tabs Switcher -->
         <div class="rtl-main-nav">
-          <button type="button" class="rtl-main-nav-btn active" data-tab="ptab-typo">راست‌چین و قلم</button>
-          <button type="button" class="rtl-main-nav-btn" data-tab="ptab-theme">پیام کاربر و تم</button>
-          <button type="button" class="rtl-main-nav-btn" data-tab="ptab-sidebar">سایدبار و محیط</button>
+          <button type="button" class="rtl-main-nav-btn active" data-tab="ptab-typo">Typography & RTL</button>
+          <button type="button" class="rtl-main-nav-btn" data-tab="ptab-theme">Bubble & Themes</button>
+          <button type="button" class="rtl-main-nav-btn" data-tab="ptab-sidebar">Sidebar & Layout</button>
         </div>
       </div>
 
@@ -944,47 +952,47 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         <div id="ptab-typo" class="rtl-tab-view active">
           <div class="rtl-card">
             <div class="rtl-control-row">
-              <span>موتور هوشمند راست‌چین (RTL)</span>
+              <span>Smart RTL Engine</span>
               <label class="rtl-switch">
                 <input type="checkbox" id="p-isRTL">
                 <span class="rtl-slider"></span>
               </label>
             </div>
             <div class="rtl-control-row">
-              <span>اجبار سراسری به راست‌چین (Force RTL)</span>
+              <span>Force Global RTL</span>
               <label class="rtl-switch">
                 <input type="checkbox" id="p-forceRTL">
                 <span class="rtl-slider"></span>
               </label>
             </div>
             <div class="rtl-control-row">
-              <span>فونت فارسی (FA Font)</span>
-              <input type="text" id="p-faFont" class="rtl-text-input" placeholder="پیش‌فرض: Vazirmatn">
+              <span>Persian Font (FA)</span>
+              <input type="text" id="p-faFont" class="rtl-text-input" placeholder="Default: Vazirmatn">
             </div>
             <div class="rtl-control-row">
-              <span>فونت انگلیسی (EN Font)</span>
-              <input type="text" id="p-enFont" class="rtl-text-input" placeholder="پیش‌فرض: System">
+              <span>English Font (EN)</span>
+              <input type="text" id="p-enFont" class="rtl-text-input" placeholder="Default: System UI">
             </div>
             <div class="rtl-control-row">
-              <span>فونت کدها (Code Font)</span>
-              <input type="text" id="p-codeFont" class="rtl-text-input" placeholder="پیش‌فرض: Monospace">
+              <span>Code Font (Mono)</span>
+              <input type="text" id="p-codeFont" class="rtl-text-input" placeholder="Default: Monospace">
             </div>
             <div class="rtl-control-row">
-              <span>ارتفاع خطوط (Line Height)</span>
+              <span>Line Height</span>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <input type="range" id="p-lh" min="1.2" max="2.5" step="0.1" class="rtl-range-slider">
                 <span id="p-val-lh" class="rtl-badge-val">1.6</span>
               </div>
             </div>
             <div class="rtl-control-row">
-              <span>اندازه قلم (Font Size)</span>
+              <span>Font Size</span>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <input type="range" id="p-fs" min="11" max="22" step="1" class="rtl-range-slider">
                 <span id="p-val-fs" class="rtl-badge-val">16px</span>
               </div>
             </div>
             <div class="rtl-control-row">
-              <span>اصلاح Shift+2 برای علامت @</span>
+              <span>Fix Shift+2 for @ Symbol</span>
               <label class="rtl-switch">
                 <input type="checkbox" id="p-fixAtSign">
                 <span class="rtl-slider"></span>
@@ -997,7 +1005,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         <div id="ptab-theme" class="rtl-tab-view">
           <div class="rtl-card">
             <div class="rtl-control-row">
-              <span>استایل اختصاصی حباب پیام کاربر</span>
+              <span>Custom User Bubble Style</span>
               <label class="rtl-switch">
                 <input type="checkbox" id="p-userMsgEnabled">
                 <span class="rtl-slider"></span>
@@ -1005,42 +1013,42 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             </div>
 
             <div class="rtl-mode-switcher">
-              <button type="button" id="p-btn-dark" class="rtl-mode-btn active">تاریک (Dark)</button>
-              <button type="button" id="p-btn-light" class="rtl-mode-btn">روشن (Light)</button>
+              <button type="button" id="p-btn-dark" class="rtl-mode-btn active">Dark Theme</button>
+              <button type="button" id="p-btn-light" class="rtl-mode-btn">Light Theme</button>
             </div>
 
             <!-- Dark controls -->
             <div id="p-group-dark" style="display: flex; flex-direction: column; gap: 6px;">
               <div class="rtl-control-row">
-                <span>رنگ پس‌زمینه</span>
+                <span>Background Color</span>
                 <div style="display: flex; align-items: center; gap: 4px;">
                   <input type="color" id="p-dark-bg" class="rtl-color-input">
                   <input type="text" id="p-dark-bg-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
-                <span>رنگ متن</span>
+                <span>Text Color</span>
                 <div style="display: flex; align-items: center; gap: 4px;">
                   <input type="color" id="p-dark-text" class="rtl-color-input">
                   <input type="text" id="p-dark-text-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
-                <span>رنگ کادر</span>
+                <span>Border Color</span>
                 <div style="display: flex; align-items: center; gap: 4px;">
                   <input type="color" id="p-dark-border" class="rtl-color-input">
                   <input type="text" id="p-dark-border-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
-                <span>ضخامت کادر</span>
+                <span>Border Width</span>
                 <div style="display: flex; align-items: center; gap: 4px;">
                   <input type="range" id="p-dark-bw" min="0" max="4" step="0.5" class="rtl-range-slider">
                   <span id="p-val-dark-bw" class="rtl-badge-val">1.5px</span>
                 </div>
               </div>
               <div class="rtl-control-row">
-                <span>سایه و عمق حباب</span>
+                <span>Bubble Shadow & Depth</span>
                 <div class="rtl-shadow-group" id="p-dark-shadow-group">
                   <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
                   <button type="button" class="rtl-shadow-btn active" data-val="soft">Soft</button>
@@ -1053,35 +1061,35 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             <!-- Light controls -->
             <div id="p-group-light" style="display: none; flex-direction: column; gap: 6px;">
               <div class="rtl-control-row">
-                <span>رنگ پس‌زمینه</span>
+                <span>Background Color</span>
                 <div style="display: flex; align-items: center; gap: 4px;">
                   <input type="color" id="p-light-bg" class="rtl-color-input">
                   <input type="text" id="p-light-bg-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
-                <span>رنگ متن</span>
+                <span>Text Color</span>
                 <div style="display: flex; align-items: center; gap: 4px;">
                   <input type="color" id="p-light-text" class="rtl-color-input">
                   <input type="text" id="p-light-text-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
-                <span>رنگ کادر</span>
+                <span>Border Color</span>
                 <div style="display: flex; align-items: center; gap: 4px;">
                   <input type="color" id="p-light-border" class="rtl-color-input">
                   <input type="text" id="p-light-border-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
-                <span>ضخامت کادر</span>
+                <span>Border Width</span>
                 <div style="display: flex; align-items: center; gap: 4px;">
                   <input type="range" id="p-light-bw" min="0" max="4" step="0.5" class="rtl-range-slider">
                   <span id="p-val-light-bw" class="rtl-badge-val">1.5px</span>
                 </div>
               </div>
               <div class="rtl-control-row">
-                <span>سایه و عمق حباب</span>
+                <span>Bubble Shadow & Depth</span>
                 <div class="rtl-shadow-group" id="p-light-shadow-group">
                   <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
                   <button type="button" class="rtl-shadow-btn active" data-val="soft">Soft</button>
@@ -1095,8 +1103,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           <div class="rtl-card">
             <div class="rtl-control-row">
               <div>
-                <span>کادر دور باکس ورودی چت</span>
-                <p style="margin: 2px 0 0 0; font-size: 10px; color: var(--rtl-text-muted);">همگام‌سازی کادر با پیام کاربر</p>
+                <span>Harmonize Chat Input Border</span>
+                <p style="margin: 2px 0 0 0; font-size: 10px; color: var(--rtl-text-muted);">Sync input box border and glow with user bubble style</p>
               </div>
               <label class="rtl-switch">
                 <input type="checkbox" id="p-inputBoxEnabled">
@@ -1110,17 +1118,17 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         <div id="ptab-sidebar" class="rtl-tab-view">
           <div class="rtl-card">
             <div class="rtl-control-row">
-              <span>سایدبار فوق‌فشرده (امکان ریسایز تا ۱۶۰px)</span>
+              <span>Compact Sidebar (Resize down to 160px)</span>
               <label class="rtl-switch">
                 <input type="checkbox" id="p-compactSidebar">
                 <span class="rtl-slider"></span>
               </label>
             </div>
             <p style="margin: 2px 0 6px 0; font-size: 10.5px; color: var(--rtl-text-muted); line-height: 1.4;">
-              با فعال‌سازی این گزینه، با کشیدن خط جداکننده سایدبار سمت چپ می‌توانید عرض آن را آزادانه تا ۱۶۰ پیکسل باریک کنید.
+              Enables ultra-compact sidebar mode. Drag the sidebar divider to freely shrink the left pane down to 160px.
             </p>
             <div style="display: flex; justify-content: flex-end;">
-              <button type="button" id="p-btn-reset-sidebar" style="background: var(--rtl-surface); border: 1px solid var(--rtl-border); color: var(--rtl-text); font-size: 11px; padding: 4px 8px; border-radius: 6px; cursor: pointer;">بازنشانی به ۲۵۶ پیکسل</button>
+              <button type="button" id="p-btn-reset-sidebar" style="background: var(--rtl-surface); border: 1px solid var(--rtl-border); color: var(--rtl-text); font-size: 11px; padding: 4px 8px; border-radius: 6px; cursor: pointer;">Reset Width to 256px</button>
             </div>
           </div>
         </div>
@@ -1128,10 +1136,10 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
       <!-- Pinned Footer (Enhanced GitHub Star Invite & Clean Badge) -->
       <div class="rtl-panel-footer">
-        <a href="https://github.com/omid-io/antigravity-ui" target="_blank" class="rtl-footer-link" title="مشاهده ریپازیتوری در گیت‌هاب و ثبت ستاره">
+        <a href="https://github.com/omid-io/antigravity-ui" target="_blank" class="rtl-footer-link" title="Star Antigravity UI on GitHub">
           <span class="rtl-star-badge">
             <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" class="rtl-gh-icon"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
-            <span>حمایت با ستاره در گیت‌هاب</span>
+            <span>Star on GitHub</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" class="rtl-star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           </span>
         </a>
@@ -1157,11 +1165,19 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     togglePopup(false);
   });
 
+  // Delegated Root Click Handler (React-proof, immune to node replacement)
   document.addEventListener('click', (e) => {
-    if (!isPopupOpen) return;
-    const sBtn = document.getElementById('antigravity-ui-sidebar-btn');
-    if (!popup.contains(e.target) && (!sBtn || !sBtn.contains(e.target))) {
-      togglePopup(false);
+    const sBtn = e.target.closest('#antigravity-ui-sidebar-btn');
+    if (sBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      togglePopup();
+      return;
+    }
+    if (isPopupOpen) {
+      if (!popup.contains(e.target)) {
+        togglePopup(false);
+      }
     }
   }, { capture: true });
 
@@ -1197,10 +1213,6 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       </div>
       <span class="truncate text-xs font-medium">Antigravity UI</span>
     \`;
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      togglePopup();
-    });
     settingsBtn.parentElement.insertBefore(btn, settingsBtn);
   }
   attachSidebarBtn();

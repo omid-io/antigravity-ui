@@ -6,6 +6,14 @@ import http from 'node:http';
 import { SidecarApp, Response } from 'sidecar_sdk';
 import { generatePopupBundle } from './popup-engine.js';
 
+// Immortal Sidecar Process Immunity (Zero-Crash Guarantee)
+process.on('uncaughtException', (err) => {
+  console.error('[antigravity-ui] Suppressed uncaughtException:', err?.message || err);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('[antigravity-ui] Suppressed unhandledRejection:', reason?.message || reason);
+});
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CONFIG_PATH = join(homedir(), '.antigravity-ui.json');
 const LEGACY_CONFIG_PATH = join(homedir(), '.antigravity-rtl.json');
@@ -507,6 +515,10 @@ function injectToLiveWindows(config, force = false) {
           if (!page.webSocketDebuggerUrl) continue;
           try {
             const ws = new WebSocket(page.webSocketDebuggerUrl);
+            if (typeof ws.on === 'function') {
+              ws.on('error', () => {});
+            }
+            ws.onerror = () => {};
             ws.onopen = () => {
               // 1. Check health of live page before doing any DOM manipulation
               ws.send(JSON.stringify({
@@ -534,7 +546,7 @@ function injectToLiveWindows(config, force = false) {
                   }
 
                   // ONLY touch DOM/evaluate if missing or outdated version or forced
-                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 16) {
+                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 20) {
                     ws.send(JSON.stringify({
                       id: 101,
                       method: 'Runtime.evaluate',
@@ -564,7 +576,6 @@ function injectToLiveWindows(config, force = false) {
                 }
               } catch (_) {}
             };
-            ws.onerror = () => {};
           } catch (_) {}
         }
       } catch (_) {}

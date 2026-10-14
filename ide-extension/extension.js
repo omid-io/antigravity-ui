@@ -96,7 +96,7 @@ function activate(context) {
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.command = 'antigravity-ui.toggleRtl';
     statusBarItem.text = '$(arrow-both) RTL';
-    statusBarItem.tooltip = 'Antigravity UI: تغییر جهت متن / وضعیت راست چین (Ctrl+Alt+R)';
+    statusBarItem.tooltip = 'Antigravity UI: Toggle text direction / RTL mode (Ctrl+Alt+R)';
     statusBarItem.show();
     context.subscriptions.push(statusBarItem);
 
@@ -104,7 +104,7 @@ function activate(context) {
     const toggleRtlCmd = vscode.commands.registerCommand('antigravity-ui.toggleRtl', async () => {
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
-            vscode.window.showInformationMessage('Antigravity UI: راست چین برای چت، ایجنت و کامپوزر فعال است.');
+            vscode.window.showInformationMessage('Antigravity UI: RTL mode is active for Chat, Agent, and Composer.');
             return;
         }
 
@@ -118,19 +118,19 @@ function activate(context) {
                 const text = line.text;
                 if (text.startsWith(RLM)) {
                     editBuilder.delete(new vscode.Range(line.lineNumber, 0, line.lineNumber, 1));
-                    vscode.window.setStatusBarMessage('Antigravity UI: نشانگر راست چین برداشته شد', 2000);
+                    vscode.window.setStatusBarMessage('Antigravity UI: RTL mark removed', 2000);
                 } else {
                     editBuilder.insert(new vscode.Position(line.lineNumber, 0), RLM);
-                    vscode.window.setStatusBarMessage('Antigravity UI: خط به صورت راست چین علامت گذاری شد', 2000);
+                    vscode.window.setStatusBarMessage('Antigravity UI: Line marked as RTL', 2000);
                 }
             } else {
                 const text = document.getText(selection);
                 if (text.startsWith(RLM)) {
                     editBuilder.replace(selection, text.substring(1));
-                    vscode.window.setStatusBarMessage('Antigravity UI: جهت متن به حالت پیش فرض بازگشت', 2000);
+                    vscode.window.setStatusBarMessage('Antigravity UI: Text direction reset to default', 2000);
                 } else {
                     editBuilder.replace(selection, RLM + text);
-                    vscode.window.setStatusBarMessage('Antigravity UI: متن انتخابی راست چین شد', 2000);
+                    vscode.window.setStatusBarMessage('Antigravity UI: Selected text set to RTL', 2000);
                 }
             }
         });
@@ -143,17 +143,17 @@ function activate(context) {
             const patched = applyPatch(mainJsPath);
             if (patched) {
                 const action = await vscode.window.showInformationMessage(
-                    'Antigravity UI: قابلیت های راست چین و فونت وزیرمتن با موفقیت فعال شد. برای اعمال نیاز به بارگذاری مجدد است.',
-                    'بارگذاری مجدد (Reload Window)'
+                    'Antigravity UI: RTL and Vazirmatn typography enabled successfully. Window reload required.',
+                    'Reload Window'
                 );
-                if (action === 'بارگذاری مجدد (Reload Window)') {
+                if (action === 'Reload Window') {
                     vscode.commands.executeCommand('workbench.action.reloadWindow');
                 }
             } else {
-                vscode.window.showInformationMessage('Antigravity UI از قبل روی محیط فعال است.');
+                vscode.window.showInformationMessage('Antigravity UI is already active in this environment.');
             }
         } catch (e) {
-            vscode.window.showErrorMessage('خطا در فعال سازی Antigravity UI: ' + e.message);
+            vscode.window.showErrorMessage('Error enabling Antigravity UI: ' + e.message);
         }
     });
     context.subscriptions.push(enableCmd);
@@ -163,20 +163,20 @@ function activate(context) {
             restoreMainJs(mainJsPath);
             removeLoader(outDir);
             const action = await vscode.window.showInformationMessage(
-                'Antigravity UI: تغییرات با موفقیت بازگردانده و غیرفعال شد.',
-                'بارگذاری مجدد (Reload Window)'
+                'Antigravity UI: Disabled successfully.',
+                'Reload Window'
             );
-            if (action === 'بارگذاری مجدد (Reload Window)') {
+            if (action === 'Reload Window') {
                 vscode.commands.executeCommand('workbench.action.reloadWindow');
             }
         } catch (e) {
-            vscode.window.showErrorMessage('خطا در غیرفعال سازی: ' + e.message);
+            vscode.window.showErrorMessage('Error disabling Antigravity UI: ' + e.message);
         }
     });
     context.subscriptions.push(disableCmd);
 
     const setupTypographyCmd = vscode.commands.registerCommand('antigravity-ui.setupTypography', async () => {
-        vscode.window.showInformationMessage('Antigravity UI: فونت وزیرمتن به صورت خودکار برای بخش چت و هوش مصنوعی فعال است و ادیتور کد بدون تغییر و در حالت پیش فرض باقی می ماند.');
+        vscode.window.showInformationMessage('Antigravity UI: Vazirmatn typography is active for Chat and AI assistant; editor code font remains unchanged.');
     });
     context.subscriptions.push(setupTypographyCmd);
 

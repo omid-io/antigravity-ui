@@ -41,7 +41,7 @@
     "commands": [
       {
         "command": "antigravity-ui.toggleRtl",
-        "title": "Antigravity UI: Toggle RTL (فعال / غیرفعال)",
+        "title": "Antigravity UI: Toggle RTL (On / Off)",
         "category": "Antigravity UI"
       },
       {
