@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 29;
+  const POPUP_ENGINE_VERSION = 31;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -51,20 +51,20 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     const inputBoxEnabled = Boolean(c.inputBoxEnabled);
 
     const userMsgDark = {
-      bg: '#1e2433',
+      bg: '#1a2230',
       text: '#f1f5f9',
-      border: '#384c6e',
+      border: '#3b4b66',
       borderWidth: '1.5',
-      shadow: 'soft',
+      shadow: 'clay',
       ...(c.userMsgDark || {})
     };
 
     const userMsgLight = {
-      bg: '#f0f4ff',
+      bg: '#e8eef6',
       text: '#0f172a',
-      border: '#cbd5e1',
+      border: '#c5d2e2',
       borderWidth: '1.5',
-      shadow: 'soft',
+      shadow: 'clay',
       ...(c.userMsgLight || {})
     };
 
@@ -119,6 +119,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           case 'soft': return '0 4px 14px -1px rgba(15, 23, 42, 0.12), 0 2px 6px -1px rgba(15, 23, 42, 0.08)';
           case '3d':
           case 'medium': return '0 4px 0 0 rgba(15, 23, 42, 0.28), 0 10px 22px -2px rgba(15, 23, 42, 0.22)';
+          case 'clay': return '0 14px 28px -4px rgba(70, 85, 110, 0.16), 0 4px 10px -2px rgba(70, 85, 110, 0.08), inset 3px 3px 5px rgba(255, 255, 255, 0.9), inset -3px -3px 6px rgba(15, 23, 42, 0.09)';
           case 'glow': return '0 0 0 1.5px ' + borderCol + ', 0 6px 22px 3px ' + borderCol + '66, 0 2px 6px ' + borderCol + '40';
           default: return 'none';
         }
@@ -127,6 +128,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           case 'soft': return '0 6px 18px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3)';
           case '3d':
           case 'medium': return '0 5px 0 0 rgba(0, 0, 0, 0.8), 0 14px 28px -3px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+          case 'clay': return '0 18px 36px -6px rgba(0, 0, 0, 0.7), 0 6px 14px -2px rgba(0, 0, 0, 0.5), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.2), inset -3.5px -3.5px 7px rgba(0, 0, 0, 0.65)';
           case 'glow': return '0 0 0 1.5px ' + borderCol + ', 0 0 25px 4px ' + borderCol + '88, 0 0 50px 10px ' + borderCol + '44';
           default: return 'none';
         }
@@ -165,7 +167,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
-        border-radius: 0.75rem !important;
+        border-radius: 1.15rem !important;
         transition: all 0.2s ease !important;
       }
       [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div {
@@ -173,13 +175,17 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         border: var(--user-msg-border-width) solid var(--user-msg-border-color) !important;
         box-shadow: var(--user-msg-shadow) !important;
         color: var(--user-msg-text) !important;
-        border-radius: 0.75rem !important;
+        border-radius: 1.15rem !important;
         position: relative !important;
         z-index: 2 !important;
-        transition: all 0.2s ease !important;
+        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, filter 0.2s ease !important;
       }
       [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:hover > div {
-        filter: brightness(1.04);
+        transform: translateY(-2px) !important;
+        filter: brightness(1.03);
+      }
+      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:active > div {
+        transform: scale(0.985) !important;
       }
       [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] .whitespace-pre-wrap,
       [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] p,
@@ -512,55 +518,61 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
       }
 
-      /* Light Mode Tokens (Crisp Swiss Light & High Contrast) */
+      /* Light Mode Tokens (Claymorphism 3D Soft Light) */
       :root, body, body.light, body.theme-light, body.vscode-light, .rtl-widget-panel.rtl-is-light {
-        --rtl-bg: #ffffff;
-        --rtl-surface: #f1f5f9;
-        --rtl-surface-hover: #e2e8f0;
-        --rtl-card-bg: #f8fafc;
-        --rtl-card-border: #cbd5e1;
-        --rtl-card-border-hover: #94a3b8;
+        --rtl-bg: #edf2f8;
+        --rtl-surface: #e2e8f2;
+        --rtl-surface-hover: #d7e0ec;
+        --rtl-card-bg: #f4f7fb;
+        --rtl-card-border: rgba(255, 255, 255, 0.85);
+        --rtl-card-border-hover: rgba(255, 255, 255, 1);
         --rtl-text: #0f172a;
         --rtl-text-secondary: #334155;
         --rtl-text-muted: #475569;
-        --rtl-border: #cbd5e1;
-        --rtl-border-subtle: #cbd5e1;
-        --rtl-input-bg: #ffffff;
-        --rtl-input-border: #94a3b8;
-        --rtl-slider-track: #94a3b8;
+        --rtl-border: rgba(255, 255, 255, 0.9);
+        --rtl-border-subtle: rgba(255, 255, 255, 0.65);
+        --rtl-input-bg: #e5ebf3;
+        --rtl-input-border: rgba(255, 255, 255, 0.7);
+        --rtl-slider-track: #cbd5e1;
         --rtl-badge-bg: #e2e8f0;
-        --rtl-badge-border: #94a3b8;
+        --rtl-badge-border: rgba(255, 255, 255, 0.8);
         --rtl-accent: #4f46e5;
         --rtl-accent-hover: #4338ca;
         --rtl-accent-gradient: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
         --rtl-toggle-off: #94a3b8;
-        --rtl-shadow-panel: 0 20px 48px -8px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.08);
+        --rtl-shadow-panel: 0 20px 45px -8px rgba(70, 85, 110, 0.22), 0 8px 16px -4px rgba(70, 85, 110, 0.1), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.95), inset -2.5px -2.5px 5px rgba(160, 175, 200, 0.3);
+        --rtl-shadow-card: 0 6px 16px -3px rgba(70, 85, 110, 0.1), inset 2.5px 2.5px 4px rgba(255, 255, 255, 0.95), inset -2.5px -2.5px 5px rgba(160, 175, 200, 0.28);
+        --rtl-shadow-inset: inset 2px 2px 4px rgba(70, 85, 110, 0.14), inset -1.5px -1.5px 3px rgba(255, 255, 255, 0.85);
+        --rtl-shadow-pill: 0 4px 10px rgba(79, 70, 229, 0.35), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.5), inset -1.5px -1.5px 3px rgba(0, 0, 0, 0.2);
         --rtl-ring: rgba(79, 70, 229, 0.25);
       }
 
-      /* Dark Mode Tokens (Deep Obsidian HUD & Tactile Glow) */
+      /* Dark Mode Tokens (Claymorphism 3D Soft Dark) */
       body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark, .rtl-widget-panel.rtl-is-dark {
-        --rtl-bg: #0f131a;
-        --rtl-surface: #171d26;
-        --rtl-surface-hover: #1f2733;
-        --rtl-card-bg: #141922;
-        --rtl-card-border: rgba(255, 255, 255, 0.09);
-        --rtl-card-border-hover: rgba(255, 255, 255, 0.18);
+        --rtl-bg: #141822;
+        --rtl-surface: #10141d;
+        --rtl-surface-hover: #19202c;
+        --rtl-card-bg: #1b2230;
+        --rtl-card-border: rgba(255, 255, 255, 0.08);
+        --rtl-card-border-hover: rgba(255, 255, 255, 0.16);
         --rtl-text: #f8fafc;
         --rtl-text-secondary: #cbd5e1;
         --rtl-text-muted: #94a3b8;
-        --rtl-border: rgba(255, 255, 255, 0.1);
-        --rtl-border-subtle: rgba(255, 255, 255, 0.07);
-        --rtl-input-bg: #0b0e14;
-        --rtl-input-border: rgba(255, 255, 255, 0.14);
-        --rtl-slider-track: #334155;
-        --rtl-badge-bg: #171d26;
-        --rtl-badge-border: rgba(255, 255, 255, 0.14);
+        --rtl-border: rgba(255, 255, 255, 0.09);
+        --rtl-border-subtle: rgba(255, 255, 255, 0.06);
+        --rtl-input-bg: #0e121a;
+        --rtl-input-border: rgba(255, 255, 255, 0.1);
+        --rtl-slider-track: #252e3d;
+        --rtl-badge-bg: #10141d;
+        --rtl-badge-border: rgba(255, 255, 255, 0.1);
         --rtl-accent: #6366f1;
         --rtl-accent-hover: #818cf8;
         --rtl-accent-gradient: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
         --rtl-toggle-off: #475569;
-        --rtl-shadow-panel: 0 24px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        --rtl-shadow-panel: 0 25px 55px -10px rgba(0, 0, 0, 0.75), 0 10px 22px -5px rgba(0, 0, 0, 0.5), inset 2px 2px 4px rgba(255, 255, 255, 0.12), inset -3px -3px 6px rgba(0, 0, 0, 0.65);
+        --rtl-shadow-card: 0 8px 20px -4px rgba(0, 0, 0, 0.5), inset 2px 2px 4px rgba(255, 255, 255, 0.08), inset -2.5px -2.5px 6px rgba(0, 0, 0, 0.55);
+        --rtl-shadow-inset: inset 2.5px 2.5px 5px rgba(0, 0, 0, 0.6), inset -1.5px -1.5px 3px rgba(255, 255, 255, 0.05);
+        --rtl-shadow-pill: 0 4px 12px rgba(99, 102, 241, 0.4), inset 1.5px 1.5px 3px rgba(255, 255, 255, 0.4), inset -1.5px -1.5px 3px rgba(0, 0, 0, 0.35);
         --rtl-ring: rgba(99, 102, 241, 0.35);
       }
 
@@ -589,13 +601,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         left: 16px !important;
         right: auto !important;
         width: 338px !important;
-        height: 540px !important;
+        height: 558px !important;
         max-height: calc(100vh - 75px) !important;
         background-color: var(--rtl-bg) !important;
         color: var(--rtl-text) !important;
         border: 1px solid var(--rtl-border) !important;
         box-shadow: var(--rtl-shadow-panel) !important;
-        border-radius: 14px !important;
+        border-radius: 20px !important;
         opacity: 0 !important;
         visibility: hidden !important;
         pointer-events: none !important;
@@ -645,14 +657,15 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       .rtl-panel-body::-webkit-scrollbar { width: 4px; }
       .rtl-panel-body::-webkit-scrollbar-thumb { background: rgba(140, 150, 170, 0.35); border-radius: 9999px; }
 
-      /* Tabs Nav (Sleek Segmented Pill) */
+      /* Tabs Nav (Clay Inset Tray) */
       .rtl-main-nav {
         display: flex;
-        gap: 3px;
-        padding: 3px;
+        gap: 4px;
+        padding: 3.5px;
         background-color: var(--rtl-surface);
         border: 1px solid var(--rtl-border-subtle);
-        border-radius: 8px;
+        border-radius: 12px;
+        box-shadow: var(--rtl-shadow-inset) !important;
       }
       .rtl-main-nav-btn {
         flex: 1 1 0;
@@ -662,9 +675,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         color: var(--rtl-text-secondary);
         font-size: 11px;
         font-weight: 500 !important;
-        border-radius: 6px;
+        border-radius: 8px;
         cursor: pointer;
-        transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         text-align: center;
         white-space: nowrap;
         display: inline-flex;
@@ -674,13 +687,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       }
       .rtl-main-nav-btn:hover {
         color: var(--rtl-text);
-        background-color: rgba(255, 255, 255, 0.04);
+        transform: translateY(-1px);
       }
       .rtl-main-nav-btn.active {
         background: var(--rtl-accent-gradient) !important;
         color: #ffffff !important;
         font-weight: 600 !important;
-        box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        box-shadow: var(--rtl-shadow-pill) !important;
       }
       .rtl-main-nav-btn svg {
         flex-shrink: 0;
@@ -699,20 +712,21 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         margin-bottom: 2px;
       }
 
-      /* Cards & Controls (Tactile Elevation) */
+      /* Cards & Controls (Tactile Claymorphism Elevation) */
       .rtl-card {
         background-color: var(--rtl-card-bg);
         border: 1px solid var(--rtl-card-border);
-        border-radius: 11px;
+        border-radius: 15px !important;
         padding: 11px 12px;
         display: flex;
         flex-direction: column;
         gap: 9px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        box-shadow: var(--rtl-shadow-card) !important;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease !important;
       }
       .rtl-card:hover {
         border-color: var(--rtl-card-border-hover);
+        transform: translateY(-1px);
       }
       .rtl-control-row {
         display: flex;
@@ -735,12 +749,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         letter-spacing: -0.1px;
       }
 
-      /* Tactile Switch */
+      /* Tactile Clay Switch */
       .rtl-switch {
         position: relative;
         display: inline-block;
-        width: 34px;
-        height: 18px;
+        width: 36px;
+        height: 20px;
         flex-shrink: 0;
       }
       .rtl-switch input { opacity: 0; width: 0; height: 0; margin: 0; }
@@ -749,25 +763,25 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         cursor: pointer;
         top: 0; left: 0; right: 0; bottom: 0;
         background-color: var(--rtl-toggle-off);
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        border-radius: 20px;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius: 9999px;
+        box-shadow: var(--rtl-shadow-inset) !important;
       }
       .rtl-slider:before {
         position: absolute;
         content: "";
-        height: 14px;
-        width: 14px;
+        height: 16px;
+        width: 16px;
         left: 2px;
         bottom: 2px;
         background-color: #ffffff;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 0 1px rgba(0, 0, 0, 0.15);
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2), inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.95), inset -1.5px -1.5px 2px rgba(0, 0, 0, 0.12) !important;
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         border-radius: 50%;
       }
       .rtl-switch input:checked + .rtl-slider {
         background: var(--rtl-accent-gradient) !important;
-        box-shadow: 0 0 8px rgba(99, 102, 241, 0.35);
+        box-shadow: inset 1.5px 1.5px 3px rgba(0, 0, 0, 0.25), inset -1.5px -1.5px 2px rgba(255, 255, 255, 0.35), 0 2px 8px rgba(99, 102, 241, 0.3) !important;
       }
       .rtl-switch input:checked + .rtl-slider:before {
         transform: translateX(16px);
@@ -777,7 +791,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       .rtl-text-input {
         background-color: var(--rtl-input-bg);
         border: 1px solid var(--rtl-input-border);
-        border-radius: 6px;
+        border-radius: 8px;
         padding: 4px 8px;
         font-size: 11px;
         color: var(--rtl-text);
@@ -785,39 +799,39 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         text-align: left;
         direction: ltr;
         outline: none;
+        box-shadow: var(--rtl-shadow-inset) !important;
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
       }
       .rtl-text-input:focus {
         border-color: var(--rtl-accent);
-        box-shadow: 0 0 0 2px var(--rtl-ring);
+        box-shadow: var(--rtl-shadow-inset), 0 0 0 2px var(--rtl-ring) !important;
       }
       .rtl-range-slider {
         -webkit-appearance: none;
         appearance: none;
         width: 72px;
-        height: 5px;
+        height: 7px;
         background: var(--rtl-slider-track);
         border-radius: 9999px;
         outline: none;
         cursor: pointer;
         transition: background 0.15s ease, opacity 0.15s ease;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+        box-shadow: var(--rtl-shadow-inset) !important;
       }
       .rtl-range-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
-        width: 14px;
-        height: 14px;
+        width: 15px;
+        height: 15px;
         border-radius: 50%;
-        background: var(--rtl-accent);
+        background: var(--rtl-accent-gradient) !important;
         border: 2px solid var(--rtl-bg);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        box-shadow: var(--rtl-shadow-pill) !important;
         cursor: pointer;
-        transition: transform 0.12s ease, box-shadow 0.12s ease;
+        transition: transform 0.14s ease, box-shadow 0.14s ease;
       }
       .rtl-range-slider::-webkit-slider-thumb:hover {
         transform: scale(1.18);
-        box-shadow: 0 0 0 4px var(--rtl-ring);
       }
       .rtl-badge-val {
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
@@ -827,10 +841,10 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         text-align: center;
         background-color: var(--rtl-badge-bg);
         border: 1px solid var(--rtl-badge-border);
-        padding: 2px 5px;
-        border-radius: 5px;
+        padding: 2.5px 6px;
+        border-radius: 8px;
         color: var(--rtl-text);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--rtl-shadow-inset) !important;
       }
       .rtl-color-input {
         -webkit-appearance: none;
@@ -838,14 +852,15 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         width: 22px;
         height: 22px;
         border: 1px solid var(--rtl-border);
-        border-radius: 6px;
+        border-radius: 8px;
         padding: 0;
         cursor: pointer;
         background: transparent;
+        box-shadow: var(--rtl-shadow-card) !important;
         transition: transform 0.15s ease;
       }
       .rtl-color-input:hover {
-        transform: scale(1.08);
+        transform: scale(1.1);
       }
       .rtl-hex-input {
         width: 66px;
@@ -858,46 +873,49 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         color: var(--rtl-text);
         background-color: var(--rtl-input-bg);
         border: 1px solid var(--rtl-input-border);
-        border-radius: 6px;
+        border-radius: 8px;
         outline: none;
+        box-shadow: var(--rtl-shadow-inset) !important;
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
       }
       .rtl-hex-input:focus {
         border-color: var(--rtl-accent);
-        box-shadow: 0 0 0 2px var(--rtl-ring);
+        box-shadow: var(--rtl-shadow-inset), 0 0 0 2px var(--rtl-ring) !important;
       }
 
-      /* Segmented shadow buttons */
+      /* Clay Segmented shadow buttons */
       .rtl-shadow-group {
         display: flex;
         gap: 3px;
         background-color: var(--rtl-surface);
         border: 1px solid var(--rtl-border-subtle);
-        border-radius: 7px;
-        padding: 2px;
+        border-radius: 10px;
+        padding: 2.5px;
         width: 100%;
+        box-shadow: var(--rtl-shadow-inset) !important;
       }
       .rtl-shadow-btn {
         flex: 1 1 0;
-        padding: 4px 2px;
+        padding: 4px 1px;
         border: none;
         background: transparent;
         color: var(--rtl-text-secondary);
-        font-size: 10.5px;
+        font-size: 10px;
         font-weight: 500;
-        border-radius: 5px;
+        border-radius: 7px;
         cursor: pointer;
         text-align: center;
-        transition: all 0.15s ease;
+        transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .rtl-shadow-btn:hover {
         color: var(--rtl-text);
+        transform: translateY(-0.5px);
       }
       .rtl-shadow-btn.active {
         background: var(--rtl-accent-gradient);
         color: #ffffff;
         font-weight: 600;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--rtl-shadow-pill) !important;
       }
 
       /* Mode switcher */
@@ -905,10 +923,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         display: flex;
         background-color: var(--rtl-surface);
         border: 1px solid var(--rtl-border-subtle);
-        border-radius: 8px;
+        border-radius: 10px;
         padding: 2.5px;
         gap: 3px;
         margin-bottom: 2px;
+        box-shadow: var(--rtl-shadow-inset) !important;
       }
       .rtl-mode-btn {
         flex: 1 1 0;
@@ -918,14 +937,14 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         color: var(--rtl-text-secondary);
         font-size: 11px;
         font-weight: 500;
-        border-radius: 6px;
+        border-radius: 7px;
         cursor: pointer;
         text-align: center;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 5px;
-        transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .rtl-mode-btn:hover {
         color: var(--rtl-text);
@@ -965,14 +984,14 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         font-weight: 500;
         color: var(--rtl-text);
         transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        box-shadow: var(--rtl-shadow-card) !important;
       }
       .rtl-star-badge:hover {
         background: var(--rtl-surface-hover);
         border-color: #f59e0b;
         color: #f59e0b;
         transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.22);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
       }
       .rtl-star-icon {
         filter: drop-shadow(0 1px 2px rgba(245, 158, 11, 0.4));
@@ -1002,6 +1021,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         display: inline-flex;
         align-items: center;
         gap: 6px;
+        box-shadow: var(--rtl-shadow-card) !important;
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         user-select: none;
       }
@@ -1234,8 +1254,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                 <span style="font-size: 11px; color: var(--rtl-text-secondary); font-weight: 500;">Bubble Shadow & Depth</span>
                 <div class="rtl-shadow-group" id="p-dark-shadow-group">
                   <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
-                  <button type="button" class="rtl-shadow-btn active" data-val="soft">Soft</button>
+                  <button type="button" class="rtl-shadow-btn" data-val="soft">Soft</button>
                   <button type="button" class="rtl-shadow-btn" data-val="3d">3D</button>
+                  <button type="button" class="rtl-shadow-btn active" data-val="clay">Clay</button>
                   <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
                 </div>
               </div>
@@ -1275,8 +1296,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                 <span style="font-size: 11px; color: var(--rtl-text-secondary); font-weight: 500;">Bubble Shadow & Depth</span>
                 <div class="rtl-shadow-group" id="p-light-shadow-group">
                   <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
-                  <button type="button" class="rtl-shadow-btn active" data-val="soft">Soft</button>
+                  <button type="button" class="rtl-shadow-btn" data-val="soft">Soft</button>
                   <button type="button" class="rtl-shadow-btn" data-val="3d">3D</button>
+                  <button type="button" class="rtl-shadow-btn active" data-val="clay">Clay</button>
                   <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
                 </div>
               </div>
@@ -1442,21 +1464,34 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if ($('p-val-dark-bw')) $('p-val-dark-bw').textContent = (dark.borderWidth || '1.5') + 'px';
 
     const light = cfg.userMsgLight || {};
-    $('p-light-bg').value = light.bg || '#f0f4ff';
-    $('p-light-bg-hex').value = light.bg || '#f0f4ff';
+    $('p-light-bg').value = light.bg || '#e8eef6';
+    $('p-light-bg-hex').value = light.bg || '#e8eef6';
     $('p-light-text').value = light.text || '#0f172a';
     $('p-light-text-hex').value = light.text || '#0f172a';
-    $('p-light-border').value = light.border || '#cbd5e1';
-    $('p-light-border-hex').value = light.border || '#cbd5e1';
+    $('p-light-border').value = light.border || '#c5d2e2';
+    $('p-light-border-hex').value = light.border || '#c5d2e2';
     $('p-light-bw').value = light.borderWidth || '1.5';
     if ($('p-val-light-bw')) $('p-val-light-bw').textContent = (light.borderWidth || '1.5') + 'px';
+
+    const darkShadowVal = dark.shadow || 'clay';
+    const darkShadowBtn = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn[data-val="' + darkShadowVal + '"]');
+    if (darkShadowBtn) {
+      document.querySelectorAll('#p-dark-shadow-group .rtl-shadow-btn').forEach(b => b.classList.remove('active'));
+      darkShadowBtn.classList.add('active');
+    }
+    const lightShadowVal = light.shadow || 'clay';
+    const lightShadowBtn = document.querySelector('#p-light-shadow-group .rtl-shadow-btn[data-val="' + lightShadowVal + '"]');
+    if (lightShadowBtn) {
+      document.querySelectorAll('#p-light-shadow-group .rtl-shadow-btn').forEach(b => b.classList.remove('active'));
+      lightShadowBtn.classList.add('active');
+    }
   }
   populateUI(currentConfig);
 
   function syncConfigFromUI() {
     if (!$('p-isRTL')) return;
-    const darkShadow = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'soft';
-    const lightShadow = document.querySelector('#p-light-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'soft';
+    const darkShadow = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'clay';
+    const lightShadow = document.querySelector('#p-light-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'clay';
     const updated = {
       ...currentConfig,
       isRTL: $('p-isRTL').checked,
