@@ -833,20 +833,9 @@ win.webContents.on('dom-ready', () => {
                 
                 // 1. Independent UI & Styling CSS (Always active, never disabled by RTL Engine)
                 uiStyle.textContent = \`
-                    /* Compact Sidebar Support — prevents left-clipping and enables fluid mouse resizing down to 160px */
+                    /* Compact Sidebar Support — enables fluid mouse resizing down to 160px */
                     div:has(> div > [role="navigation"][aria-label="Sidebar"]),
                     div:has(> [role="navigation"][aria-label="Sidebar"]) {
-                        min-width: 0 !important;
-                    }
-                    div:has(> [role="navigation"][aria-label="Sidebar"]) {
-                        left: 0 !important;
-                        right: auto !important;
-                        width: 100% !important;
-                        max-width: 100% !important;
-                    }
-                    [role="navigation"][aria-label="Sidebar"] {
-                        width: 100% !important;
-                        max-width: 100% !important;
                         min-width: 0 !important;
                     }
 
@@ -947,6 +936,49 @@ win.webContents.on('dom-ready', () => {
                     [role="navigation"][aria-label="Sidebar"] *, .truncate {
                         unicode-bidi: plaintext !important;
                         text-align: start !important;
+                    }
+
+                    /* Multi-Choice Questions (ask_question) BiDi & RTL Support */
+                    [data-testid="ask-question-header-text"],
+                    [data-testid="ask-question-header-text"] p,
+                    [data-testid="ask-question-header-text"] span,
+                    [data-testid="ask-question-option"] > span,
+                    [data-testid="ask-question-option-hover-card"],
+                    [data-testid="ask-question-writein"],
+                    label[htmlFor*="__write_in__"] span,
+                    label[for^="ask-opt-"] span {
+                        unicode-bidi: plaintext !important;
+                        text-align: start;
+                    }
+
+                    [data-testid="ask-question-option"][dir="rtl"],
+                    [data-testid="ask-question-option"]:dir(rtl),
+                    [dir="rtl"] [data-testid="ask-question-option"],
+                    label[for^="ask-opt-"][dir="rtl"] {
+                        direction: rtl !important;
+                        text-align: right !important;
+                    }
+
+                    [data-testid="ask-question-option"][dir="rtl"] > span,
+                    [data-testid="ask-question-option"]:dir(rtl) > span,
+                    [dir="rtl"] [data-testid="ask-question-option"] > span,
+                    label[for^="ask-opt-"][dir="rtl"] > span {
+                        text-align: right !important;
+                        unicode-bidi: isolate !important;
+                    }
+
+                    [data-testid="ask-question-header-text"][dir="rtl"],
+                    [data-testid="ask-question-header-text"]:dir(rtl),
+                    [dir="rtl"] [data-testid="ask-question-header-text"] {
+                        direction: rtl !important;
+                        text-align: right !important;
+                    }
+
+                    label[htmlFor*="__write_in__"][dir="rtl"],
+                    label[htmlFor*="__write_in__"]:dir(rtl),
+                    [dir="rtl"] label[htmlFor*="__write_in__"] {
+                        direction: rtl !important;
+                        text-align: right !important;
                     }
                     /* Apply line height exclusively to chat paragraphs and input area */
                     .prose p, .prose li, .markdown-body p, [data-testid="chat-message"] p, [data-testid="chat-message"] .leading-relaxed, .leading-relaxed, .leading-relaxed p, .leading-relaxed li, [data-testid="user-input-step"], [data-testid="user-input-step"] div, [data-testid="user-input-step"] p, [data-testid="user-input-step"] .whitespace-pre-wrap, [data-lexical-text="true"], [contenteditable="true"], [contenteditable="true"] p, .pointer-events-none.absolute.overflow-hidden, label[for^="ask-opt-"] {
@@ -1517,14 +1549,38 @@ win.webContents.on('dom-ready', () => {
                 const sidebar = document.querySelector('[role="navigation"][aria-label="Sidebar"]');
                 const parent = sidebar ? sidebar.parentElement : null;
                 const grandParent = parent ? parent.parentElement : null;
+                const root = document.querySelector('.h-screen.w-screen') || document.body;
 
-                // Restore saved compact width on startup if enabled
+                if (window.__RTL_SIDEBAR_OBSERVER__) {
+                    window.__RTL_SIDEBAR_OBSERVER__.disconnect();
+                    window.__RTL_SIDEBAR_OBSERVER__ = null;
+                }
+
                 if (compactSidebar && grandParent) {
                     const storedW = parseInt(localStorage.getItem('sidebarWidth'), 10);
-                    if (storedW && storedW >= 160 && storedW < 256) {
-                        grandParent.style.setProperty('width', storedW + 'px', 'important');
-                        if (parent) parent.style.setProperty('width', storedW + 'px', 'important');
+                    const targetW = (storedW && storedW >= 160 && storedW < 256) ? storedW : 0;
+
+                    function applyWidthIfOpen() {
+                        if (!grandParent) return;
+                        const isClosed = grandParent.style.visibility === 'hidden' || grandParent.style.width === '0px' || grandParent.offsetWidth === 0;
+                        if (isClosed) return;
+
+                        if (targetW >= 160 && targetW < 256) {
+                            const targetStr = targetW + 'px';
+                            if (grandParent.style.width !== targetStr) {
+                                grandParent.style.width = targetStr;
+                                if (parent) parent.style.width = targetStr;
+                                root.style.setProperty('--sidebar-width', targetStr);
+                            }
+                        }
                     }
+
+                    applyWidthIfOpen();
+
+                    window.__RTL_SIDEBAR_OBSERVER__ = new MutationObserver(() => {
+                        applyWidthIfOpen();
+                    });
+                    window.__RTL_SIDEBAR_OBSERVER__.observe(grandParent, { attributes: true, attributeFilter: ['style', 'class'] });
                 }
 
                 let isDragging = false;
@@ -1539,8 +1595,9 @@ win.webContents.on('dom-ready', () => {
                     if (newW < 160) newW = 160;
                     if (newW > maxLimit) newW = maxLimit;
 
-                    grandParent.style.setProperty('width', newW + 'px', 'important');
-                    if (parent) parent.style.setProperty('width', newW + 'px', 'important');
+                    grandParent.style.width = newW + 'px';
+                    if (parent) parent.style.width = newW + 'px';
+                    if (root) root.style.setProperty('--sidebar-width', newW + 'px');
                 }
 
                 function onPointerEnd() {
@@ -1559,15 +1616,15 @@ win.webContents.on('dom-ready', () => {
                         const finalW = grandParent.offsetWidth;
                         localStorage.setItem('sidebarWidth', finalW);
                         sidebarWidth = finalW;
+                        if (root) root.style.setProperty('--sidebar-width', finalW + 'px');
                         saveConfig();
                     }
                 }
 
                 function onPointerStart(e) {
-                    if (!compactSidebar) return; // If compact mode is OFF, let Antigravity handle native resize
-                    if (e.button !== 0) return; // Primary left-click only
+                    if (!compactSidebar) return;
+                    if (e.button !== 0) return;
 
-                    // Stop Antigravity's native handler to eliminate 60fps jitter/conflict
                     e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
@@ -1588,10 +1645,28 @@ win.webContents.on('dom-ready', () => {
 
                 resizer.addEventListener('pointerdown', onPointerStart, { capture: true });
                 resizer.addEventListener('mousedown', onPointerStart, { capture: true });
+
+                /* Auto-Detect Persian in Multi-Choice Questions */
+                function scanQuestionsRTL() {
+                    const hasPersian = (txt) => /[\u0600-\u06FF]/.test(txt || '');
+                    document.querySelectorAll('[data-testid="ask-question-header-text"]').forEach(hdr => {
+                        if (hasPersian(hdr.textContent) && hdr.getAttribute('dir') !== 'rtl') hdr.setAttribute('dir', 'rtl');
+                    });
+                    document.querySelectorAll('[data-testid="ask-question-option"]').forEach(opt => {
+                        if (hasPersian(opt.textContent) && opt.getAttribute('dir') !== 'rtl') opt.setAttribute('dir', 'rtl');
+                    });
+                    document.querySelectorAll('label[htmlFor*="__write_in__"]').forEach(lbl => {
+                        if (hasPersian(lbl.textContent) && lbl.getAttribute('dir') !== 'rtl') lbl.setAttribute('dir', 'rtl');
+                    });
+                }
+                scanQuestionsRTL();
+                if (!window.__RTL_QUESTIONS_OBSERVER__) {
+                    window.__RTL_QUESTIONS_OBSERVER__ = new MutationObserver(() => scanQuestionsRTL());
+                    window.__RTL_QUESTIONS_OBSERVER__.observe(document.body, { childList: true, subtree: true });
+                }
             }
 
             initSidebarResizer();
-            setInterval(initSidebarResizer, 1500);
 
             userMsgToggleBtn.addEventListener('click', () => {
                 userMsgEnabled = !userMsgEnabled;

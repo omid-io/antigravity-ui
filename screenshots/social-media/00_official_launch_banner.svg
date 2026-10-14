@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#070a12" />
+    </linearGradient>
+
+    <!-- Glowing Accent -->
+    <radialGradient id="glow" cx="80%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glow2" cx="20%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Star Gold Gradient -->
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+
+    <!-- Card Background -->
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="675" fill="url(#bg)" />
+  <rect width="1200" height="675" fill="url(#glow)" />
+  <rect width="1200" height="675" fill="url(#glow2)" />
+
+  <!-- Subtle Grid Lines -->
+  <g opacity="0.08" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="135" x2="1200" y2="135" />
+    <line x1="0" y1="270" x2="1200" y2="270" />
+    <line x1="0" y1="405" x2="1200" y2="405" />
+    <line x1="0" y1="540" x2="1200" y2="540" />
+    <line x1="240" y1="0" x2="240" y2="675" />
+    <line x1="480" y1="0" x2="480" y2="675" />
+    <line x1="720" y1="0" x2="720" y2="675" />
+    <line x1="960" y1="0" x2="960" y2="675" />
+  </g>
+
+  <!-- Left Content Column -->
+  <g transform="translate(100, 140)">
+    <!-- Pill Badge -->
+    <rect width="180" height="34" rx="17" fill="#6366f1" fill-opacity="0.2" stroke="#6366f1" stroke-width="1.5" />
+    <text x="90" y="22" fill="#818cf8" font-family="system-ui, sans-serif" font-size="13" font-weight="600" text-anchor="middle">v3.0.0 RELEASE</text>
+
+    <!-- Main Title -->
+    <text x="0" y="90" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-size="52" font-weight="800" letter-spacing="-1">
+      Antigravity UI Studio 🌌
+    </text>
+
+    <!-- Subtitle -->
+    <text x="0" y="140" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="22" font-weight="400">
+      Zero-Patch Workspace Ergonomics &amp; Multilingual Studio
+    </text>
+
+    <!-- Bullet Features -->
+    <g transform="translate(0, 190)" font-family="system-ui, sans-serif" font-size="16" fill="#cbd5e1">
+      <!-- Bullet 1 -->
+      <circle cx="8" cy="8" r="4" fill="#38bdf8" />
+      <text x="24" y="13">100% Zero-Patch Official Plugin (No asar tampering)</text>
+
+      <!-- Bullet 2 -->
+      <circle cx="8" cy="44" r="4" fill="#6366f1" />
+      <text x="24" y="49">Fluid 160px Sidebar Resizer &amp; Vazirmatn Variable Font</text>
+
+      <!-- Bullet 3 -->
+      <circle cx="8" cy="80" r="4" fill="#f59e0b" />
+      <text x="24" y="85">Active Theme Auto-Sync + 0ms Real-Time In-Memory Mutation</text>
+    </g>
+
+    <!-- Terminal Code Box -->
+    <g transform="translate(0, 320)">
+      <rect width="440" height="56" rx="12" fill="#030712" stroke="#1f2937" stroke-width="1.5" />
+      <text x="20" y="34" fill="#22c55e" font-family="ui-monospace, monospace" font-size="17" font-weight="700">$</text>
+      <text x="42" y="34" fill="#f8fafc" font-family="ui-monospace, monospace" font-size="16" font-weight="600">npx antigravity-ui</text>
+      <rect x="330" y="13" width="92" height="30" rx="8" fill="#1e293b" />
+      <text x="376" y="33" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="12" font-weight="600" text-anchor="middle">INSTANT</text>
+    </g>
+  </g>
+
+  <!-- Right Visual Card (Floating Mockup Graphic) -->
+  <g transform="translate(730, 95)">
+    <!-- Outer Glow Behind Card -->
+    <rect width="370" height="490" rx="24" fill="#6366f1" opacity="0.12" filter="blur(20px)" />
+
+    <!-- Card Container -->
+    <rect width="360" height="480" rx="20" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Card Header -->
+    <g transform="translate(20, 20)">
+      <text x="0" y="24" font-size="20">🌌</text>
+      <text x="32" y="22" fill="#ffffff" font-family="system-ui, sans-serif" font-size="15" font-weight="700">Antigravity UI Studio</text>
+      <rect x="250" y="6" width="65" height="22" rx="6" fill="#10b981" fill-opacity="0.15" />
+      <text x="282" y="21" fill="#34d399" font-family="ui-monospace, monospace" font-size="10.5" font-weight="700" text-anchor="middle">v3.0 Native</text>
+    </g>
+
+    <!-- Navigation Tabs Simulation -->
+    <g transform="translate(20, 70)">
+      <rect width="320" height="36" rx="8" fill="#0f172a" stroke="#1e293b" />
+      <!-- Active Tab -->
+      <rect x="3" y="3" width="104" height="30" rx="6" fill="#6366f1" />
+      <text x="55" y="22" fill="#ffffff" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">RTL &amp; Font</text>
+      <text x="160" y="22" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="500" text-anchor="middle">Themes</text>
+      <text x="265" y="22" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" font-weight="500" text-anchor="middle">Sidebar</text>
+    </g>
+
+    <!-- Simulated Controls -->
+    <g transform="translate(20, 125)">
+      <!-- Row 1 -->
+      <rect width="320" height="46" rx="8" fill="#1e293b" fill-opacity="0.5" />
+      <text x="16" y="28" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="12">Smart BiDi Engine (RTL)</text>
+      <rect x="264" y="14" width="40" height="20" rx="10" fill="#6366f1" />
+      <circle cx="294" cy="24" r="7" fill="#ffffff" />
+
+      <!-- Row 2 -->
+      <g transform="translate(0, 56)">
+        <rect width="320" height="46" rx="8" fill="#1e293b" fill-opacity="0.5" />
+        <text x="16" y="28" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="12">Vazirmatn Variable Font</text>
+        <rect x="210" y="12" width="94" height="24" rx="6" fill="#0f172a" stroke="#334155" />
+        <text x="257" y="28" fill="#38bdf8" font-family="ui-monospace, monospace" font-size="11" text-anchor="middle">400 Regular</text>
+      </g>
+
+      <!-- Row 3 -->
+      <g transform="translate(0, 112)">
+        <rect width="320" height="46" rx="8" fill="#1e293b" fill-opacity="0.5" />
+        <text x="16" y="28" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="12">User Message 3D Bubble</text>
+        <rect x="264" y="14" width="40" height="20" rx="10" fill="#6366f1" />
+        <circle cx="294" cy="24" r="7" fill="#ffffff" />
+      </g>
+
+      <!-- Row 4 -->
+      <g transform="translate(0, 168)">
+        <rect width="320" height="46" rx="8" fill="#1e293b" fill-opacity="0.5" />
+        <text x="16" y="28" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="12">Active Theme Sync</text>
+        <rect x="235" y="12" width="70" height="24" rx="6" fill="#0f172a" stroke="#334155" />
+        <text x="270" y="28" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="11" text-anchor="middle">Auto 🌓</text>
+      </g>
+    </g>
+
+    <!-- Card Footer -->
+    <g transform="translate(20, 420)">
+      <line x1="0" y1="0" x2="320" y2="0" stroke="#1e293b" stroke-width="1" />
+      <rect x="0" y="12" width="170" height="30" rx="15" fill="#1e293b" stroke="#334155" />
+      <text x="20" y="32" font-size="12">⭐</text>
+      <text x="40" y="31" fill="#f59e0b" font-family="system-ui, sans-serif" font-size="11" font-weight="600">Star on GitHub</text>
+      <text x="310" y="31" fill="#64748b" font-family="ui-monospace, monospace" font-size="11" text-anchor="end">MIT License</text>
+    </g>
+  </g>
+</svg>

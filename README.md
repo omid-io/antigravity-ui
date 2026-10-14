@@ -14,7 +14,7 @@
 
 <p>
   <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.0.0)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.0.1)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
@@ -99,10 +99,10 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.0.0` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + 480px Studio + VSIX Companion |
-| **Antigravity 2.16.x** | `1.107.0+` | `v3.0.0` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.0.0` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v3.0.0` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
+| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.0.1` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Pure CSS Sidebar + BiDi Questions + VSIX Companion |
+| **Antigravity 2.16.x** | `1.107.0+` | `v3.0.1` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.0.1` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v3.0.1` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
 
 ---
 
@@ -115,14 +115,16 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 - **Synchronized Chat Input**: Automatically harmonizes the active prompt input box border with your personalized bubble styling.
 - **Decoupled Architecture**: Custom UI styling stays 100% active even when the RTL engine is toggled off (ideal for English-only developers who only want the UI perks!).
 
-### 📐 Ergonomic Workspace & Compact Sidebar (160px)
+### 📐 Ergonomic Workspace & Pure CSS Compact Sidebar (160px)
 - **Activity Sidebar Docking**: Integrates seamlessly right above the Settings gear icon, keeping the chat canvas clean.
-- **Fluid Mouse Resizing**: Natural, smooth mouse dragging across the calibrated 160px–420px range.
-- **Compact Sidebar (160px)**: Allows resizing down to 160px with left-pinned CSS rules that prevent text clipping on smaller laptop screens.
+- **Pure CSS State-Driven Resilience**: Eliminates aggressive DOM MutationObservers; seamlessly toggles between 160px custom width and Google's native 500ms collapse animation without jumping or ghost margins.
+- **Fluid Mouse Resizing & React State Sync**: Smooth mouse dragging down to 160px with bidirectional React state synchronization (`H6b.onSidebarResize`) returning cleanly to standard 256px when turned off.
+- **Anti-Clipping Layout**: Left-pinned CSS rules prevent text clipping and preserve full readability on compact laptop screens.
 - **Click-to-Toggle**: Opens only on click and dismisses smoothly on outside click or the `Esc` key.
 
 ### 📝 Smart Multilingual Typography & BiDi Engine
 - **Intelligent Auto-Direction**: Dynamically detects paragraph language, right-aligning Persian/Arabic while keeping English and code blocks LTR.
+- **Interactive Multi-Choice Question BiDi Support (`ask_question`)**: Automatically detects Persian prompts in interactive dialogs, right-aligns option choices, positions numbered badges on the right, and isolates mixed direction prefixes like `(Recommended)`.
 - **Force RTL Mode**: Option to align all content to the right when full RTL layout is preferred.
 - **Built-in Vazirmatn Font**: Ships with the modern, high-legibility Vazirmatn Variable font out of the box.
 - **Independent Font Families**: Configure separate fonts for RTL text, Latin text, and code blocks.

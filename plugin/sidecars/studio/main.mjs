@@ -126,7 +126,14 @@ function generateScript(c) {
     .markdown-body > *:not(pre):not(code), 
     .leading-relaxed > *:not(pre):not(code),
     [data-testid="user-input-step"],
-    [data-testid="user-input-step"] > *:not(pre):not(code) {
+    [data-testid="user-input-step"] > *:not(pre):not(code),
+    [data-testid="ask-question-header-text"],
+    [data-testid="ask-question-header-text"] *,
+    [data-testid="ask-question-option"],
+    [data-testid="ask-question-option"] *,
+    [data-testid="ask-question-option-hover-card"],
+    label[htmlFor*="__write_in__"],
+    label[htmlFor*="__write_in__"] * {
       direction: rtl !important;
       text-align: right !important;
       unicode-bidi: isolate !important;
@@ -284,6 +291,46 @@ function generateScript(c) {
       }
       ${forceRtlCSS}
 
+      /* Multi-Choice Questions (ask_question) BiDi & RTL Support */
+      [data-testid="ask-question-header-text"],
+      [data-testid="ask-question-header-text"] p,
+      [data-testid="ask-question-header-text"] span,
+      [data-testid="ask-question-option"] > span,
+      [data-testid="ask-question-option-hover-card"],
+      [data-testid="ask-question-writein"],
+      label[htmlFor*="__write_in__"] span {
+        unicode-bidi: plaintext !important;
+        text-align: start;
+      }
+
+      [data-testid="ask-question-option"][dir="rtl"],
+      [data-testid="ask-question-option"]:dir(rtl),
+      [dir="rtl"] [data-testid="ask-question-option"] {
+        direction: rtl !important;
+        text-align: right !important;
+      }
+
+      [data-testid="ask-question-option"][dir="rtl"] > span,
+      [data-testid="ask-question-option"]:dir(rtl) > span,
+      [dir="rtl"] [data-testid="ask-question-option"] > span {
+        text-align: right !important;
+        unicode-bidi: isolate !important;
+      }
+
+      [data-testid="ask-question-header-text"][dir="rtl"],
+      [data-testid="ask-question-header-text"]:dir(rtl),
+      [dir="rtl"] [data-testid="ask-question-header-text"] {
+        direction: rtl !important;
+        text-align: right !important;
+      }
+
+      label[htmlFor*="__write_in__"][dir="rtl"],
+      label[htmlFor*="__write_in__"]:dir(rtl),
+      [dir="rtl"] label[htmlFor*="__write_in__"] {
+        direction: rtl !important;
+        text-align: right !important;
+      }
+
       /* RTL List Indent */
       ul:not(#_)[dir="rtl"], ol:not(#_)[dir="rtl"], [dir="rtl"] ul:not(#_), [dir="rtl"] ol:not(#_) {
         padding-left: 0 !important;
@@ -298,47 +345,63 @@ function generateScript(c) {
         font-family: ${codeFontStr} !important;
       }
 
+      /* Pure CSS Compact Sidebar Architecture - 100% Native Resilience */
+      ${c.compactSidebar !== false ? `
+        :root {
+          --compact-sidebar-width: ${(parseInt(c.sidebarWidth, 10) >= 160 && parseInt(c.sidebarWidth, 10) < 256) ? parseInt(c.sidebarWidth, 10) : 200}px;
+        }
+        .h-screen:has([aria-label="Toggle Sidebar"][aria-expanded="true"]) {
+          --sidebar-width: var(--compact-sidebar-width, 200px) !important;
+        }
+        .h-screen:has([aria-label="Toggle Sidebar"][aria-expanded="true"]) div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
+          width: var(--compact-sidebar-width, 200px) !important;
+        }
+        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
+          width: 100% !important;
+        }
+      ` : ''}
+
       ${userMsgCSS}
       ${inputBoxCSS}
     \`;
 
-    /* Compact Sidebar Logic: Unblock min-width without fighting React layout */
+    /* Pure CSS Compact Sidebar Initialization */
+    if (window.__ANTIGRAVITY_SIDEBAR_OBSERVER__) {
+      window.__ANTIGRAVITY_SIDEBAR_OBSERVER__.disconnect();
+      window.__ANTIGRAVITY_SIDEBAR_OBSERVER__ = null;
+    }
     const sidebar = document.querySelector('[role="navigation"][aria-label="Sidebar"]');
     const parent = sidebar ? sidebar.parentElement : null;
     const grandParent = parent ? parent.parentElement : null;
+    const root = document.querySelector('.h-screen.w-screen') || document.body;
+    if (grandParent) grandParent.style.removeProperty('width');
+    if (parent) parent.style.removeProperty('width');
+    if (root) root.style.removeProperty('--sidebar-width');
 
-    if (grandParent) {
-      if (${c.compactSidebar === false}) {
-        // When compact mode is turned OFF, completely clean all inline widths so Antigravity restores its native 256px
-        localStorage.removeItem('sidebarWidth');
-        grandParent.style.removeProperty('width');
-        if (parent) parent.style.removeProperty('width');
-      } else {
-        // When compact mode is ON: only restore if user had previously dragged it below 256px
-        const storedW = parseInt(localStorage.getItem('sidebarWidth'), 10);
-        if (storedW && storedW >= 160 && storedW < 256) {
-          grandParent.style.setProperty('width', storedW + 'px', 'important');
-          if (parent) parent.style.setProperty('width', storedW + 'px', 'important');
-        }
-      }
+    if (${c.compactSidebar === false}) {
+      localStorage.removeItem('sidebarWidth');
+      document.documentElement.style.removeProperty('--compact-sidebar-width');
+    } else {
+      const storedW = parseInt(localStorage.getItem('sidebarWidth'), 10);
+      const targetW = (storedW && storedW >= 160 && storedW < 256) ? storedW : 200;
+      document.documentElement.style.setProperty('--compact-sidebar-width', targetW + 'px');
     }
 
     const resizer = document.querySelector('.cursor-col-resize');
-    if (resizer && !resizer.dataset.rtlInit) {
-      resizer.dataset.rtlInit = 'true';
+    if (resizer && !resizer.dataset.pureCssResizer) {
+      resizer.dataset.pureCssResizer = 'true';
 
       let isDragging = false;
       let startX = 0;
       let startW = 0;
 
       function onMove(ev) {
-        if (!isDragging || !grandParent) return;
+        if (!isDragging) return;
         const delta = ev.clientX - startX;
         let newW = Math.round(startW + delta);
         if (newW < 160) newW = 160;
         if (newW > 450) newW = 450;
-        grandParent.style.setProperty('width', newW + 'px', 'important');
-        if (parent) parent.style.setProperty('width', newW + 'px', 'important');
+        document.documentElement.style.setProperty('--compact-sidebar-width', newW + 'px');
       }
 
       function onEnd() {
@@ -347,26 +410,48 @@ function generateScript(c) {
         window.removeEventListener('pointermove', onMove, true);
         window.removeEventListener('pointerup', onEnd, true);
         window.removeEventListener('mouseup', onEnd, true);
-        if (grandParent) {
-          const finalW = grandParent.offsetWidth;
-          localStorage.setItem('sidebarWidth', finalW);
+        const curW = parseInt(document.documentElement.style.getPropertyValue('--compact-sidebar-width'), 10);
+        if (curW && curW >= 160 && curW <= 450) {
+          localStorage.setItem('sidebarWidth', curW);
         }
       }
 
       resizer.addEventListener('pointerdown', (e) => {
-        // Only take over resizing if compactSidebar is enabled
         const cfg = window.__ANTIGRAVITY_CONFIG__ || {};
+        if (cfg.compactSidebar === false) return;
         if (e.button !== 0) return;
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
         isDragging = true;
         startX = e.clientX;
-        startW = grandParent ? grandParent.offsetWidth : 256;
+        const curW = parseInt(document.documentElement.style.getPropertyValue('--compact-sidebar-width'), 10);
+        const gp = document.querySelector('[role="navigation"][aria-label="Sidebar"]')?.parentElement?.parentElement;
+        startW = curW || (gp ? gp.offsetWidth : 200);
         window.addEventListener('pointermove', onMove, true);
         window.addEventListener('pointerup', onEnd, true);
         window.addEventListener('mouseup', onEnd, true);
       }, { capture: true });
+    }
+
+    /* Auto-Detect Persian in Multi-Choice Questions */
+    function scanQuestionsRTL() {
+      const hasPersian = (txt) => /[\u0600-\u06FF]/.test(txt || '');
+      document.querySelectorAll('[data-testid="ask-question-header-text"]').forEach(hdr => {
+        if (hasPersian(hdr.textContent) && hdr.getAttribute('dir') !== 'rtl') hdr.setAttribute('dir', 'rtl');
+      });
+      document.querySelectorAll('[data-testid="ask-question-option"]').forEach(opt => {
+        if (hasPersian(opt.textContent) && opt.getAttribute('dir') !== 'rtl') opt.setAttribute('dir', 'rtl');
+      });
+      document.querySelectorAll('label[htmlFor*="__write_in__"]').forEach(lbl => {
+        if (hasPersian(lbl.textContent) && lbl.getAttribute('dir') !== 'rtl') lbl.setAttribute('dir', 'rtl');
+      });
+    }
+
+    scanQuestionsRTL();
+    if (!window.__ANTIGRAVITY_QUESTIONS_OBSERVER__) {
+      window.__ANTIGRAVITY_QUESTIONS_OBSERVER__ = new MutationObserver(() => scanQuestionsRTL());
+      window.__ANTIGRAVITY_QUESTIONS_OBSERVER__.observe(document.body, { childList: true, subtree: true });
     }
 
     /* Shift+2 Fix */
@@ -449,7 +534,7 @@ function injectToLiveWindows(config, force = false) {
                   }
 
                   // ONLY touch DOM/evaluate if missing or outdated version or forced
-                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 10) {
+                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 16) {
                     ws.send(JSON.stringify({
                       id: 101,
                       method: 'Runtime.evaluate',
