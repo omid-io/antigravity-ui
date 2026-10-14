@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 32;
+  const POPUP_ENGINE_VERSION = 33;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -1352,8 +1352,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" class="rtl-star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           </span>
         </a>
-        <button id="p-btn-check-update" type="button" class="rtl-version-capsule" title="v3.1.0 - Click to check for updates">
-          <span id="p-version-text">v3.1.0</span>
+        <button id="p-btn-check-update" type="button" class="rtl-version-capsule" title="v3.2.0 - Click to check for updates">
+          <span id="p-version-text">v3.2.0</span>
           <span id="p-capsule-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center;">
             <svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
@@ -1690,7 +1690,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (capsuleBtn) capsuleBtn.classList.add('rtl-checking');
     if (!quiet && versionText) versionText.textContent = 'Checking...';
 
-    const currentVer = '3.1.0';
+    const currentVer = '3.2.0';
     let updateFound = false;
     let remoteVer = null;
 

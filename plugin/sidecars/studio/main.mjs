@@ -615,7 +615,7 @@ app.api('/icon.png', () => new Response(readFileSync(join(HERE, 'icon.png')), { 
 // ---------------------------------------------------------------------------
 // Autonomous GitHub Update Engine
 // ---------------------------------------------------------------------------
-const CURRENT_VERSION = '3.1.0';
+const CURRENT_VERSION = '3.2.0';
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/omid-io/antigravity-ui/main';
 
 let updateState = {
