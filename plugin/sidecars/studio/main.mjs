@@ -546,7 +546,7 @@ function injectToLiveWindows(config, force = false) {
                   }
 
                   // ONLY touch DOM/evaluate if missing or outdated version or forced
-                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 23) {
+                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 25) {
                     ws.send(JSON.stringify({
                       id: 101,
                       method: 'Runtime.evaluate',

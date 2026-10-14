@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 23;
+  const POPUP_ENGINE_VERSION = 25;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -942,36 +942,44 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         opacity: 1;
         transform: rotate(90deg);
       }
-      .rtl-version-capsule.rtl-checking .rtl-capsule-icon {
-        opacity: 1;
-        animation: rtlSpin 0.9s linear infinite;
-      }
       .rtl-version-capsule.rtl-update-available {
-        background: rgba(245, 158, 11, 0.12) !important;
-        border-color: rgba(245, 158, 11, 0.6) !important;
-        color: #d97706 !important;
+        background: var(--rtl-surface-hover) !important;
+        border-color: #f59e0b !important;
+        color: #f59e0b !important;
         font-weight: 600 !important;
-        animation: rtlUpdatePulse 2s infinite ease-in-out;
+        animation: rtlUpdatePulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2);
+      }
+      .rtl-version-capsule.rtl-update-available:hover {
+        background: rgba(245, 158, 11, 0.15) !important;
+        border-color: #f59e0b !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
       }
       .rtl-version-capsule.rtl-update-available .rtl-capsule-icon {
-        opacity: 1;
-        color: #f59e0b;
+        opacity: 1 !important;
+        color: #f59e0b !important;
+        filter: drop-shadow(0 1px 2px rgba(245, 158, 11, 0.4));
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .rtl-version-capsule.rtl-update-available:hover .rtl-capsule-icon {
+        transform: scale(1.2) rotate(15deg);
       }
       @keyframes rtlSpin {
         100% { transform: rotate(360deg); }
       }
       @keyframes rtlUpdatePulse {
         0% {
-          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
-          border-color: rgba(245, 158, 11, 0.4);
+          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45);
+          border-color: rgba(245, 158, 11, 0.6);
         }
         50% {
           box-shadow: 0 0 0 4px rgba(245, 158, 11, 0);
-          border-color: rgba(245, 158, 11, 0.9);
+          border-color: rgba(245, 158, 11, 1);
         }
         100% {
-          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
-          border-color: rgba(245, 158, 11, 0.4);
+          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45);
+          border-color: rgba(245, 158, 11, 0.6);
         }
       }
     \`;
@@ -1202,9 +1210,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         </a>
         <button id="p-btn-check-update" type="button" class="rtl-version-capsule" title="v3.0.1 - Click to check for updates">
           <span id="p-version-text">v3.0.1</span>
-          <svg id="p-capsule-icon" class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-          </svg>
+          <span id="p-capsule-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center;">
+            <svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+          </span>
         </button>
       </div>
     </div>
@@ -1554,6 +1564,10 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
       }
 
+      const iconWrap = $('p-capsule-icon-wrap');
+      const refreshSvgHtml = '<svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
+      const starSvgHtml = '<svg class="rtl-capsule-icon rtl-star-icon" width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+
       if (updateFound && remoteVer) {
         availableUpdateInfo = { updateAvailable: true, remoteVersion: remoteVer, currentVersion: currentVer };
         if (capsuleBtn) {
@@ -1561,12 +1575,14 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           capsuleBtn.title = \`New version v\${remoteVer} is available! Click to update now.\`;
         }
         if (versionText) versionText.textContent = \`Update v\${remoteVer}\`;
+        if (iconWrap) iconWrap.innerHTML = starSvgHtml;
       } else {
         availableUpdateInfo = null;
         if (capsuleBtn) {
           capsuleBtn.classList.remove('rtl-update-available');
           capsuleBtn.title = \`v\${currentVer} - Click to check for updates\`;
         }
+        if (iconWrap) iconWrap.innerHTML = refreshSvgHtml;
         if (versionText) {
           versionText.textContent = quiet ? \`v\${currentVer}\` : 'Up to date ✔';
           if (!quiet) {
