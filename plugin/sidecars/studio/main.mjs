@@ -546,7 +546,7 @@ function injectToLiveWindows(config, force = false) {
                   }
 
                   // ONLY touch DOM/evaluate if missing or outdated version or forced
-                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 31) {
+                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 32) {
                     ws.send(JSON.stringify({
                       id: 101,
                       method: 'Runtime.evaluate',
@@ -592,9 +592,16 @@ setInterval(() => {
 injectToLiveWindows(currentActiveConfig, true);
 
 // ---------------------------------------------------------------------------
-// Sidecar Application Routes
-// ---------------------------------------------------------------------------
-const app = new SidecarApp();
+let app;
+try {
+  app = new SidecarApp();
+} catch (_) {
+  app = {
+    page: () => {},
+    api: () => {},
+    run: () => {}
+  };
+}
 
 const readLocal = (filename) => readFileSync(join(HERE, filename), 'utf8');
 
@@ -608,7 +615,7 @@ app.api('/icon.png', () => new Response(readFileSync(join(HERE, 'icon.png')), { 
 // ---------------------------------------------------------------------------
 // Autonomous GitHub Update Engine
 // ---------------------------------------------------------------------------
-const CURRENT_VERSION = '3.0.1';
+const CURRENT_VERSION = '3.1.0';
 const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/omid-io/antigravity-ui/main';
 
 let updateState = {
@@ -709,6 +716,56 @@ app.api('/api/perform-update', async () => {
   return await downloadAndApplyUpdate();
 }, 'POST');
 
+// Dedicated Local HTTP Server for 1-Click Zero-Downtime Live Updates
+const LOCAL_UPDATE_PORT = 58888;
+try {
+  const localHttp = http.createServer(async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
+
+    const url = new URL(req.url, `http://127.0.0.1:${LOCAL_UPDATE_PORT}`);
+    if (url.pathname === '/api/check-update') {
+      const st = await checkGitHubUpdate();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        updateAvailable: st.hasUpdate,
+        currentVersion: CURRENT_VERSION,
+        remoteVersion: st.latestVersion
+      }));
+      return;
+    }
+
+    if (url.pathname === '/api/perform-update' && req.method === 'POST') {
+      try {
+        const result = await downloadAndApplyUpdate();
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(result));
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+      return;
+    }
+
+    res.writeHead(404);
+    res.end('Not Found');
+  });
+
+  localHttp.listen(LOCAL_UPDATE_PORT, '127.0.0.1', () => {
+    console.log(`[antigravity-ui] Dedicated update server listening on 127.0.0.1:${LOCAL_UPDATE_PORT}`);
+  });
+  localHttp.on('error', (err) => {
+    console.warn('[antigravity-ui] Update server port already bound or in use:', err.message);
+  });
+} catch (_) {}
+
 app.api('/api/config', () => {
   return loadConfig();
 }, 'GET');
@@ -754,4 +811,4 @@ function loadConfig() {
   }
 }
 
-app.run();
+try { app.run(); } catch (_) {}

@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 31;
+  const POPUP_ENGINE_VERSION = 32;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -1044,43 +1044,43 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         transform: rotate(90deg);
       }
       .rtl-version-capsule.rtl-update-available {
-        background: var(--rtl-surface-hover) !important;
-        border-color: #f59e0b !important;
-        color: #f59e0b !important;
+        background: rgba(239, 68, 68, 0.08) !important;
+        border-color: #ef4444 !important;
+        color: #ef4444 !important;
         font-weight: 600 !important;
-        animation: rtlUpdatePulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
-        box-shadow: 0 1px 3px rgba(245, 158, 11, 0.2);
+        animation: rtlUpdateRedPulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25), inset 1px 1px 2px rgba(255, 255, 255, 0.6) !important;
       }
       .rtl-version-capsule.rtl-update-available:hover {
-        background: rgba(245, 158, 11, 0.15) !important;
-        border-color: #f59e0b !important;
+        background: rgba(239, 68, 68, 0.16) !important;
+        border-color: #dc2626 !important;
+        color: #dc2626 !important;
         transform: translateY(-1px);
-        box-shadow: 0 2px 10px rgba(245, 158, 11, 0.35);
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.8) !important;
       }
       .rtl-version-capsule.rtl-update-available .rtl-capsule-icon {
         opacity: 1 !important;
-        color: #f59e0b !important;
-        filter: drop-shadow(0 1px 2px rgba(245, 158, 11, 0.4));
+        color: #ef4444 !important;
         transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
       .rtl-version-capsule.rtl-update-available:hover .rtl-capsule-icon {
-        transform: scale(1.2) rotate(15deg);
+        transform: translateY(1.5px);
       }
       @keyframes rtlSpin {
         100% { transform: rotate(360deg); }
       }
-      @keyframes rtlUpdatePulse {
+      @keyframes rtlUpdateRedPulse {
         0% {
-          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45);
-          border-color: rgba(245, 158, 11, 0.6);
+          box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45);
+          border-color: rgba(239, 68, 68, 0.7);
         }
         50% {
-          box-shadow: 0 0 0 4px rgba(245, 158, 11, 0);
-          border-color: rgba(245, 158, 11, 1);
+          box-shadow: 0 0 0 4px rgba(239, 68, 68, 0);
+          border-color: rgba(239, 68, 68, 1);
         }
         100% {
-          box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45);
-          border-color: rgba(245, 158, 11, 0.6);
+          box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45);
+          border-color: rgba(239, 68, 68, 0.7);
         }
       }
     \`;
@@ -1690,20 +1690,24 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (capsuleBtn) capsuleBtn.classList.add('rtl-checking');
     if (!quiet && versionText) versionText.textContent = 'Checking...';
 
-    const currentVer = '3.0.1';
+    const currentVer = '3.1.0';
     let updateFound = false;
     let remoteVer = null;
 
     try {
-      // 1. First try sidecar local API if active
-      if (SIDECAR_PORT > 0) {
+      // 1. Try dedicated local server on 58888 or sidecar port
+      const portsToCheck = [58888, SIDECAR_PORT].filter(p => p > 0);
+      for (const p of portsToCheck) {
         try {
-          const res = await fetch(\`http://localhost:\${SIDECAR_PORT}/api/check-update\`);
+          const res = await fetch('http://127.0.0.1:' + p + '/api/check-update', {
+            signal: AbortSignal.timeout(3000)
+          });
           if (res.ok) {
             const data = await res.json();
-            if (data.updateAvailable) {
+            if (data && data.updateAvailable && data.remoteVersion) {
               updateFound = true;
               remoteVer = data.remoteVersion;
+              break;
             }
           }
         } catch (_) {}
@@ -1711,40 +1715,44 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
       // 2. Direct fast GitHub fallback (anti-rate-limit raw check)
       if (!updateFound) {
-        const ghRes = await fetch('https://raw.githubusercontent.com/omid-io/antigravity-ui/main/package.json');
-        if (ghRes.ok) {
-          const pkg = await ghRes.json();
-          if (pkg && pkg.version && pkg.version !== currentVer) {
-            updateFound = true;
-            remoteVer = pkg.version;
+        try {
+          const ghRes = await fetch('https://raw.githubusercontent.com/omid-io/antigravity-ui/main/package.json?t=' + Date.now(), {
+            signal: AbortSignal.timeout(4000)
+          });
+          if (ghRes.ok) {
+            const pkg = await ghRes.json();
+            if (pkg && pkg.version && pkg.version !== currentVer) {
+              updateFound = true;
+              remoteVer = pkg.version;
+            }
           }
-        }
+        } catch (_) {}
       }
 
       const iconWrap = $('p-capsule-icon-wrap');
       const refreshSvgHtml = '<svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
-      const starSvgHtml = '<svg class="rtl-capsule-icon rtl-star-icon" width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>';
+      const updateArrowSvgHtml = '<svg class="rtl-capsule-icon rtl-update-arrow-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>';
 
       if (updateFound && remoteVer) {
         availableUpdateInfo = { updateAvailable: true, remoteVersion: remoteVer, currentVersion: currentVer };
         if (capsuleBtn) {
           capsuleBtn.classList.add('rtl-update-available');
-          capsuleBtn.title = \`New version v\${remoteVer} is available! Click to update now.\`;
+          capsuleBtn.title = 'New version v' + remoteVer + ' is available! Click to update automatically.';
         }
-        if (versionText) versionText.textContent = \`Update v\${remoteVer}\`;
-        if (iconWrap) iconWrap.innerHTML = starSvgHtml;
+        if (versionText) versionText.textContent = 'Update v' + remoteVer;
+        if (iconWrap) iconWrap.innerHTML = updateArrowSvgHtml;
       } else {
         availableUpdateInfo = null;
         if (capsuleBtn) {
           capsuleBtn.classList.remove('rtl-update-available');
-          capsuleBtn.title = \`v\${currentVer} - Click to check for updates\`;
+          capsuleBtn.title = 'v' + currentVer + ' - Click to check for updates';
         }
         if (iconWrap) iconWrap.innerHTML = refreshSvgHtml;
         if (versionText) {
-          versionText.textContent = quiet ? \`v\${currentVer}\` : 'Up to date ✔';
+          versionText.textContent = quiet ? ('v' + currentVer) : 'Up to date ✔';
           if (!quiet) {
             setTimeout(() => {
-              if (!availableUpdateInfo && versionText) versionText.textContent = \`v\${currentVer}\`;
+              if (!availableUpdateInfo && versionText) versionText.textContent = 'v' + currentVer;
             }, 2500);
           }
         }
@@ -1753,7 +1761,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       if (!quiet && versionText) {
         versionText.textContent = 'Up to date ✔';
         setTimeout(() => {
-          if (versionText) versionText.textContent = \`v\${currentVer}\`;
+          if (versionText) versionText.textContent = 'v' + currentVer;
         }, 2000);
       }
     } finally {
@@ -1772,48 +1780,67 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (versionText) versionText.textContent = 'Updating...';
 
     try {
-      if (SIDECAR_PORT > 0) {
-        const res = await fetch(\`http://localhost:\${SIDECAR_PORT}/api/perform-update\`, { method: 'POST' });
-        const result = await res.json();
-        if (result.success) {
-          if (capsuleBtn) {
-            capsuleBtn.classList.remove('rtl-update-available');
-            capsuleBtn.classList.remove('rtl-updating');
-            capsuleBtn.classList.remove('rtl-checking');
+      const portsToTry = [58888, SIDECAR_PORT].filter(p => p > 0);
+      let updateResult = null;
+
+      for (const p of portsToTry) {
+        try {
+          const res = await fetch('http://127.0.0.1:' + p + '/api/perform-update', {
+            method: 'POST',
+            signal: AbortSignal.timeout(15000)
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.success) {
+              updateResult = data;
+              break;
+            }
           }
-          if (versionText) versionText.textContent = \`Updated to v\${result.version}! 🎉\`;
-          availableUpdateInfo = null;
-          setTimeout(() => {
-            if (versionText) versionText.textContent = \`v\${result.version}\`;
-          }, 3000);
-          return;
+        } catch (_) {}
+      }
+
+      if (updateResult) {
+        if (capsuleBtn) {
+          capsuleBtn.classList.remove('rtl-update-available');
+          capsuleBtn.classList.remove('rtl-updating');
+          capsuleBtn.classList.remove('rtl-checking');
         }
+        const iconWrap = $('p-capsule-icon-wrap');
+        const refreshSvgHtml = '<svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
+        if (iconWrap) iconWrap.innerHTML = refreshSvgHtml;
+        const newV = updateResult.version || availableUpdateInfo?.remoteVersion || currentVer;
+        if (versionText) versionText.textContent = 'Updated to v' + newV + '! 🎉';
+        availableUpdateInfo = null;
+        setTimeout(() => {
+          if (versionText) versionText.textContent = 'v' + newV;
+        }, 3000);
+        return;
       }
-      // If sidecar API unavailable, open GitHub releases in browser
-      window.open('https://github.com/omid-io/antigravity-ui/releases', '_blank');
-      if (capsuleBtn) {
-        capsuleBtn.classList.remove('rtl-updating');
-        capsuleBtn.classList.remove('rtl-checking');
-      }
-      if (versionText) versionText.textContent = 'Opened GitHub 🔗';
-      setTimeout(() => {
-        if (versionText && availableUpdateInfo) versionText.textContent = \`Update v\${availableUpdateInfo.remoteVersion}\`;
-      }, 3000);
-    } catch (err) {
-      if (capsuleBtn) {
-        capsuleBtn.classList.remove('rtl-updating');
-        capsuleBtn.classList.remove('rtl-checking');
-      }
-      if (versionText) versionText.textContent = 'Update Error ⚠️';
+
+      if (versionText) versionText.textContent = 'Update Failed ⚠️';
       setTimeout(() => {
         if (availableUpdateInfo) {
           if (capsuleBtn) capsuleBtn.classList.add('rtl-update-available');
-          if (versionText) versionText.textContent = \`Update v\${availableUpdateInfo.remoteVersion}\`;
+          if (versionText) versionText.textContent = 'Update v' + availableUpdateInfo.remoteVersion;
         } else {
-          if (versionText) versionText.textContent = 'v3.1.0';
+          if (versionText) versionText.textContent = 'v' + currentVer;
         }
-      }, 3000);
+      }, 2500);
+    } catch (err) {
+      if (versionText) versionText.textContent = 'Update Failed ⚠️';
+      setTimeout(() => {
+        if (availableUpdateInfo) {
+          if (capsuleBtn) capsuleBtn.classList.add('rtl-update-available');
+          if (versionText) versionText.textContent = 'Update v' + availableUpdateInfo.remoteVersion;
+        } else {
+          if (versionText) versionText.textContent = 'v' + currentVer;
+        }
+      }, 2500);
     } finally {
+      if (capsuleBtn) {
+        capsuleBtn.classList.remove('rtl-updating');
+        capsuleBtn.classList.remove('rtl-checking');
+      }
       isPerformingUpdate = false;
     }
   }
