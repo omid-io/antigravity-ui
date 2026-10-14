@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.1.0] - 2026-10-15
+
+### Changed
+- **Linear Minimal & Raycast HUD Popup Redesign (Vibe UI Suite v6+):** Complete architectural and visual overhaul of the Antigravity UI Studio popup panel (`popup-engine.js`).
+- **Sovereign Dual-Theme Color Engine:** Engineered crisp Swiss Light tokens (`#ffffff` canvas, subtle slate `#f8fafc` surfaces, high-contrast `#0f172a` text, and vivid indigo accents) alongside Deep Obsidian Dark tokens (`#0f131a` canvas, `#171d26` elevated cards, micro-borders `rgba(255,255,255,0.08)`, and multi-layer depth shadows).
+- **Tactile Living Controls:** Replaced generic inputs with tactile spring-physics toggle switches (`cubic-bezier(0.16, 1, 0.3, 1)`), precision range sliders with glowing thumbs and monospace badges, and integrated color swatch controls.
+- **Micro-Structured DOM & Navigation:** Upgraded segmented pill tabs with vector SVG glyphs (`Typography`, `Themes`, `Sidebar`), added uppercase section subheaders (`DIRECTION & LAYOUT`, `TYPOGRAPHY SCALES`, `USER BUBBLE THEME`, `SIDEBAR ERGONOMICS`), and eliminated raw text emojis.
+- **Full-Width Shadow Presets:** Structured the bubble shadow controls into an unconstrained stacked layout (`None`, `Soft`, `3D`, `Glow`), preventing label truncation across both Light and Dark themes.
+
+---
+
 ## [3.0.0] - 2026-10-13
 
 ### Added

@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 25;
+  const POPUP_ENGINE_VERSION = 29;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -512,44 +512,56 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
       }
 
-      /* Light Mode Tokens (Sharp & High Contrast) */
+      /* Light Mode Tokens (Crisp Swiss Light & High Contrast) */
       :root, body, body.light, body.theme-light, body.vscode-light, .rtl-widget-panel.rtl-is-light {
         --rtl-bg: #ffffff;
         --rtl-surface: #f1f5f9;
         --rtl-surface-hover: #e2e8f0;
         --rtl-card-bg: #f8fafc;
         --rtl-card-border: #cbd5e1;
+        --rtl-card-border-hover: #94a3b8;
         --rtl-text: #0f172a;
         --rtl-text-secondary: #334155;
-        --rtl-text-muted: #64748b;
+        --rtl-text-muted: #475569;
         --rtl-border: #cbd5e1;
-        --rtl-border-subtle: #e2e8f0;
+        --rtl-border-subtle: #cbd5e1;
         --rtl-input-bg: #ffffff;
         --rtl-input-border: #94a3b8;
+        --rtl-slider-track: #94a3b8;
+        --rtl-badge-bg: #e2e8f0;
+        --rtl-badge-border: #94a3b8;
         --rtl-accent: #4f46e5;
         --rtl-accent-hover: #4338ca;
+        --rtl-accent-gradient: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
         --rtl-toggle-off: #94a3b8;
-        --rtl-shadow-panel: 0 16px 40px -6px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(15, 23, 42, 0.1);
+        --rtl-shadow-panel: 0 20px 48px -8px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.08);
+        --rtl-ring: rgba(79, 70, 229, 0.25);
       }
 
-      /* Dark Mode Tokens (Deep, Rich & Crisp) */
+      /* Dark Mode Tokens (Deep Obsidian HUD & Tactile Glow) */
       body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark, .rtl-widget-panel.rtl-is-dark {
-        --rtl-bg: #131722;
-        --rtl-surface: #1a2030;
-        --rtl-surface-hover: #232c42;
-        --rtl-card-bg: #171d2b;
-        --rtl-card-border: #29354e;
+        --rtl-bg: #0f131a;
+        --rtl-surface: #171d26;
+        --rtl-surface-hover: #1f2733;
+        --rtl-card-bg: #141922;
+        --rtl-card-border: rgba(255, 255, 255, 0.09);
+        --rtl-card-border-hover: rgba(255, 255, 255, 0.18);
         --rtl-text: #f8fafc;
         --rtl-text-secondary: #cbd5e1;
         --rtl-text-muted: #94a3b8;
-        --rtl-border: #29354e;
-        --rtl-border-subtle: #1e263a;
-        --rtl-input-bg: #10141f;
-        --rtl-input-border: #3b4b6d;
+        --rtl-border: rgba(255, 255, 255, 0.1);
+        --rtl-border-subtle: rgba(255, 255, 255, 0.07);
+        --rtl-input-bg: #0b0e14;
+        --rtl-input-border: rgba(255, 255, 255, 0.14);
+        --rtl-slider-track: #334155;
+        --rtl-badge-bg: #171d26;
+        --rtl-badge-border: rgba(255, 255, 255, 0.14);
         --rtl-accent: #6366f1;
-        --rtl-accent-hover: #4f46e5;
+        --rtl-accent-hover: #818cf8;
+        --rtl-accent-gradient: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
         --rtl-toggle-off: #475569;
-        --rtl-shadow-panel: 0 24px 50px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.08);
+        --rtl-shadow-panel: 0 24px 50px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        --rtl-ring: rgba(99, 102, 241, 0.35);
       }
 
       .rtl-widget-container {
@@ -562,9 +574,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         overflow: visible !important;
       }
 
-      /* Pixel-Crisp Popup Panel (Zero Fractional GPU Blur & Natural Height) */
+      /* Pixel-Crisp HUD Panel (Raycast / Linear Minimal) */
       .rtl-widget-panel {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
         font-weight: 400 !important;
         font-synthesis: none !important;
         direction: ltr !important;
@@ -576,8 +588,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         bottom: 56px !important;
         left: 16px !important;
         right: auto !important;
-        width: 330px !important;
-        height: 480px !important;
+        width: 338px !important;
+        height: 540px !important;
         max-height: calc(100vh - 75px) !important;
         background-color: var(--rtl-bg) !important;
         color: var(--rtl-text) !important;
@@ -587,8 +599,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         opacity: 0 !important;
         visibility: hidden !important;
         pointer-events: none !important;
-        transition: opacity 0.16s ease, visibility 0.16s, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-        transform: translateY(8px);
+        transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        transform: translateY(10px) scale(0.99);
         transform-origin: bottom left;
         display: flex !important;
         flex-direction: column !important;
@@ -597,7 +609,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       }
 
       .rtl-widget-panel.rtl-panel-open {
-        transform: none !important;
+        transform: translateY(0) scale(1) !important;
         opacity: 1 !important;
         visibility: visible !important;
         pointer-events: auto !important;
@@ -607,7 +619,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         display: none;
         flex-direction: column;
         gap: 10px;
-        animation: fadeInTab 0.14s ease-out;
+        animation: fadeInTab 0.16s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .rtl-tab-view.active {
@@ -615,63 +627,92 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       }
 
       @keyframes fadeInTab {
-        from { opacity: 0; transform: translateY(3px); }
+        from { opacity: 0; transform: translateY(4px); }
         to { opacity: 1; transform: translateY(0); }
       }
 
       /* Custom Crisp Scrollbar & Fixed-Frame Body */
       .rtl-panel-body {
         scrollbar-width: thin !important;
-        scrollbar-color: rgba(140, 150, 170, 0.45) transparent !important;
+        scrollbar-color: rgba(140, 150, 170, 0.35) transparent !important;
         flex: 1 1 0 !important;
         overflow-y: auto !important;
-        padding: 10px;
+        padding: 11px 12px;
         display: flex;
         flex-direction: column;
         gap: 10px;
       }
       .rtl-panel-body::-webkit-scrollbar { width: 4px; }
-      .rtl-panel-body::-webkit-scrollbar-thumb { background: rgba(140, 150, 170, 0.45); border-radius: 9999px; }
+      .rtl-panel-body::-webkit-scrollbar-thumb { background: rgba(140, 150, 170, 0.35); border-radius: 9999px; }
 
-      /* Tabs Nav */
+      /* Tabs Nav (Sleek Segmented Pill) */
       .rtl-main-nav {
         display: flex;
-        gap: 4px;
+        gap: 3px;
         padding: 3px;
         background-color: var(--rtl-surface);
-        border: 1px solid var(--rtl-border);
-        border-radius: 9px;
+        border: 1px solid var(--rtl-border-subtle);
+        border-radius: 8px;
       }
       .rtl-main-nav-btn {
         flex: 1 1 0;
-        padding: 5px 3px;
+        padding: 5px 4px;
         border: none;
         background: transparent;
         color: var(--rtl-text-secondary);
         font-size: 11px;
         font-weight: 500 !important;
-        border-radius: 7px;
+        border-radius: 6px;
         cursor: pointer;
-        transition: all 0.15s ease;
+        transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
         text-align: center;
         white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+      }
+      .rtl-main-nav-btn:hover {
+        color: var(--rtl-text);
+        background-color: rgba(255, 255, 255, 0.04);
       }
       .rtl-main-nav-btn.active {
-        background-color: var(--rtl-accent) !important;
+        background: var(--rtl-accent-gradient) !important;
         color: #ffffff !important;
         font-weight: 600 !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 6px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      }
+      .rtl-main-nav-btn svg {
+        flex-shrink: 0;
       }
 
-      /* Cards & Controls */
+      /* Section Subheaders */
+      .rtl-section-header {
+        font-size: 9.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: var(--rtl-text-muted);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 2px;
+      }
+
+      /* Cards & Controls (Tactile Elevation) */
       .rtl-card {
         background-color: var(--rtl-card-bg);
         border: 1px solid var(--rtl-card-border);
         border-radius: 11px;
-        padding: 10px 12px;
+        padding: 11px 12px;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 9px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+      .rtl-card:hover {
+        border-color: var(--rtl-card-border-hover);
       }
       .rtl-control-row {
         display: flex;
@@ -679,7 +720,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         justify-content: space-between;
         gap: 8px;
         font-size: 11.5px;
-        font-weight: 400 !important;
+        font-weight: 450 !important;
         color: var(--rtl-text);
         min-height: 26px;
       }
@@ -688,18 +729,18 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         overflow: hidden;
         text-overflow: ellipsis;
         flex: 1 1 auto;
-        font-weight: 400 !important;
+        font-weight: 450 !important;
         direction: ltr !important;
         text-align: left !important;
         letter-spacing: -0.1px;
       }
 
-      /* Switch (Sharp & Clean) */
+      /* Tactile Switch */
       .rtl-switch {
         position: relative;
         display: inline-block;
-        width: 36px;
-        height: 20px;
+        width: 34px;
+        height: 18px;
         flex-shrink: 0;
       }
       .rtl-switch input { opacity: 0; width: 0; height: 0; margin: 0; }
@@ -708,50 +749,59 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         cursor: pointer;
         top: 0; left: 0; right: 0; bottom: 0;
         background-color: var(--rtl-toggle-off);
-        transition: .18s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         border-radius: 20px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12);
       }
       .rtl-slider:before {
         position: absolute;
         content: "";
         height: 14px;
         width: 14px;
-        left: 3px;
-        bottom: 3px;
+        left: 2px;
+        bottom: 2px;
         background-color: #ffffff;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        transition: .18s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 0 1px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         border-radius: 50%;
       }
       .rtl-switch input:checked + .rtl-slider {
-        background-color: var(--rtl-accent) !important;
+        background: var(--rtl-accent-gradient) !important;
+        box-shadow: 0 0 8px rgba(99, 102, 241, 0.35);
       }
       .rtl-switch input:checked + .rtl-slider:before {
         transform: translateX(16px);
       }
 
-      /* Inputs */
+      /* Tactile Inputs */
       .rtl-text-input {
         background-color: var(--rtl-input-bg);
         border: 1px solid var(--rtl-input-border);
         border-radius: 6px;
-        padding: 4px 7px;
+        padding: 4px 8px;
         font-size: 11px;
         color: var(--rtl-text);
-        width: 110px;
+        width: 112px;
         text-align: left;
         direction: ltr;
         outline: none;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+      .rtl-text-input:focus {
+        border-color: var(--rtl-accent);
+        box-shadow: 0 0 0 2px var(--rtl-ring);
       }
       .rtl-range-slider {
         -webkit-appearance: none;
         appearance: none;
-        width: 68px;
-        height: 4px;
-        background: var(--rtl-surface-hover);
-        border-radius: 2px;
+        width: 72px;
+        height: 5px;
+        background: var(--rtl-slider-track);
+        border-radius: 9999px;
         outline: none;
         cursor: pointer;
+        transition: background 0.15s ease, opacity 0.15s ease;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
       }
       .rtl-range-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
@@ -763,18 +813,24 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         border: 2px solid var(--rtl-bg);
         box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         cursor: pointer;
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+      }
+      .rtl-range-slider::-webkit-slider-thumb:hover {
+        transform: scale(1.18);
+        box-shadow: 0 0 0 4px var(--rtl-ring);
       }
       .rtl-badge-val {
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
         font-size: 10.5px;
         font-weight: 600;
-        min-width: 34px;
+        min-width: 36px;
         text-align: center;
-        background-color: var(--rtl-surface);
-        border: 1px solid var(--rtl-border);
-        padding: 2px 4px;
+        background-color: var(--rtl-badge-bg);
+        border: 1px solid var(--rtl-badge-border);
+        padding: 2px 5px;
         border-radius: 5px;
         color: var(--rtl-text);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       }
       .rtl-color-input {
         -webkit-appearance: none;
@@ -786,9 +842,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         padding: 0;
         cursor: pointer;
         background: transparent;
+        transition: transform 0.15s ease;
+      }
+      .rtl-color-input:hover {
+        transform: scale(1.08);
       }
       .rtl-hex-input {
-        width: 68px;
+        width: 66px;
         height: 22px;
         padding: 0 5px;
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
@@ -800,6 +860,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         border: 1px solid var(--rtl-input-border);
         border-radius: 6px;
         outline: none;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      }
+      .rtl-hex-input:focus {
+        border-color: var(--rtl-accent);
+        box-shadow: 0 0 0 2px var(--rtl-ring);
       }
 
       /* Segmented shadow buttons */
@@ -807,7 +872,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         display: flex;
         gap: 3px;
         background-color: var(--rtl-surface);
-        border: 1px solid var(--rtl-border);
+        border: 1px solid var(--rtl-border-subtle);
         border-radius: 7px;
         padding: 2px;
         width: 100%;
@@ -823,37 +888,53 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         border-radius: 5px;
         cursor: pointer;
         text-align: center;
+        transition: all 0.15s ease;
+      }
+      .rtl-shadow-btn:hover {
+        color: var(--rtl-text);
       }
       .rtl-shadow-btn.active {
-        background-color: var(--rtl-accent);
+        background: var(--rtl-accent-gradient);
         color: #ffffff;
         font-weight: 600;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       }
 
       /* Mode switcher */
       .rtl-mode-switcher {
         display: flex;
         background-color: var(--rtl-surface);
-        border: 1px solid var(--rtl-border);
+        border: 1px solid var(--rtl-border-subtle);
         border-radius: 8px;
-        padding: 2px;
-        gap: 4px;
+        padding: 2.5px;
+        gap: 3px;
+        margin-bottom: 2px;
       }
       .rtl-mode-btn {
         flex: 1 1 0;
-        padding: 5px;
+        padding: 5px 6px;
         border: none;
         background: transparent;
         color: var(--rtl-text-secondary);
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 500;
         border-radius: 6px;
         cursor: pointer;
         text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .rtl-mode-btn:hover {
+        color: var(--rtl-text);
       }
       .rtl-mode-btn.active {
-        background-color: var(--rtl-accent);
-        color: #ffffff;
+        background: var(--rtl-card-bg);
+        color: var(--rtl-text) !important;
+        font-weight: 600;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--rtl-border);
       }
 
       /* Footer (Enhanced GitHub Star Invite & Clean Badge) */
@@ -881,9 +962,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         background: var(--rtl-card-bg);
         border: 1px solid var(--rtl-border);
         font-size: 11px;
-        font-weight: 450;
+        font-weight: 500;
         color: var(--rtl-text);
-        transition: all 0.16s ease;
+        transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
       }
       .rtl-star-badge:hover {
@@ -994,20 +1075,34 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   container.innerHTML = \`
     <div id="antigravity-ui-popup" class="rtl-widget-panel">
       <!-- Pinned Top Header -->
-      <div style="display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 8px; border-bottom: 1px solid var(--rtl-border-subtle); direction: ltr !important;">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 11px 12px 9px; border-bottom: 1px solid var(--rtl-border-subtle); direction: ltr !important;">
         <div style="display: flex; align-items: center; justify-content: space-between;">
           <div style="display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 13px; color: var(--rtl-text);">
             <span style="font-size: 16px; line-height: 1;">🌌</span>
-            <span>Antigravity UI Studio</span>
+            <span style="font-size: 12.5px; font-weight: 600; letter-spacing: -0.2px;">Antigravity UI Studio</span>
           </div>
-          <button id="p-btn-close" type="button" style="background: none; border: none; cursor: pointer; color: var(--rtl-text-muted); font-size: 16px; padding: 2px 6px; line-height: 1;" title="Close">✕</button>
+          <button id="p-btn-close" type="button" style="background: none; border: none; cursor: pointer; color: var(--rtl-text-muted); width: 24px; height: 24px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease;" title="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
 
         <!-- 3 Tabs Switcher -->
         <div class="rtl-main-nav">
-          <button type="button" class="rtl-main-nav-btn active" data-tab="ptab-typo">Typography & RTL</button>
-          <button type="button" class="rtl-main-nav-btn" data-tab="ptab-theme">Bubble & Themes</button>
-          <button type="button" class="rtl-main-nav-btn" data-tab="ptab-sidebar">Sidebar & Layout</button>
+          <button type="button" class="rtl-main-nav-btn active" data-tab="ptab-typo">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+            <span>Typography</span>
+          </button>
+          <button type="button" class="rtl-main-nav-btn" data-tab="ptab-theme">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+            <span>Themes</span>
+          </button>
+          <button type="button" class="rtl-main-nav-btn" data-tab="ptab-sidebar">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+            <span>Sidebar</span>
+          </button>
         </div>
       </div>
 
@@ -1015,7 +1110,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       <div class="rtl-panel-body">
         <!-- TAB 1: RTL & Typography -->
         <div id="ptab-typo" class="rtl-tab-view active">
+          <!-- RTL Direction Group -->
           <div class="rtl-card">
+            <div class="rtl-section-header">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+              <span>Direction & Layout</span>
+            </div>
             <div class="rtl-control-row">
               <span>Smart RTL Engine</span>
               <label class="rtl-switch">
@@ -1029,6 +1129,21 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                 <input type="checkbox" id="p-forceRTL">
                 <span class="rtl-slider"></span>
               </label>
+            </div>
+            <div class="rtl-control-row">
+              <span>Fix Shift+2 for @ Symbol</span>
+              <label class="rtl-switch">
+                <input type="checkbox" id="p-fixAtSign">
+                <span class="rtl-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Typography Group -->
+          <div class="rtl-card">
+            <div class="rtl-section-header">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+              <span>Typography Scales</span>
             </div>
             <div class="rtl-control-row">
               <span>Persian Font (FA)</span>
@@ -1056,19 +1171,16 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                 <span id="p-val-fs" class="rtl-badge-val">16px</span>
               </div>
             </div>
-            <div class="rtl-control-row">
-              <span>Fix Shift+2 for @ Symbol</span>
-              <label class="rtl-switch">
-                <input type="checkbox" id="p-fixAtSign">
-                <span class="rtl-slider"></span>
-              </label>
-            </div>
           </div>
         </div>
 
         <!-- TAB 2: Themes & Bubbles -->
         <div id="ptab-theme" class="rtl-tab-view">
           <div class="rtl-card">
+            <div class="rtl-section-header">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              <span>User Bubble Theme</span>
+            </div>
             <div class="rtl-control-row">
               <span>Custom User Bubble Style</span>
               <label class="rtl-switch">
@@ -1078,42 +1190,48 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             </div>
 
             <div class="rtl-mode-switcher">
-              <button type="button" id="p-btn-dark" class="rtl-mode-btn active">Dark Theme</button>
-              <button type="button" id="p-btn-light" class="rtl-mode-btn">Light Theme</button>
+              <button type="button" id="p-btn-dark" class="rtl-mode-btn active">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <span>Dark Theme</span>
+              </button>
+              <button type="button" id="p-btn-light" class="rtl-mode-btn">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <span>Light Theme</span>
+              </button>
             </div>
 
             <!-- Dark controls -->
-            <div id="p-group-dark" style="display: flex; flex-direction: column; gap: 6px;">
+            <div id="p-group-dark" style="display: flex; flex-direction: column; gap: 7px;">
               <div class="rtl-control-row">
                 <span>Background Color</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-dark-bg" class="rtl-color-input">
                   <input type="text" id="p-dark-bg-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
                 <span>Text Color</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-dark-text" class="rtl-color-input">
                   <input type="text" id="p-dark-text-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
                 <span>Border Color</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-dark-border" class="rtl-color-input">
                   <input type="text" id="p-dark-border-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
                 <span>Border Width</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
                   <input type="range" id="p-dark-bw" min="0" max="4" step="0.5" class="rtl-range-slider">
                   <span id="p-val-dark-bw" class="rtl-badge-val">1.5px</span>
                 </div>
               </div>
-              <div class="rtl-control-row">
-                <span>Bubble Shadow & Depth</span>
+              <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 2px;">
+                <span style="font-size: 11px; color: var(--rtl-text-secondary); font-weight: 500;">Bubble Shadow & Depth</span>
                 <div class="rtl-shadow-group" id="p-dark-shadow-group">
                   <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
                   <button type="button" class="rtl-shadow-btn active" data-val="soft">Soft</button>
@@ -1124,37 +1242,37 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             </div>
 
             <!-- Light controls -->
-            <div id="p-group-light" style="display: none; flex-direction: column; gap: 6px;">
+            <div id="p-group-light" style="display: none; flex-direction: column; gap: 7px;">
               <div class="rtl-control-row">
                 <span>Background Color</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-light-bg" class="rtl-color-input">
                   <input type="text" id="p-light-bg-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
                 <span>Text Color</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-light-text" class="rtl-color-input">
                   <input type="text" id="p-light-text-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
                 <span>Border Color</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-light-border" class="rtl-color-input">
                   <input type="text" id="p-light-border-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div class="rtl-control-row">
                 <span>Border Width</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
                   <input type="range" id="p-light-bw" min="0" max="4" step="0.5" class="rtl-range-slider">
                   <span id="p-val-light-bw" class="rtl-badge-val">1.5px</span>
                 </div>
               </div>
-              <div class="rtl-control-row">
-                <span>Bubble Shadow & Depth</span>
+              <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 2px;">
+                <span style="font-size: 11px; color: var(--rtl-text-secondary); font-weight: 500;">Bubble Shadow & Depth</span>
                 <div class="rtl-shadow-group" id="p-light-shadow-group">
                   <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
                   <button type="button" class="rtl-shadow-btn active" data-val="soft">Soft</button>
@@ -1182,6 +1300,10 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         <!-- TAB 3: Sidebar -->
         <div id="ptab-sidebar" class="rtl-tab-view">
           <div class="rtl-card">
+            <div class="rtl-section-header">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+              <span>Sidebar Ergonomics</span>
+            </div>
             <div class="rtl-control-row">
               <span>Compact Sidebar (Resize down to 160px)</span>
               <label class="rtl-switch">
@@ -1193,7 +1315,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
               Enables ultra-compact sidebar mode. Drag the sidebar divider to freely shrink the left pane down to 160px.
             </p>
             <div style="display: flex; justify-content: flex-end;">
-              <button type="button" id="p-btn-reset-sidebar" style="background: var(--rtl-surface); border: 1px solid var(--rtl-border); color: var(--rtl-text); font-size: 11px; padding: 4px 8px; border-radius: 6px; cursor: pointer;">Reset Width to 256px</button>
+              <button type="button" id="p-btn-reset-sidebar" style="background: var(--rtl-surface); border: 1px solid var(--rtl-border-subtle); color: var(--rtl-text); font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.15s ease;">Reset Width to 256px</button>
             </div>
           </div>
         </div>
@@ -1208,8 +1330,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" class="rtl-star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           </span>
         </a>
-        <button id="p-btn-check-update" type="button" class="rtl-version-capsule" title="v3.0.1 - Click to check for updates">
-          <span id="p-version-text">v3.0.1</span>
+        <button id="p-btn-check-update" type="button" class="rtl-version-capsule" title="v3.1.0 - Click to check for updates">
+          <span id="p-version-text">v3.1.0</span>
           <span id="p-capsule-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center;">
             <svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
@@ -1653,7 +1775,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           if (capsuleBtn) capsuleBtn.classList.add('rtl-update-available');
           if (versionText) versionText.textContent = \`Update v\${availableUpdateInfo.remoteVersion}\`;
         } else {
-          if (versionText) versionText.textContent = 'v3.0.1';
+          if (versionText) versionText.textContent = 'v3.1.0';
         }
       }, 3000);
     } finally {
