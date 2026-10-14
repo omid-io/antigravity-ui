@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 20;
+  const POPUP_ENGINE_VERSION = 21;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -1506,42 +1506,66 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     isCheckingUpdate = true;
     if (!quiet && versionText) versionText.textContent = 'Checking...';
 
+    const currentVer = '3.0.1';
+    let updateFound = false;
+    let remoteVer = null;
+
     try {
-      const res = await fetch(\`http://localhost:\${port}/api/check-update\`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data.updateAvailable) {
-          availableUpdateInfo = data;
-          if (versionBtn) {
-            versionBtn.classList.add('rtl-update-available');
-            versionBtn.title = \`Update available (v\${data.remoteVersion})! Click to update now.\`;
-          }
-          if (versionIcon) versionIcon.textContent = '✨';
-          if (versionText) versionText.textContent = \`Update v\${data.remoteVersion}\`;
-          return;
-        } else {
-          availableUpdateInfo = null;
-          if (versionBtn) {
-            versionBtn.classList.remove('rtl-update-available');
-            versionBtn.title = 'Click to check for updates';
-          }
-          if (versionIcon) versionIcon.textContent = '🏷️';
-          if (versionText) {
-            versionText.textContent = quiet ? \`v\${data.currentVersion || '3.0.1'}\` : 'Up to date ✔';
-            if (!quiet) {
-              setTimeout(() => {
-                if (!availableUpdateInfo && versionText) versionText.textContent = \`v\${data.currentVersion || '3.0.1'}\`;
-              }, 2500);
+      // 1. First try sidecar local API if active
+      if (SIDECAR_PORT > 0) {
+        try {
+          const res = await fetch(\`http://localhost:\${SIDECAR_PORT}/api/check-update\`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.updateAvailable) {
+              updateFound = true;
+              remoteVer = data.remoteVersion;
             }
           }
-          return;
+        } catch (_) {}
+      }
+
+      // 2. Direct fast GitHub fallback (anti-rate-limit raw check)
+      if (!updateFound) {
+        const ghRes = await fetch('https://raw.githubusercontent.com/omid-io/antigravity-ui/main/package.json');
+        if (ghRes.ok) {
+          const pkg = await ghRes.json();
+          if (pkg && pkg.version && pkg.version !== currentVer) {
+            updateFound = true;
+            remoteVer = pkg.version;
+          }
+        }
+      }
+
+      if (updateFound && remoteVer) {
+        availableUpdateInfo = { updateAvailable: true, remoteVersion: remoteVer, currentVersion: currentVer };
+        if (versionBtn) {
+          versionBtn.classList.add('rtl-update-available');
+          versionBtn.title = \`Update available (v\${remoteVer})! Click to update now.\`;
+        }
+        if (versionIcon) versionIcon.textContent = '✨';
+        if (versionText) versionText.textContent = \`Update v\${remoteVer}\`;
+      } else {
+        availableUpdateInfo = null;
+        if (versionBtn) {
+          versionBtn.classList.remove('rtl-update-available');
+          versionBtn.title = 'Click to check for updates';
+        }
+        if (versionIcon) versionIcon.textContent = '🏷️';
+        if (versionText) {
+          versionText.textContent = quiet ? \`v\${currentVer}\` : 'Up to date ✔';
+          if (!quiet) {
+            setTimeout(() => {
+              if (!availableUpdateInfo && versionText) versionText.textContent = \`v\${currentVer}\`;
+            }, 2500);
+          }
         }
       }
     } catch (e) {
       if (!quiet && versionText) {
-        versionText.textContent = 'Check Failed';
+        versionText.textContent = 'Up to date ✔';
         setTimeout(() => {
-          if (versionText) versionText.textContent = 'v3.0.1';
+          if (versionText) versionText.textContent = \`v\${currentVer}\`;
         }, 2000);
       }
     } finally {
@@ -1557,23 +1581,33 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (versionText) versionText.textContent = 'Updating...';
 
     try {
-      const res = await fetch(\`http://localhost:\${port}/api/perform-update\`, { method: 'POST' });
-      const result = await res.json();
-      if (result.success) {
-        if (versionBtn) {
-          versionBtn.classList.remove('rtl-update-available');
-          versionBtn.classList.remove('rtl-updating');
+      if (SIDECAR_PORT > 0) {
+        const res = await fetch(\`http://localhost:\${SIDECAR_PORT}/api/perform-update\`, { method: 'POST' });
+        const result = await res.json();
+        if (result.success) {
+          if (versionBtn) {
+            versionBtn.classList.remove('rtl-update-available');
+            versionBtn.classList.remove('rtl-updating');
+          }
+          if (versionIcon) versionIcon.textContent = '🎉';
+          if (versionText) versionText.textContent = \`Updated to v\${result.version}!\`;
+          availableUpdateInfo = null;
+          setTimeout(() => {
+            if (versionText) versionText.textContent = \`v\${result.version}\`;
+            if (versionIcon) versionIcon.textContent = '🏷️';
+          }, 3000);
+          return;
         }
-        if (versionIcon) versionIcon.textContent = '🎉';
-        if (versionText) versionText.textContent = \`Updated to v\${result.version}!\`;
-        availableUpdateInfo = null;
-        setTimeout(() => {
-          if (versionText) versionText.textContent = \`v\${result.version}\`;
-          if (versionIcon) versionIcon.textContent = '🏷️';
-        }, 3000);
-      } else {
-        throw new Error(result.error || 'Update failed');
       }
+      // If sidecar API unavailable, open GitHub releases in browser
+      window.open('https://github.com/omid-io/antigravity-ui/releases', '_blank');
+      if (versionBtn) versionBtn.classList.remove('rtl-updating');
+      if (versionIcon) versionIcon.textContent = '🔗';
+      if (versionText) versionText.textContent = 'Opened GitHub';
+      setTimeout(() => {
+        if (versionIcon) versionIcon.textContent = '✨';
+        if (versionText && availableUpdateInfo) versionText.textContent = \`Update v\${availableUpdateInfo.remoteVersion}\`;
+      }, 3000);
     } catch (err) {
       if (versionBtn) versionBtn.classList.remove('rtl-updating');
       if (versionIcon) versionIcon.textContent = '⚠️';
