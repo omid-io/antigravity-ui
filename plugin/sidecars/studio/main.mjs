@@ -605,15 +605,109 @@ app.api('/font.woff2', () => new Response(readFileSync(join(HERE, 'Vazirmatn-Var
 app.api('/logo.svg', () => new Response(readFileSync(join(HERE, 'logo.svg')), { contentType: 'image/svg+xml' }), 'GET');
 app.api('/icon.png', () => new Response(readFileSync(join(HERE, 'icon.png')), { contentType: 'image/png' }), 'GET');
 
+// ---------------------------------------------------------------------------
+// Autonomous GitHub Update Engine
+// ---------------------------------------------------------------------------
+const CURRENT_VERSION = '3.0.1';
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/omid-io/antigravity-ui/main';
+
+let updateState = {
+  currentVersion: CURRENT_VERSION,
+  latestVersion: CURRENT_VERSION,
+  hasUpdate: false,
+  checkedAt: 0,
+  checking: false,
+  error: null
+};
+
+function compareVersions(v1, v2) {
+  const p1 = (v1 || '').replace(/^v/, '').split('.').map(Number);
+  const p2 = (v2 || '').replace(/^v/, '').split('.').map(Number);
+  for (let i = 0; i < 3; i++) {
+    const num1 = p1[i] || 0;
+    const num2 = p2[i] || 0;
+    if (num1 > num2) return 1;
+    if (num1 < num2) return -1;
+  }
+  return 0;
+}
+
+async function checkGitHubUpdate() {
+  if (updateState.checking) return updateState;
+  updateState.checking = true;
+  updateState.error = null;
+  try {
+    const res = await fetch(`${GITHUB_RAW_BASE}/package.json`, {
+      signal: AbortSignal.timeout(5000)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.version) {
+        updateState.latestVersion = data.version;
+        updateState.hasUpdate = compareVersions(data.version, CURRENT_VERSION) > 0;
+        updateState.checkedAt = Date.now();
+      }
+    }
+  } catch (err) {
+    updateState.error = err.message;
+  } finally {
+    updateState.checking = false;
+  }
+  return updateState;
+}
+
+// Check once on sidecar boot in background (zero blocking)
+setTimeout(() => {
+  checkGitHubUpdate().catch(() => {});
+}, 3000);
+
+async function downloadAndApplyUpdate() {
+  try {
+    const filesToUpdate = [
+      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/popup-engine.js`, dest: join(HERE, 'popup-engine.js') },
+      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/main.mjs`, dest: join(HERE, 'main.mjs') },
+      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/index.html`, dest: join(HERE, 'index.html') },
+      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/styles.css`, dest: join(HERE, 'styles.css') }
+    ];
+
+    for (const f of filesToUpdate) {
+      const resp = await fetch(f.url, { signal: AbortSignal.timeout(8000) });
+      if (!resp.ok) throw new Error(`Download failed for ${f.url} (${resp.status})`);
+      const text = await resp.text();
+      if (text && text.length > 50) {
+        writeFileSync(f.dest, text, 'utf8');
+      }
+    }
+
+    // Force re-inject new engine to open Electron windows in 0ms!
+    injectToLiveWindows(currentActiveConfig, true);
+
+    updateState.currentVersion = updateState.latestVersion;
+    updateState.hasUpdate = false;
+    return { success: true, version: updateState.latestVersion };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+}
+
 app.api('/api/status', () => {
   return {
-    version: '3.0.0-hybrid',
+    version: CURRENT_VERSION,
     nodeVersion: process.version,
     cdpPort: getDevToolsPort(),
     asarPatched: existsSync(ASAR_PATH + '.meta.json'),
     configExists: existsSync(CONFIG_PATH),
+    updateState
   };
 }, 'GET');
+
+app.api('/api/check-update', async () => {
+  return await checkGitHubUpdate();
+}, 'GET');
+
+app.api('/api/perform-update', async () => {
+  return await downloadAndApplyUpdate();
+}, 'POST');
 
 app.api('/api/config', () => {
   return loadConfig();
