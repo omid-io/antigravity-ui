@@ -1,7 +1,7 @@
 // Antigravity UI Studio - CDP Sidebar & Popup Injector Engine
 // Injects native-looking sidebar button and customizer popup directly into Antigravity Chat Window without any Asar patches!
 
-export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.2.0') {
+export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.3.0') {
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
