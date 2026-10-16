@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 34;
+  const POPUP_ENGINE_VERSION = 35;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -162,15 +162,19 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       div.sticky:has([data-testid="user-input-step"]) {
         overflow: visible !important;
       }
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] {
+      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"],
+      [data-testid="user-input-step"] .bg-card-border {
         background: transparent !important;
         padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
         border-radius: 1.15rem !important;
+        overflow: visible !important;
         transition: all 0.2s ease !important;
       }
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div {
+      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
+      [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
+      [data-testid="user-input-step"] > .w-full > div > .bg-card {
         background-color: var(--user-msg-bg) !important;
         border: var(--user-msg-border-width) solid var(--user-msg-border-color) !important;
         box-shadow: var(--user-msg-shadow) !important;
@@ -180,16 +184,22 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         z-index: 2 !important;
         transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, filter 0.2s ease !important;
       }
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:hover > div {
+      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:hover > div,
+      [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container):hover,
+      [data-testid="user-input-step"] > .w-full > div > .bg-card:hover {
         transform: translateY(-2px) !important;
         filter: brightness(1.03);
       }
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:active > div {
+      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:active > div,
+      [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container):active,
+      [data-testid="user-input-step"] > .w-full > div > .bg-card:active {
         transform: scale(0.985) !important;
       }
       [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] .whitespace-pre-wrap,
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] p,
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] span:not(.text-muted-foreground) {
+      [data-testid="user-input-step"] .whitespace-pre-wrap,
+      [data-testid="user-input-step"] [data-quotable="true"],
+      [data-testid="user-input-step"] p,
+      [data-testid="user-input-step"] span:not(.text-muted-foreground) {
         color: var(--user-msg-text) !important;
       }
 

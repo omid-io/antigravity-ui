@@ -164,6 +164,8 @@ win.webContents.on('dom-ready', () => {
                             return '0 5px 0 0 rgba(0, 0, 0, 0.18), 0 12px 24px -2px rgba(15, 23, 42, 0.22)';
                         case 'glow': 
                             return \`0 0 0 1.5px \${borderCol}, 0 6px 22px 3px \${borderCol}66, 0 2px 6px \${borderCol}40\`;
+                        case 'clay':
+                            return '0 14px 28px -4px rgba(70, 85, 110, 0.16), 0 4px 10px -2px rgba(70, 85, 110, 0.08), inset 3px 3px 5px rgba(255, 255, 255, 0.9), inset -3px -3px 6px rgba(15, 23, 42, 0.09)';
                         default: return 'none';
                     }
                 } else {
@@ -175,6 +177,8 @@ win.webContents.on('dom-ready', () => {
                             return '0 5px 0 0 rgba(0, 0, 0, 0.8), 0 14px 28px -3px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
                         case 'glow': 
                             return \`0 0 0 1.5px \${borderCol}, 0 0 25px 4px \${borderCol}88, 0 0 50px 10px \${borderCol}44\`;
+                        case 'clay':
+                            return '0 18px 36px -6px rgba(0, 0, 0, 0.7), 0 6px 14px -2px rgba(0, 0, 0, 0.5), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.2), inset -3.5px -3.5px 7px rgba(0, 0, 0, 0.65)';
                         default: return 'none';
                     }
                 }
@@ -761,30 +765,44 @@ win.webContents.on('dom-ready', () => {
                     div.sticky:has([data-testid="user-input-step"]) {
                         overflow: visible !important;
                     }
-                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] {
+                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"],
+                    [data-testid="user-input-step"] .bg-card-border {
                         background: transparent !important;
                         padding: 0 !important;
                         border: none !important;
                         box-shadow: none !important;
-                        border-radius: 0.75rem !important;
+                        border-radius: 1.15rem !important;
+                        overflow: visible !important;
                         transition: all 0.2s ease !important;
                     }
-                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div {
+                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
+                    [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
+                    [data-testid="user-input-step"] > .w-full > div > .bg-card {
                         background-color: var(--user-msg-bg) !important;
                         border: var(--user-msg-border-width) solid var(--user-msg-border-color) !important;
                         box-shadow: var(--user-msg-shadow) !important;
                         color: var(--user-msg-text) !important;
-                        border-radius: 0.75rem !important;
+                        border-radius: 1.15rem !important;
                         position: relative !important;
                         z-index: 2 !important;
-                        transition: all 0.2s ease !important;
+                        transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, filter 0.2s ease !important;
                     }
-                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:hover > div {
-                        filter: brightness(1.04);
+                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:hover > div,
+                    [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container):hover,
+                    [data-testid="user-input-step"] > .w-full > div > .bg-card:hover {
+                        transform: translateY(-2px) !important;
+                        filter: brightness(1.03);
+                    }
+                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:active > div,
+                    [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container):active,
+                    [data-testid="user-input-step"] > .w-full > div > .bg-card:active {
+                        transform: scale(0.985) !important;
                     }
                     [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] .whitespace-pre-wrap,
-                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] p,
-                    [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] span:not(.text-muted-foreground) {
+                    [data-testid="user-input-step"] .whitespace-pre-wrap,
+                    [data-testid="user-input-step"] [data-quotable="true"],
+                    [data-testid="user-input-step"] p,
+                    [data-testid="user-input-step"] span:not(.text-muted-foreground) {
                         color: var(--user-msg-text) !important;
                     }
 
