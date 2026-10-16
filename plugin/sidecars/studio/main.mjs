@@ -58,7 +58,7 @@ function getShadowCSS(type, borderCol, mode) {
       case 'glow':
         return `0 0 0 1.5px ${borderCol}, 0 6px 22px 3px ${borderCol}66, 0 2px 6px ${borderCol}40`;
       case 'clay':
-        return '0 14px 28px -4px rgba(70, 85, 110, 0.16), 0 4px 10px -2px rgba(70, 85, 110, 0.08), inset 3px 3px 5px rgba(255, 255, 255, 0.9), inset -3px -3px 6px rgba(15, 23, 42, 0.09)';
+        return '0 16px 32px -4px rgba(70, 95, 140, 0.2), 0 6px 14px -2px rgba(70, 95, 140, 0.1), inset 3.5px 3.5px 6px rgba(255, 255, 255, 0.95), inset -3.5px -3.5px 7px rgba(70, 95, 140, 0.12)';
       default:
         return 'none';
     }
@@ -72,7 +72,7 @@ function getShadowCSS(type, borderCol, mode) {
       case 'glow':
         return `0 0 0 1.5px ${borderCol}, 0 0 25px 4px ${borderCol}88, 0 0 50px 10px ${borderCol}44`;
       case 'clay':
-        return '0 18px 36px -6px rgba(0, 0, 0, 0.7), 0 6px 14px -2px rgba(0, 0, 0, 0.5), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.2), inset -3.5px -3.5px 7px rgba(0, 0, 0, 0.65)';
+        return '0 20px 40px -6px rgba(0, 0, 0, 0.75), 0 8px 16px -2px rgba(0, 0, 0, 0.6), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.22), inset -3.5px -3.5px 8px rgba(0, 0, 0, 0.75)';
       default:
         return 'none';
     }
@@ -95,7 +95,7 @@ function generateScript(c) {
     text: '#f1f5f9',
     border: '#384c6e',
     borderWidth: '1.5',
-    shadow: 'soft',
+    shadow: 'clay',
     ...(c.userMsgDark || {})
   };
 
@@ -104,9 +104,22 @@ function generateScript(c) {
     text: '#0f172a',
     border: '#cbd5e1',
     borderWidth: '1.5',
-    shadow: 'soft',
+    shadow: 'clay',
     ...(c.userMsgLight || {})
   };
+
+  const isDarkClay = userMsgDark.shadow === 'clay';
+  const isLightClay = userMsgLight.shadow === 'clay';
+
+  const lightBg = isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' : userMsgLight.bg;
+  const lightText = isLightClay ? '#0f172a' : userMsgLight.text;
+  const lightBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' : userMsgLight.border;
+  const lightBorderWidth = isLightClay ? '1.5' : userMsgLight.borderWidth;
+
+  const darkBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : userMsgDark.bg;
+  const darkText = isDarkClay ? '#f8fafc' : userMsgDark.text;
+  const darkBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : userMsgDark.border;
+  const darkBorderWidth = isDarkClay ? '1.5' : userMsgDark.borderWidth;
 
   let faFontRule = '';
   let faFontName = "'Vazirmatn'";
@@ -152,22 +165,22 @@ function generateScript(c) {
     }
   ` : '';
 
-  const darkShadow = getShadowCSS(userMsgDark.shadow, userMsgDark.border, 'dark');
-  const lightShadow = getShadowCSS(userMsgLight.shadow, userMsgLight.border, 'light');
+  const darkShadow = getShadowCSS(userMsgDark.shadow, darkBorder, 'dark');
+  const lightShadow = getShadowCSS(userMsgLight.shadow, lightBorder, 'light');
 
   const userMsgCSS = userMsgEnabled ? `
     :root, body, body.light, body.theme-light {
-      --user-msg-bg: ${userMsgLight.bg};
-      --user-msg-text: ${userMsgLight.text};
-      --user-msg-border-color: ${userMsgLight.border};
-      --user-msg-border-width: ${userMsgLight.borderWidth}px;
+      --user-msg-bg: ${lightBg};
+      --user-msg-text: ${lightText};
+      --user-msg-border-color: ${lightBorder};
+      --user-msg-border-width: ${lightBorderWidth}px;
       --user-msg-shadow: ${lightShadow};
     }
     body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark {
-      --user-msg-bg: ${userMsgDark.bg};
-      --user-msg-text: ${userMsgDark.text};
-      --user-msg-border-color: ${userMsgDark.border};
-      --user-msg-border-width: ${userMsgDark.borderWidth}px;
+      --user-msg-bg: ${darkBg};
+      --user-msg-text: ${darkText};
+      --user-msg-border-color: ${darkBorder};
+      --user-msg-border-width: ${darkBorderWidth}px;
       --user-msg-shadow: ${darkShadow};
     }
     [data-testid="user-input-step"] {
@@ -192,7 +205,7 @@ function generateScript(c) {
     [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
     [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
     [data-testid="user-input-step"] > .w-full > div > .bg-card {
-      background-color: var(--user-msg-bg) !important;
+      background: var(--user-msg-bg) !important;
       border: var(--user-msg-border-width) solid var(--user-msg-border-color) !important;
       box-shadow: var(--user-msg-shadow) !important;
       color: var(--user-msg-text) !important;
@@ -204,8 +217,8 @@ function generateScript(c) {
     [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:hover > div,
     [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container):hover,
     [data-testid="user-input-step"] > .w-full > div > .bg-card:hover {
-      transform: translateY(-2px) !important;
-      filter: brightness(1.03);
+      transform: translateY(-2.5px) !important;
+      filter: brightness(1.025);
     }
     [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"]:active > div,
     [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container):active,
@@ -222,7 +235,7 @@ function generateScript(c) {
 
     /* Harmonized Action Toolbar */
     [data-testid="user-input-step"] .user-input-buttons-container {
-      background-color: var(--user-msg-bg) !important;
+      background: var(--user-msg-bg) !important;
       border: 1px solid var(--user-msg-border-color) !important;
       box-shadow: 0 0 16px 6px var(--user-msg-bg) !important;
     }
@@ -601,7 +614,7 @@ function injectToLiveWindows(config, force = false) {
                   }
 
                   // ONLY touch DOM/evaluate if missing or outdated version or forced
-                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 35) {
+                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 36) {
                     ws.send(JSON.stringify({
                       id: 101,
                       method: 'Runtime.evaluate',
