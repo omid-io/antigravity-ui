@@ -1,11 +1,11 @@
 // Antigravity UI Studio - CDP Sidebar & Popup Injector Engine
 // Injects native-looking sidebar button and customizer popup directly into Antigravity Chat Window without any Asar patches!
 
-export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken) {
+export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.2.0') {
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 33;
+  const POPUP_ENGINE_VERSION = 34;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -1352,8 +1352,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             <svg width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" class="rtl-star-icon"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
           </span>
         </a>
-        <button id="p-btn-check-update" type="button" class="rtl-version-capsule" title="v3.2.0 - Click to check for updates">
-          <span id="p-version-text">v3.2.0</span>
+        <button id="p-btn-check-update" type="button" class="rtl-version-capsule" title="v${currentVersion} - Click to check for updates">
+          <span id="p-version-text">v${currentVersion}</span>
           <span id="p-capsule-icon-wrap" style="display: inline-flex; align-items: center; justify-content: center;">
             <svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
@@ -1690,9 +1690,21 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (capsuleBtn) capsuleBtn.classList.add('rtl-checking');
     if (!quiet && versionText) versionText.textContent = 'Checking...';
 
-    const currentVer = '3.2.0';
+    const currentVer = "${currentVersion}";
     let updateFound = false;
     let remoteVer = null;
+
+    function compareVersions(v1, v2) {
+      const p1 = (v1 || '').replace(/^v/, '').split('.').map(Number);
+      const p2 = (v2 || '').replace(/^v/, '').split('.').map(Number);
+      for (let i = 0; i < 3; i++) {
+        const num1 = p1[i] || 0;
+        const num2 = p2[i] || 0;
+        if (num1 > num2) return 1;
+        if (num1 < num2) return -1;
+      }
+      return 0;
+    }
 
     try {
       // 1. Try dedicated local server on 58888 or sidecar port
@@ -1704,7 +1716,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           });
           if (res.ok) {
             const data = await res.json();
-            if (data && data.updateAvailable && data.remoteVersion) {
+            if (data && data.updateAvailable && data.remoteVersion && compareVersions(data.remoteVersion, data.currentVersion || currentVer) > 0) {
               updateFound = true;
               remoteVer = data.remoteVersion;
               break;
@@ -1721,7 +1733,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           });
           if (ghRes.ok) {
             const pkg = await ghRes.json();
-            if (pkg && pkg.version && pkg.version !== currentVer) {
+            if (pkg && pkg.version && compareVersions(pkg.version, currentVer) > 0) {
               updateFound = true;
               remoteVer = pkg.version;
             }

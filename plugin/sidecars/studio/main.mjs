@@ -488,6 +488,43 @@ function generateScript(c) {
 // ---------------------------------------------------------------------------
 // Direct Instant Injector Engine (No persistent socket stall, 100% Reliable)
 // ---------------------------------------------------------------------------
+// Autonomous GitHub Update Engine State & Helpers
+// ---------------------------------------------------------------------------
+function getStudioVersion() {
+  try {
+    const pkgPath = join(HERE, 'package.json');
+    if (existsSync(pkgPath)) {
+      const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+      if (pkg && pkg.version) return pkg.version;
+    }
+  } catch (_) {}
+  return '3.2.0';
+}
+
+function compareVersions(v1, v2) {
+  const p1 = (v1 || '').replace(/^v/, '').split('.').map(Number);
+  const p2 = (v2 || '').replace(/^v/, '').split('.').map(Number);
+  for (let i = 0; i < 3; i++) {
+    const num1 = p1[i] || 0;
+    const num2 = p2[i] || 0;
+    if (num1 > num2) return 1;
+    if (num1 < num2) return -1;
+  }
+  return 0;
+}
+
+let CURRENT_VERSION = getStudioVersion();
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/omid-io/antigravity-ui/main';
+
+let updateState = {
+  currentVersion: CURRENT_VERSION,
+  latestVersion: CURRENT_VERSION,
+  hasUpdate: false,
+  checkedAt: 0,
+  checking: false,
+  error: null
+};
+
 let currentActiveConfig = loadConfig();
 
 function injectToLiveWindows(config, force = false) {
@@ -501,7 +538,7 @@ function injectToLiveWindows(config, force = false) {
   const script = generateScript(config);
   const myPort = process.env.ANTIGRAVITY_SIDECAR_WEB_PORT || 0;
   const myToken = process.env.ANTIGRAVITY_SIDECAR_UI_TOKEN || '';
-  const popupScript = generatePopupBundle(config, fontBase64, myPort, myToken);
+  const popupScript = generatePopupBundle(config, fontBase64, myPort, myToken, updateState.currentVersion);
 
   http.get(`http://127.0.0.1:${port}/json/list`, (res) => {
     let raw = '';
@@ -546,7 +583,7 @@ function injectToLiveWindows(config, force = false) {
                   }
 
                   // ONLY touch DOM/evaluate if missing or outdated version or forced
-                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 32) {
+                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || val.popupVersion < 34) {
                     ws.send(JSON.stringify({
                       id: 101,
                       method: 'Runtime.evaluate',
@@ -615,30 +652,6 @@ app.api('/icon.png', () => new Response(readFileSync(join(HERE, 'icon.png')), { 
 // ---------------------------------------------------------------------------
 // Autonomous GitHub Update Engine
 // ---------------------------------------------------------------------------
-const CURRENT_VERSION = '3.2.0';
-const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/omid-io/antigravity-ui/main';
-
-let updateState = {
-  currentVersion: CURRENT_VERSION,
-  latestVersion: CURRENT_VERSION,
-  hasUpdate: false,
-  checkedAt: 0,
-  checking: false,
-  error: null
-};
-
-function compareVersions(v1, v2) {
-  const p1 = (v1 || '').replace(/^v/, '').split('.').map(Number);
-  const p2 = (v2 || '').replace(/^v/, '').split('.').map(Number);
-  for (let i = 0; i < 3; i++) {
-    const num1 = p1[i] || 0;
-    const num2 = p2[i] || 0;
-    if (num1 > num2) return 1;
-    if (num1 < num2) return -1;
-  }
-  return 0;
-}
-
 async function checkGitHubUpdate() {
   if (updateState.checking) return updateState;
   updateState.checking = true;
@@ -651,7 +664,7 @@ async function checkGitHubUpdate() {
       const data = await res.json();
       if (data && data.version) {
         updateState.latestVersion = data.version;
-        updateState.hasUpdate = compareVersions(data.version, CURRENT_VERSION) > 0;
+        updateState.hasUpdate = compareVersions(data.version, updateState.currentVersion) > 0;
         updateState.checkedAt = Date.now();
       }
     }
@@ -671,6 +684,7 @@ setTimeout(() => {
 async function downloadAndApplyUpdate() {
   try {
     const filesToUpdate = [
+      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/package.json`, dest: join(HERE, 'package.json') },
       { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/popup-engine.js`, dest: join(HERE, 'popup-engine.js') },
       { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/main.mjs`, dest: join(HERE, 'main.mjs') },
       { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/index.html`, dest: join(HERE, 'index.html') },
@@ -678,19 +692,30 @@ async function downloadAndApplyUpdate() {
     ];
 
     for (const f of filesToUpdate) {
-      const resp = await fetch(f.url, { signal: AbortSignal.timeout(8000) });
-      if (!resp.ok) throw new Error(`Download failed for ${f.url} (${resp.status})`);
-      const text = await resp.text();
-      if (text && text.length > 50) {
-        writeFileSync(f.dest, text, 'utf8');
-      }
+      try {
+        const resp = await fetch(f.url, { signal: AbortSignal.timeout(8000) });
+        if (!resp.ok) continue;
+        const text = await resp.text();
+        if (text && text.length > 5) {
+          writeFileSync(f.dest, text, 'utf8');
+        }
+      } catch (_) {}
     }
+
+    CURRENT_VERSION = updateState.latestVersion;
+    updateState.currentVersion = updateState.latestVersion;
+    updateState.hasUpdate = false;
 
     // Force re-inject new engine to open Electron windows in 0ms!
     injectToLiveWindows(currentActiveConfig, true);
 
-    updateState.currentVersion = updateState.latestVersion;
-    updateState.hasUpdate = false;
+    // Gracefully restart sidecar so supervisor (restart_policy: always) loads fresh code into memory
+    setTimeout(() => {
+      try {
+        process.exit(0);
+      } catch (_) {}
+    }, 1200);
+
     return { success: true, version: updateState.latestVersion };
   } catch (err) {
     return { success: false, error: err.message };
@@ -699,7 +724,7 @@ async function downloadAndApplyUpdate() {
 
 app.api('/api/status', () => {
   return {
-    version: CURRENT_VERSION,
+    version: updateState.currentVersion,
     nodeVersion: process.version,
     cdpPort: getDevToolsPort(),
     asarPatched: existsSync(ASAR_PATH + '.meta.json'),
@@ -736,7 +761,7 @@ try {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({
         updateAvailable: st.hasUpdate,
-        currentVersion: CURRENT_VERSION,
+        currentVersion: updateState.currentVersion,
         remoteVersion: st.latestVersion
       }));
       return;
