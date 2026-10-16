@@ -1,7 +1,7 @@
 // Antigravity UI Studio - CDP Sidebar & Popup Injector Engine
 // Injects native-looking sidebar button and customizer popup directly into Antigravity Chat Window without any Asar patches!
 
-export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.3.0') {
+export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.4.0', bundledFonts = {}) {
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
@@ -17,12 +17,15 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   window.__ANTIGRAVITY_POPUP_VERSION__ = POPUP_ENGINE_VERSION;
   const prevContainer = document.getElementById('antigravity-ui-widget-container');
   if (prevContainer) prevContainer.remove();
+  const prevPopup = document.getElementById('antigravity-ui-popup');
+  if (prevPopup) prevPopup.remove();
   const prevBtn = document.getElementById('antigravity-ui-sidebar-btn');
   if (prevBtn) prevBtn.remove();
 
   const SIDECAR_PORT = ${sidecarPort || 0};
   const SIDECAR_TOKEN = "${sidecarToken || ''}";
   const FONT_BASE64 = "${fontBase64 || ''}";
+  const BUNDLED_FONTS = ${JSON.stringify(bundledFonts)};
   let currentConfig = ${cfgJson};
   try {
     const cached = localStorage.getItem('__antigravity_ui_config__');
@@ -68,29 +71,65 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       ...(c.userMsgLight || {})
     };
 
-    let faFontRule = '';
-    let faFontName = "'Vazirmatn'";
-    if (faFont) {
-      faFontName = "'" + faFont + "', 'Vazirmatn'";
-      const baseFa = faFont.replace(/[-\\s]?Regular$/i, '');
-      faFontRule = \`
+    // Strict Unicode-range virtual font definitions
+    // Ensures Persian font ONLY matches Persian/Arabic chars, English font handles Latin chars,
+    // and Code font strictly handles monospace blocks.
+    const ARABIC_UNICODE_RANGE = 'U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF';
+    const LATIN_UNICODE_RANGE = 'U+0000-05FF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2200-22FF, U+FB00-FB4F';
+
+    let extraFontRules = '';
+
+    // 1. Virtual Persian Font: Strictly scoped to Arabic/Persian Unicode Range
+    const targetFaName = faFont || 'Vazirmatn';
+    const targetFaB64 = BUNDLED_FONTS[targetFaName] || BUNDLED_FONTS['Vazirmatn'] || FONT_BASE64;
+    if (targetFaB64) {
+      extraFontRules += \`
         @font-face {
-          font-family: '\${faFont}';
-          src: local('\${faFont}'), local('\${baseFa}');
-          font-weight: 400;
-          unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
-        }
-        @font-face {
-          font-family: '\${faFont}';
-          src: local('\${baseFa} Bold'), local('\${baseFa}-Bold'), local('\${baseFa}Bold');
-          font-weight: 700;
-          unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+          font-family: 'AppPersianFont';
+          src: url('data:font/woff2;base64,\${targetFaB64}') format('woff2');
+          font-weight: 100 900;
+          font-display: swap;
+          unicode-range: \${ARABIC_UNICODE_RANGE};
         }
       \`;
     }
 
-    const enFontStr = enFont ? "'" + enFont + "', ui-sans-serif, system-ui, sans-serif" : 'ui-sans-serif, system-ui, sans-serif';
-    const codeFontStr = codeFont ? "'" + codeFont + "', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" : 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
+    // 2. Virtual English Font: Dedicated to Latin characters
+    if (enFont && BUNDLED_FONTS[enFont]) {
+      extraFontRules += \`
+        @font-face {
+          font-family: 'AppEnglishFont';
+          src: url('data:font/woff2;base64,\${BUNDLED_FONTS[enFont]}') format('woff2');
+          font-weight: 100 900;
+          font-display: swap;
+          unicode-range: \${LATIN_UNICODE_RANGE};
+        }
+      \`;
+    }
+
+    // 3. Virtual Code Monospace Font
+    if (codeFont && BUNDLED_FONTS[codeFont]) {
+      extraFontRules += \`
+        @font-face {
+          font-family: 'AppCodeFont';
+          src: url('data:font/woff2;base64,\${BUNDLED_FONTS[codeFont]}') format('woff2');
+          font-weight: 100 900;
+          font-display: swap;
+        }
+      \`;
+    }
+
+    const appFontStack = enFont && BUNDLED_FONTS[enFont] 
+      ? "'AppPersianFont', 'AppEnglishFont', ui-sans-serif, system-ui, sans-serif"
+      : (enFont 
+          ? \`'AppPersianFont', '\${enFont}', ui-sans-serif, system-ui, sans-serif\` 
+          : "'AppPersianFont', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif");
+
+    const appCodeStack = codeFont && BUNDLED_FONTS[codeFont]
+      ? "'AppCodeFont', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+      : (codeFont
+          ? \`'\${codeFont}', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace\`
+          : "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace");
 
     const forceRtlCSS = forceRTL ? \`
       .prose > *:not(pre):not(code), 
@@ -266,6 +305,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       \` : ''}
     \` : '';
 
+    const legacyGFonts = document.getElementById('antigravity-gfonts-link');
+    if (legacyGFonts) legacyGFonts.remove();
+
     let uiStyle = document.getElementById('antigravity-ui-style');
     if (!uiStyle) {
       uiStyle = document.createElement('style');
@@ -274,14 +316,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     }
 
     uiStyle.textContent = \`
-      @font-face {
-        font-family: 'Vazirmatn';
-        src: url('data:font/woff2;base64,' + FONT_BASE64 + ')') format('woff2');
-        font-weight: 100 900;
-        font-display: swap;
-        unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
-      }
-      \${faFontRule}
+      \${extraFontRules}
 
       /* Compact Sidebar Resizer Support */
       div:has(> div > [role="navigation"][aria-label="Sidebar"]),
@@ -304,9 +339,19 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         unicode-bidi: plaintext !important;
       }
 
-      /* Typography & Fonts */
-      :root, :host, html, body {
-        font-family: \${faFontName}, \${enFontStr} !important;
+      /* Typography & Fonts - Strict BiDi Scoped Application */
+      :root, :host, html, body,
+      .prose, .prose p, .prose span:not(pre *):not(code *), .prose li,
+      [data-testid="chat-message"], [data-testid="chat-message"] p,
+      [data-testid="chat-message"] span:not(pre *):not(code *),
+      .markdown-body, .markdown-body p,
+      .markdown-body span:not(pre *):not(code *),
+      .leading-relaxed, .leading-relaxed p,
+      [data-testid="user-input-step"], [data-testid="user-input-step"] p,
+      [data-testid="user-input-step"] span:not(pre *):not(code *),
+      [contenteditable="true"], [data-lexical-text="true"],
+      p, li, h1, h2, h3, h4, h5, h6 {
+        font-family: \${appFontStack} !important;
         -webkit-font-smoothing: antialiased !important;
         -moz-osx-font-smoothing: grayscale !important;
         text-rendering: optimizeLegibility !important;
@@ -374,12 +419,18 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         padding-right: 1.25rem !important;
       }
 
-      /* Monospace Code Isolation */
-      pre, code, pre *, code * {
+      /* Monospace Code Isolation - Dedicated Font & Direction Guard */
+      pre, code, pre *, code *,
+      .prose pre, .prose code, .prose pre *, .prose code *,
+      [data-testid="chat-message"] pre, [data-testid="chat-message"] code,
+      [data-testid="chat-message"] pre *, [data-testid="chat-message"] code *,
+      .markdown-body pre, .markdown-body code,
+      .markdown-body pre *, .markdown-body code *,
+      .monaco-editor, .monaco-editor * {
         unicode-bidi: isolate !important;
         direction: ltr !important;
         text-align: left !important;
-        font-family: \${codeFontStr} !important;
+        font-family: \${appCodeStack} !important;
       }
 
       /* Pure CSS Compact Sidebar Architecture - 100% Native Resilience */
@@ -920,6 +971,151 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         box-shadow: var(--rtl-shadow-inset), 0 0 0 2px var(--rtl-ring) !important;
       }
 
+      /* Permanent Immunity against browser extensions (e.g. rtlfix) injecting dir="rtl" */
+      .rtl-widget-panel,
+      .rtl-widget-panel *,
+      .rtl-widget-panel [dir="rtl"],
+      .rtl-widget-panel .rtlfix-active-rtl-block,
+      .rtl-card,
+      .rtl-control-row,
+      .rtl-select-wrap,
+      .rtl-select-wrap[dir="rtl"],
+      .rtl-select-wrap.rtlfix-active-rtl-block,
+      .rtl-dual-toggle-row,
+      .rtl-dual-stepper-row {
+        direction: ltr !important;
+        text-align: left !important;
+      }
+
+      /* Compact 2-in-1 Dual Toggle Row */
+      .rtl-dual-toggle-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        background-color: var(--rtl-surface) !important;
+        border: 1px solid var(--rtl-border-subtle) !important;
+        border-radius: 9px !important;
+        padding: 6px 10px !important;
+        box-shadow: var(--rtl-shadow-inset) !important;
+        direction: ltr !important;
+      }
+      .rtl-toggle-sub-item {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 6px !important;
+        direction: ltr !important;
+      }
+      .rtl-toggle-sub-label {
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        color: var(--rtl-text-secondary) !important;
+        direction: ltr !important;
+      }
+
+      /* Curated Font Select Dropdowns */
+      .rtl-select-wrap {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+        font-size: 11.5px !important;
+        direction: ltr !important;
+        text-align: left !important;
+        width: 100% !important;
+      }
+      .rtl-select-label {
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        color: var(--rtl-text-secondary) !important;
+        direction: ltr !important;
+        text-align: left !important;
+        order: 1 !important;
+      }
+      .rtl-select {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        background-color: var(--rtl-input-bg) !important;
+        background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 8px center !important;
+        border: 1px solid var(--rtl-input-border) !important;
+        border-radius: 8px !important;
+        padding: 4px 24px 4px 8px !important;
+        font-size: 11.5px !important;
+        font-weight: 500 !important;
+        color: var(--rtl-text) !important;
+        width: 175px !important;
+        direction: ltr !important;
+        text-align: left !important;
+        order: 2 !important;
+        outline: none !important;
+        box-shadow: var(--rtl-shadow-inset) !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        cursor: pointer !important;
+      }
+      .rtl-widget-panel.rtl-is-dark .rtl-select,
+      .rtl-widget-panel.dark .rtl-select {
+        background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2394a3b8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+      }
+      .rtl-select:focus {
+        border-color: var(--rtl-accent) !important;
+        box-shadow: var(--rtl-shadow-inset), 0 0 0 2px var(--rtl-ring) !important;
+      }
+
+      /* Compact Number Inputs with Clean Line Height and No Double-Inset */
+      .rtl-dual-stepper-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        width: 100% !important;
+        direction: ltr !important;
+        padding-top: 8px !important;
+        margin-top: 2px !important;
+        border-top: 1px solid var(--rtl-border-subtle) !important;
+      }
+      .rtl-stepper-item {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        direction: ltr !important;
+      }
+      .rtl-stepper-label {
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        color: var(--rtl-text-secondary) !important;
+        direction: ltr !important;
+        white-space: nowrap !important;
+      }
+      .rtl-number-input {
+        width: 58px !important;
+        height: 27px !important;
+        padding: 0 4px !important;
+        border-radius: 8px !important;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+        text-align: center !important;
+        outline: none !important;
+        border: 1px solid var(--rtl-input-border) !important;
+        background-color: var(--rtl-input-bg) !important;
+        color: var(--rtl-accent) !important;
+        direction: ltr !important;
+        box-shadow: var(--rtl-shadow-inset) !important;
+        transition: all 0.15s ease !important;
+      }
+      .rtl-number-input:focus {
+        border-color: var(--rtl-accent) !important;
+        box-shadow: var(--rtl-shadow-inset), 0 0 0 2px var(--rtl-ring) !important;
+      }
+      .rtl-number-input::-webkit-inner-spin-button,
+      .rtl-number-input::-webkit-outer-spin-button {
+        opacity: 0.85 !important;
+        cursor: pointer !important;
+        height: 22px !important;
+      }
+
       /* Clay Segmented shadow buttons */
       .rtl-shadow-group {
         display: flex;
@@ -1167,65 +1363,78 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       <div class="rtl-panel-body">
         <!-- TAB 1: RTL & Typography -->
         <div id="ptab-typo" class="rtl-tab-view active">
-          <!-- RTL Direction Group -->
+          <!-- RTL Direction Group: 2 in 1 line -->
           <div class="rtl-card">
             <div class="rtl-section-header">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="14" y1="10" x2="21" y2="3"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
               <span>Direction & Layout</span>
             </div>
-            <div class="rtl-control-row">
-              <span>Smart RTL Engine</span>
-              <label class="rtl-switch">
-                <input type="checkbox" id="p-isRTL">
-                <span class="rtl-slider"></span>
-              </label>
-            </div>
-            <div class="rtl-control-row">
-              <span>Force Global RTL</span>
-              <label class="rtl-switch">
-                <input type="checkbox" id="p-forceRTL">
-                <span class="rtl-slider"></span>
-              </label>
-            </div>
-            <div class="rtl-control-row">
-              <span>Fix Shift+2 for @ Symbol</span>
-              <label class="rtl-switch">
-                <input type="checkbox" id="p-fixAtSign">
-                <span class="rtl-slider"></span>
-              </label>
+            <div class="rtl-dual-toggle-row">
+              <div class="rtl-toggle-sub-item">
+                <span class="rtl-toggle-sub-label">Smart RTL</span>
+                <label class="rtl-switch">
+                  <input type="checkbox" id="p-isRTL">
+                  <span class="rtl-slider"></span>
+                </label>
+              </div>
+              <div class="rtl-toggle-sub-item" style="border-left: 1px solid var(--rtl-border-subtle); padding-left: 8px;">
+                <span class="rtl-toggle-sub-label">Force RTL</span>
+                <label class="rtl-switch">
+                  <input type="checkbox" id="p-forceRTL">
+                  <span class="rtl-slider"></span>
+                </label>
+              </div>
             </div>
           </div>
 
-          <!-- Typography Group -->
+          <!-- Typography Group: Curated Google Fonts Dropdowns + Number Inputs -->
           <div class="rtl-card">
             <div class="rtl-section-header">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="12" y1="4" x2="12" y2="20"></line></svg>
               <span>Typography Scales</span>
             </div>
-            <div class="rtl-control-row">
-              <span>Persian Font (FA)</span>
-              <input type="text" id="p-faFont" class="rtl-text-input" placeholder="Default: Vazirmatn">
+
+            <!-- Persian Font Dropdown -->
+            <div class="rtl-select-wrap">
+              <span class="rtl-select-label">Persian Font</span>
+              <select class="rtl-select" id="p-faFont">
+                <option value="Vazirmatn" selected style="font-family: 'Vazirmatn', sans-serif;">Vazirmatn (وزیرمتن)</option>
+                <option value="Noto Sans Arabic" style="font-family: 'Noto Sans Arabic', sans-serif;">Noto Sans Arabic (نوتو)</option>
+                <option value="Rubik" style="font-family: 'Rubik', sans-serif;">Rubik (روبیک)</option>
+                <option value="Markazi Text" style="font-family: 'Markazi Text', serif;">Markazi Text (مرکزی)</option>
+              </select>
             </div>
-            <div class="rtl-control-row">
-              <span>English Font (EN)</span>
-              <input type="text" id="p-enFont" class="rtl-text-input" placeholder="Default: System UI">
+
+            <!-- English Font Dropdown -->
+            <div class="rtl-select-wrap">
+              <span class="rtl-select-label">English Font</span>
+              <select class="rtl-select" id="p-enFont">
+                <option value="" selected>System UI (Default)</option>
+                <option value="Inter" style="font-family: 'Inter', sans-serif;">Inter</option>
+                <option value="Plus Jakarta Sans" style="font-family: 'Plus Jakarta Sans', sans-serif;">Plus Jakarta Sans</option>
+                <option value="Roboto" style="font-family: 'Roboto', sans-serif;">Roboto</option>
+              </select>
             </div>
-            <div class="rtl-control-row">
-              <span>Code Font (Mono)</span>
-              <input type="text" id="p-codeFont" class="rtl-text-input" placeholder="Default: Monospace">
+
+            <!-- Code Monospace Font Dropdown -->
+            <div class="rtl-select-wrap">
+              <span class="rtl-select-label">Code Font</span>
+              <select class="rtl-select" id="p-codeFont">
+                <option value="JetBrains Mono" selected style="font-family: 'JetBrains Mono', monospace;">JetBrains Mono</option>
+                <option value="Fira Code" style="font-family: 'Fira Code', monospace;">Fira Code</option>
+                <option value="">Default Monospace</option>
+              </select>
             </div>
-            <div class="rtl-control-row">
-              <span>Line Height</span>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="range" id="p-lh" min="1.2" max="2.5" step="0.1" class="rtl-range-slider">
-                <span id="p-val-lh" class="rtl-badge-val">1.6</span>
+
+            <!-- Font Size & Line Height Side by Side Number Inputs -->
+            <div class="rtl-dual-stepper-row">
+              <div class="rtl-stepper-item">
+                <span class="rtl-stepper-label">Font Size</span>
+                <input type="number" id="p-fs" class="rtl-number-input" min="11" max="24" step="1" value="16">
               </div>
-            </div>
-            <div class="rtl-control-row">
-              <span>Font Size</span>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <input type="range" id="p-fs" min="11" max="22" step="1" class="rtl-range-slider">
-                <span id="p-val-fs" class="rtl-badge-val">16px</span>
+              <div class="rtl-stepper-item">
+                <span class="rtl-stepper-label">Line Height</span>
+                <input type="number" id="p-lh" class="rtl-number-input" min="1.1" max="2.5" step="0.1" value="1.6">
               </div>
             </div>
           </div>
@@ -1477,14 +1686,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (!$('p-isRTL')) return;
     $('p-isRTL').checked = cfg.isRTL !== false;
     $('p-forceRTL').checked = Boolean(cfg.forceRTL);
-    $('p-faFont').value = cfg.faFont || '';
-    $('p-enFont').value = cfg.enFont || '';
-    $('p-codeFont').value = cfg.codeFont || '';
-    $('p-lh').value = cfg.lh || '1.6';
-    if ($('p-val-lh')) $('p-val-lh').textContent = cfg.lh || '1.6';
-    $('p-fs').value = cfg.fs || '16';
-    if ($('p-val-fs')) $('p-val-fs').textContent = (cfg.fs || '16') + 'px';
-    $('p-fixAtSign').checked = cfg.fixAtSign !== false;
+    if ($('p-faFont')) $('p-faFont').value = cfg.faFont || 'Vazirmatn';
+    if ($('p-enFont')) $('p-enFont').value = cfg.enFont || '';
+    if ($('p-codeFont')) $('p-codeFont').value = cfg.codeFont || 'JetBrains Mono';
+    if ($('p-lh')) $('p-lh').value = cfg.lh || '1.6';
+    if ($('p-fs')) $('p-fs').value = cfg.fs || '16';
 
     $('p-userMsgEnabled').checked = cfg.userMsgEnabled !== false;
     $('p-inputBoxEnabled').checked = Boolean(cfg.inputBoxEnabled);
@@ -1533,12 +1739,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       ...currentConfig,
       isRTL: $('p-isRTL').checked,
       forceRTL: $('p-forceRTL').checked,
-      faFont: $('p-faFont').value.trim(),
-      enFont: $('p-enFont').value.trim(),
-      codeFont: $('p-codeFont').value.trim(),
-      lh: $('p-lh').value,
-      fs: $('p-fs').value,
-      fixAtSign: $('p-fixAtSign').checked,
+      faFont: $('p-faFont') ? $('p-faFont').value.trim() : (currentConfig.faFont || 'Vazirmatn'),
+      enFont: $('p-enFont') ? $('p-enFont').value.trim() : (currentConfig.enFont || ''),
+      codeFont: $('p-codeFont') ? $('p-codeFont').value.trim() : (currentConfig.codeFont || 'JetBrains Mono'),
+      lh: $('p-lh') ? $('p-lh').value : (currentConfig.lh || '1.6'),
+      fs: $('p-fs') ? $('p-fs').value : (currentConfig.fs || '16'),
+      fixAtSign: true,
       userMsgEnabled: $('p-userMsgEnabled').checked,
       inputBoxEnabled: $('p-inputBoxEnabled').checked,
       compactSidebar: $('p-compactSidebar').checked,
@@ -1562,28 +1768,17 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   }
 
   // Live Listeners with null safety
-  ['p-isRTL', 'p-forceRTL', 'p-fixAtSign', 'p-userMsgEnabled', 'p-inputBoxEnabled', 'p-compactSidebar'].forEach(id => {
+  ['p-isRTL', 'p-forceRTL', 'p-userMsgEnabled', 'p-inputBoxEnabled', 'p-compactSidebar', 'p-faFont', 'p-enFont', 'p-codeFont'].forEach(id => {
     const el = $(id);
     if (el) el.addEventListener('change', syncConfigFromUI);
   });
-  ['p-faFont', 'p-enFont', 'p-codeFont'].forEach(id => {
+  ['p-fs', 'p-lh'].forEach(id => {
     const el = $(id);
-    if (el) el.addEventListener('input', syncConfigFromUI);
+    if (el) {
+      el.addEventListener('input', syncConfigFromUI);
+      el.addEventListener('change', syncConfigFromUI);
+    }
   });
-  const lhEl = $('p-lh');
-  if (lhEl) {
-    lhEl.addEventListener('input', (e) => {
-      if ($('p-val-lh')) $('p-val-lh').textContent = e.target.value;
-      syncConfigFromUI();
-    });
-  }
-  const fsEl = $('p-fs');
-  if (fsEl) {
-    fsEl.addEventListener('input', (e) => {
-      if ($('p-val-fs')) $('p-val-fs').textContent = e.target.value + 'px';
-      syncConfigFromUI();
-    });
-  }
 
   // Dynamic Antigravity Theme Detection & Auto Sync
   function detectAntigravityTheme() {

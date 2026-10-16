@@ -22,19 +22,29 @@ const ASAR_PATH = join(homedir(), 'AppData', 'Local', 'Programs', 'antigravity',
 const FONT_PATH = join(HERE, 'Vazirmatn-Variable.woff2');
 
 let fontBase64 = '';
-const candidateFonts = [
-  join(HERE, 'Vazirmatn-Variable.woff2'),
-  'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/Vazirmatn-Variable.woff2',
-  'E:/programming/antigravity-ui/bin/Vazirmatn-Variable.woff2'
+const bundledFonts = {};
+const fontCandidates = [
+  { name: 'Vazirmatn', files: [join(HERE, 'Vazirmatn-Variable.woff2'), 'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/Vazirmatn-Variable.woff2', 'E:/programming/antigravity-ui/bin/Vazirmatn-Variable.woff2'] },
+  { name: 'Rubik', files: [join(HERE, 'fonts', 'Rubik.woff2'), 'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/fonts/Rubik.woff2'] },
+  { name: 'Noto Sans Arabic', files: [join(HERE, 'fonts', 'NotoSansArabic.woff2'), 'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/fonts/NotoSansArabic.woff2'] },
+  { name: 'Markazi Text', files: [join(HERE, 'fonts', 'MarkaziText.woff2'), 'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/fonts/MarkaziText.woff2'] },
+  { name: 'Inter', files: [join(HERE, 'fonts', 'Inter.woff2'), 'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/fonts/Inter.woff2'] },
+  { name: 'Plus Jakarta Sans', files: [join(HERE, 'fonts', 'PlusJakartaSans.woff2'), 'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/fonts/PlusJakartaSans.woff2'] },
+  { name: 'JetBrains Mono', files: [join(HERE, 'fonts', 'JetBrainsMono.woff2'), 'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/fonts/JetBrainsMono.woff2'] },
+  { name: 'Fira Code', files: [join(HERE, 'fonts', 'FiraCode.woff2'), 'C:/Users/Omid io/.gemini/config/plugins/antigravity-ui/sidecars/studio/fonts/FiraCode.woff2'] }
 ];
-for (const f of candidateFonts) {
-  try {
-    if (existsSync(f)) {
-      fontBase64 = readFileSync(f).toString('base64');
-      if (fontBase64) break;
-    }
-  } catch (_) {}
+
+for (const fc of fontCandidates) {
+  for (const f of fc.files) {
+    try {
+      if (existsSync(f)) {
+        bundledFonts[fc.name] = readFileSync(f).toString('base64');
+        break;
+      }
+    } catch (_) {}
+  }
 }
+if (bundledFonts['Vazirmatn']) fontBase64 = bundledFonts['Vazirmatn'];
 
 function getDevToolsPort() {
   if (!existsSync(DEVTOOLS_PORT_PATH)) return null;
@@ -121,29 +131,65 @@ function generateScript(c) {
   const darkBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : userMsgDark.border;
   const darkBorderWidth = isDarkClay ? '1.5' : userMsgDark.borderWidth;
 
-  let faFontRule = '';
-  let faFontName = "'Vazirmatn'";
-  if (faFont) {
-    faFontName = `'${faFont}', 'Vazirmatn'`;
-    const baseFa = faFont.replace(/[-\\s]?Regular$/i, '');
-    faFontRule = `
+  // Strict Unicode-range virtual font definitions
+  // Ensures Persian font ONLY matches Persian/Arabic chars, English font handles Latin chars,
+  // and Code font strictly handles monospace blocks.
+  const ARABIC_UNICODE_RANGE = 'U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF';
+  const LATIN_UNICODE_RANGE = 'U+0000-05FF, U+2000-206F, U+2070-209F, U+20A0-20CF, U+2100-214F, U+2200-22FF, U+FB00-FB4F';
+
+  let extraFontRules = '';
+
+  // 1. Virtual Persian Font: Strictly scoped to Arabic/Persian Unicode Range
+  const targetFaName = faFont || 'Vazirmatn';
+  const targetFaB64 = bundledFonts[targetFaName] || bundledFonts['Vazirmatn'] || fontBase64;
+  if (targetFaB64) {
+    extraFontRules += `
       @font-face {
-        font-family: '${faFont}';
-        src: local('${faFont}'), local('${baseFa}');
-        font-weight: 400;
-        unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
-      }
-      @font-face {
-        font-family: '${faFont}';
-        src: local('${baseFa} Bold'), local('${baseFa}-Bold'), local('${baseFa}Bold');
-        font-weight: 700;
-        unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+        font-family: 'AppPersianFont';
+        src: url('data:font/woff2;base64,${targetFaB64}') format('woff2');
+        font-weight: 100 900;
+        font-display: swap;
+        unicode-range: ${ARABIC_UNICODE_RANGE};
       }
     `;
   }
 
-  const enFontStr = enFont ? `'${enFont}', ui-sans-serif, system-ui, sans-serif` : 'ui-sans-serif, system-ui, sans-serif';
-  const codeFontStr = codeFont ? `'${codeFont}', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace` : 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace';
+  // 2. Virtual English Font: Dedicated to Latin characters
+  if (enFont && bundledFonts[enFont]) {
+    extraFontRules += `
+      @font-face {
+        font-family: 'AppEnglishFont';
+        src: url('data:font/woff2;base64,${bundledFonts[enFont]}') format('woff2');
+        font-weight: 100 900;
+        font-display: swap;
+        unicode-range: ${LATIN_UNICODE_RANGE};
+      }
+    `;
+  }
+
+  // 3. Virtual Code Monospace Font
+  if (codeFont && bundledFonts[codeFont]) {
+    extraFontRules += `
+      @font-face {
+        font-family: 'AppCodeFont';
+        src: url('data:font/woff2;base64,${bundledFonts[codeFont]}') format('woff2');
+        font-weight: 100 900;
+        font-display: swap;
+      }
+    `;
+  }
+
+  const appFontStack = enFont && bundledFonts[enFont] 
+    ? "'AppPersianFont', 'AppEnglishFont', ui-sans-serif, system-ui, sans-serif"
+    : (enFont 
+        ? `'AppPersianFont', '${enFont}', ui-sans-serif, system-ui, sans-serif` 
+        : "'AppPersianFont', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif");
+
+  const appCodeStack = codeFont && bundledFonts[codeFont]
+    ? "'AppCodeFont', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    : (codeFont
+        ? `'${codeFont}', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`
+        : "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace");
 
   const forceRtlCSS = forceRTL ? `
     .prose > *:not(pre):not(code), 
@@ -286,6 +332,9 @@ function generateScript(c) {
   return `
 (() => {
   try {
+    const legacyGFonts = document.getElementById('antigravity-gfonts-link');
+    if (legacyGFonts) legacyGFonts.remove();
+
     let uiStyle = document.getElementById('antigravity-ui-style');
     if (!uiStyle) {
       uiStyle = document.createElement('style');
@@ -294,13 +343,7 @@ function generateScript(c) {
     }
 
     uiStyle.textContent = \`
-      @font-face {
-        font-family: 'Vazirmatn';
-        src: url('data:font/woff2;base64,${fontBase64}') format('woff2');
-        font-weight: 100 900;
-        unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
-      }
-      ${faFontRule}
+      ${extraFontRules}
 
       /* Compact Sidebar Resizer Support */
       div:has(> div > [role="navigation"][aria-label="Sidebar"]),
@@ -323,9 +366,22 @@ function generateScript(c) {
         unicode-bidi: plaintext !important;
       }
 
-      /* Typography & Fonts */
-      :root, :host, html, body {
-        font-family: ${faFontName}, ${enFontStr} !important;
+      /* Typography & Fonts - Strict BiDi Scoped Application */
+      :root, :host, html, body,
+      .prose, .prose p, .prose span:not(pre *):not(code *), .prose li,
+      [data-testid="chat-message"], [data-testid="chat-message"] p,
+      [data-testid="chat-message"] span:not(pre *):not(code *),
+      .markdown-body, .markdown-body p,
+      .markdown-body span:not(pre *):not(code *),
+      .leading-relaxed, .leading-relaxed p,
+      [data-testid="user-input-step"], [data-testid="user-input-step"] p,
+      [data-testid="user-input-step"] span:not(pre *):not(code *),
+      [contenteditable="true"], [data-lexical-text="true"],
+      p, li, h1, h2, h3, h4, h5, h6 {
+        font-family: ${appFontStack} !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
       }
       .prose, .prose p, .prose li, [data-testid="chat-message"], [data-testid="chat-message"] p,
       .markdown-body, .markdown-body p, .leading-relaxed, .leading-relaxed p,
@@ -390,12 +446,18 @@ function generateScript(c) {
         padding-right: 1.25rem !important;
       }
 
-      /* Monospace Code Isolation */
-      pre, code, pre *, code * {
+      /* Monospace Code Isolation - Dedicated Font & Direction Guard */
+      pre, code, pre *, code *,
+      .prose pre, .prose code, .prose pre *, .prose code *,
+      [data-testid="chat-message"] pre, [data-testid="chat-message"] code,
+      [data-testid="chat-message"] pre *, [data-testid="chat-message"] code *,
+      .markdown-body pre, .markdown-body code,
+      .markdown-body pre *, .markdown-body code *,
+      .monaco-editor, .monaco-editor * {
         unicode-bidi: isolate !important;
         direction: ltr !important;
         text-align: left !important;
-        font-family: ${codeFontStr} !important;
+        font-family: ${appCodeStack} !important;
       }
 
       /* Pure CSS Compact Sidebar Architecture - 100% Native Resilience */
@@ -507,8 +569,8 @@ function generateScript(c) {
       window.__ANTIGRAVITY_QUESTIONS_OBSERVER__.observe(document.body, { childList: true, subtree: true });
     }
 
-    /* Shift+2 Fix */
-    if (${c.fixAtSign !== false} && !window.__ANTIGRAVITY_AT_FIX__) {
+    /* Shift+2 Fix (Unconditionally active) */
+    if (!window.__ANTIGRAVITY_AT_FIX__) {
       window.__ANTIGRAVITY_AT_FIX__ = true;
       window.addEventListener('keydown', (e) => {
         if (e.key === '2' && e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
@@ -583,7 +645,7 @@ function injectToLiveWindows(config, force = false) {
   const script = generateScript(config);
   const myPort = process.env.ANTIGRAVITY_SIDECAR_WEB_PORT || 0;
   const myToken = process.env.ANTIGRAVITY_SIDECAR_UI_TOKEN || '';
-  const popupScript = generatePopupBundle(config, fontBase64, myPort, myToken, updateState.currentVersion);
+  const popupScript = generatePopupBundle(config, fontBase64, myPort, myToken, updateState.currentVersion, bundledFonts);
 
   http.get(`http://127.0.0.1:${port}/json/list`, (res) => {
     let raw = '';

@@ -4,3 +4,6 @@ app.asar*
 unpatch.js
 PROJECT_STATE.md
 extension.vsixmanifest
+scratch/
+test-screenshots/
+demo_showcase.html
