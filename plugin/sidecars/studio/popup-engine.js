@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 37;
+  const POPUP_ENGINE_VERSION = "${currentVersion}";
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -1725,9 +1725,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (isCheckingUpdate || isPerformingUpdate) return;
     isCheckingUpdate = true;
     if (capsuleBtn) capsuleBtn.classList.add('rtl-checking');
-    if (!quiet && versionText) versionText.textContent = 'Checking...';
-
-    const currentVer = "${currentVersion}";
+    let clientCurrentVer = window.__ANTIGRAVITY_APP_VERSION__ || "${currentVersion}";
+    window.__ANTIGRAVITY_APP_VERSION__ = clientCurrentVer;
+    const currentVer = clientCurrentVer;
     let updateFound = false;
     let remoteVer = null;
 
@@ -1858,6 +1858,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         const refreshSvgHtml = '<svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
         if (iconWrap) iconWrap.innerHTML = refreshSvgHtml;
         const newV = updateResult.version || availableUpdateInfo?.remoteVersion || currentVer;
+        window.__ANTIGRAVITY_APP_VERSION__ = newV;
         if (versionText) versionText.textContent = 'Updated to v' + newV + '! 🎉';
         availableUpdateInfo = null;
         setTimeout(() => {
