@@ -5,7 +5,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
-  const POPUP_ENGINE_VERSION = 36;
+  const POPUP_ENGINE_VERSION = 37;
   const popupEl = document.getElementById('antigravity-ui-popup');
   if (window.__ANTIGRAVITY_UI_POPUP_LOADED__ === POPUP_ENGINE_VERSION && popupEl) {
     if (typeof window.__ANTIGRAVITY_SYNC_CONFIG__ === 'function') {
@@ -236,20 +236,34 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
     const inputBoxCSS = inputBoxEnabled ? \`
       :root, body, body.light, body.theme-light {
-        --input-box-border-color: \${userMsgLight.border};
-        --input-box-border-width: \${userMsgLight.borderWidth}px;
+        --input-box-bg: \${isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' : 'transparent'};
+        --input-box-border-color: \${lightBorder};
+        --input-box-border-width: \${lightBorderWidth}px;
         --input-box-shadow: \${lightShadow};
       }
       body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark {
-        --input-box-border-color: \${userMsgDark.border};
-        --input-box-border-width: \${userMsgDark.borderWidth}px;
+        --input-box-bg: \${isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : 'transparent'};
+        --input-box-border-color: \${darkBorder};
+        --input-box-border-width: \${darkBorderWidth}px;
         --input-box-shadow: \${darkShadow};
       }
       [id="antigravity.agentSidePanelInputBox"], [id*="agentSidePanelInputBox"] {
         border: var(--input-box-border-width) solid var(--input-box-border-color) !important;
         box-shadow: var(--input-box-shadow) !important;
-        transition: border 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease !important;
+        background: var(--input-box-bg) !important;
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
       }
+      \${(isLightClay || isDarkClay) ? \`
+      [id="antigravity.agentSidePanelInputBox"] .bg-card, 
+      [id*="agentSidePanelInputBox"] .bg-card {
+        background: transparent !important;
+      }
+      [id="antigravity.agentSidePanelInputBox"]:hover, 
+      [id*="agentSidePanelInputBox"]:hover {
+        filter: brightness(1.02);
+        transform: translateY(-1.5px);
+      }
+      \` : ''}
     \` : '';
 
     let uiStyle = document.getElementById('antigravity-ui-style');
