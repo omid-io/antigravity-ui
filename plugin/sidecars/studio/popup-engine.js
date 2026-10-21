@@ -181,11 +181,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     const lightText = isLightClay ? '#0f172a' : userMsgLight.text;
     const lightBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' : userMsgLight.border;
     const lightBorderWidth = isLightClay ? '1.5' : userMsgLight.borderWidth;
+    const lightBorderRadius = (userMsgLight && userMsgLight.borderRadius) || '14';
 
     const darkBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : userMsgDark.bg;
     const darkText = isDarkClay ? '#f8fafc' : userMsgDark.text;
     const darkBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : userMsgDark.border;
     const darkBorderWidth = isDarkClay ? '1.5' : userMsgDark.borderWidth;
+    const darkBorderRadius = (userMsgDark && userMsgDark.borderRadius) || '14';
 
     const darkShadow = getShadow(userMsgDark.shadow, userMsgDark.border, 'dark');
     const lightShadow = getShadow(userMsgLight.shadow, userMsgLight.border, 'light');
@@ -220,7 +222,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
-        border-radius: 1.15rem !important;
+        border-radius: var(--user-msg-border-radius, 14px) !important;
         overflow: visible !important;
         transition: all 0.2s ease !important;
       }
@@ -231,7 +233,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         border: var(--user-msg-border-width) solid var(--user-msg-border-color) !important;
         box-shadow: var(--user-msg-shadow) !important;
         color: var(--user-msg-text) !important;
-        border-radius: 1.15rem !important;
+        border-radius: var(--user-msg-border-radius, 14px) !important;
         position: relative !important;
         z-index: 2 !important;
         transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, filter 0.2s ease !important;
@@ -1502,11 +1504,14 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                   <input type="text" id="p-dark-border-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
-              <div class="rtl-control-row">
-                <span>Border Width</span>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <input type="range" id="p-dark-bw" min="0" max="4" step="0.5" class="rtl-range-slider">
-                  <span id="p-val-dark-bw" class="rtl-badge-val">1.5px</span>
+              <div class="rtl-dual-stepper-row">
+                <div class="rtl-stepper-item">
+                  <span class="rtl-stepper-label">Border Width</span>
+                  <input type="number" id="p-dark-bw" class="rtl-number-input" min="0" max="8" step="0.5" value="1.5">
+                </div>
+                <div class="rtl-stepper-item">
+                  <span class="rtl-stepper-label">Border Radius</span>
+                  <input type="number" id="p-dark-br" class="rtl-number-input" min="0" max="36" step="1" value="14">
                 </div>
               </div>
               <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 2px;">
@@ -1544,11 +1549,14 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                   <input type="text" id="p-light-border-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
-              <div class="rtl-control-row">
-                <span>Border Width</span>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <input type="range" id="p-light-bw" min="0" max="4" step="0.5" class="rtl-range-slider">
-                  <span id="p-val-light-bw" class="rtl-badge-val">1.5px</span>
+              <div class="rtl-dual-stepper-row">
+                <div class="rtl-stepper-item">
+                  <span class="rtl-stepper-label">Border Width</span>
+                  <input type="number" id="p-light-bw" class="rtl-number-input" min="0" max="8" step="0.5" value="1.5">
+                </div>
+                <div class="rtl-stepper-item">
+                  <span class="rtl-stepper-label">Border Radius</span>
+                  <input type="number" id="p-light-br" class="rtl-number-input" min="0" max="36" step="1" value="14">
                 </div>
               </div>
               <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 2px;">
@@ -1717,6 +1725,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     $('p-dark-border').value = dark.border || '#384c6e';
     $('p-dark-border-hex').value = dark.border || '#384c6e';
     $('p-dark-bw').value = dark.borderWidth || '1.5';
+    if ($('p-dark-br')) $('p-dark-br').value = dark.borderRadius || '14';
     if ($('p-val-dark-bw')) $('p-val-dark-bw').textContent = (dark.borderWidth || '1.5') + 'px';
 
     const light = cfg.userMsgLight || {};
@@ -1727,6 +1736,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     $('p-light-border').value = light.border || '#c5d2e2';
     $('p-light-border-hex').value = light.border || '#c5d2e2';
     $('p-light-bw').value = light.borderWidth || '1.5';
+    if ($('p-light-br')) $('p-light-br').value = light.borderRadius || '14';
     if ($('p-val-light-bw')) $('p-val-light-bw').textContent = (light.borderWidth || '1.5') + 'px';
 
     const darkShadowVal = dark.shadow || 'clay';
@@ -1766,6 +1776,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         text: $('p-dark-text').value,
         border: $('p-dark-border').value,
         borderWidth: $('p-dark-bw').value,
+        borderRadius: $('p-dark-br') ? $('p-dark-br').value : (dark.borderRadius || '14'),
         shadow: darkShadow
       },
       userMsgLight: {
@@ -1773,6 +1784,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         text: $('p-light-text').value,
         border: $('p-light-border').value,
         borderWidth: $('p-light-bw').value,
+        borderRadius: $('p-light-br') ? $('p-light-br').value : (light.borderRadius || '14'),
         shadow: lightShadow
       }
     };
@@ -1882,6 +1894,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   bindC('p-light-bg', 'p-light-bg-hex');
   bindC('p-light-text', 'p-light-text-hex');
   bindC('p-light-border', 'p-light-border-hex');
+
+
+  $('p-dark-bw')?.addEventListener('input', () => syncConfigFromUI());
+  $('p-dark-br')?.addEventListener('input', () => syncConfigFromUI());
+  $('p-light-bw')?.addEventListener('input', () => syncConfigFromUI());
+  $('p-light-br')?.addEventListener('input', () => syncConfigFromUI());
 
   const darkBwEl = $('p-dark-bw');
   if (darkBwEl) {

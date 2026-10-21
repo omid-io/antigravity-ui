@@ -105,6 +105,7 @@ function generateScript(c) {
     text: '#f1f5f9',
     border: '#384c6e',
     borderWidth: '1.5',
+    borderRadius: '14',
     shadow: 'clay',
     ...(c.userMsgDark || {})
   };
@@ -114,6 +115,7 @@ function generateScript(c) {
     text: '#0f172a',
     border: '#cbd5e1',
     borderWidth: '1.5',
+    borderRadius: '14',
     shadow: 'clay',
     ...(c.userMsgLight || {})
   };
@@ -125,11 +127,13 @@ function generateScript(c) {
   const lightText = isLightClay ? '#0f172a' : userMsgLight.text;
   const lightBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' : userMsgLight.border;
   const lightBorderWidth = isLightClay ? '1.5' : userMsgLight.borderWidth;
+  const lightBorderRadius = (userMsgLight && userMsgLight.borderRadius) || '14';
 
   const darkBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : userMsgDark.bg;
   const darkText = isDarkClay ? '#f8fafc' : userMsgDark.text;
   const darkBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : userMsgDark.border;
   const darkBorderWidth = isDarkClay ? '1.5' : userMsgDark.borderWidth;
+  const darkBorderRadius = (userMsgDark && userMsgDark.borderRadius) || '14';
 
   // Strict Unicode-range virtual font definitions
   // Ensures Persian font ONLY matches Persian/Arabic chars, English font handles Latin chars,
@@ -220,6 +224,7 @@ function generateScript(c) {
       --user-msg-text: ${lightText};
       --user-msg-border-color: ${lightBorder};
       --user-msg-border-width: ${lightBorderWidth}px;
+      --user-msg-border-radius: ${lightBorderRadius}px;
       --user-msg-shadow: ${lightShadow};
     }
     body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark {
@@ -227,6 +232,7 @@ function generateScript(c) {
       --user-msg-text: ${darkText};
       --user-msg-border-color: ${darkBorder};
       --user-msg-border-width: ${darkBorderWidth}px;
+      --user-msg-border-radius: ${darkBorderRadius}px;
       --user-msg-shadow: ${darkShadow};
     }
     [data-testid="user-input-step"] {
@@ -244,7 +250,7 @@ function generateScript(c) {
       padding: 0 !important;
       border: none !important;
       box-shadow: none !important;
-      border-radius: 1.15rem !important;
+      border-radius: var(--user-msg-border-radius, 14px) !important;
       overflow: visible !important;
       transition: all 0.2s ease !important;
     }
@@ -255,7 +261,7 @@ function generateScript(c) {
       border: var(--user-msg-border-width) solid var(--user-msg-border-color) !important;
       box-shadow: var(--user-msg-shadow) !important;
       color: var(--user-msg-text) !important;
-      border-radius: 1.15rem !important;
+      border-radius: var(--user-msg-border-radius, 14px) !important;
       position: relative !important;
       z-index: 2 !important;
       transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, filter 0.2s ease !important;
