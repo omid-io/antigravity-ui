@@ -60,7 +60,8 @@ function getShadowCSS(type, borderCol, mode) {
   if (type === 'none') return 'none';
   if (mode === 'light') {
     switch (type) {
-      case 'soft': return '0 12px 30px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1.5px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(0, 0, 0, 0.4)';
+      case 'soft':
+        return '0 12px 30px rgba(67, 105, 169, .12), 0 3px 8px rgba(64, 101, 163, .06), inset 0 1.5px 0 rgba(255,255,255,.99), inset 0 -1px 0 rgba(117,158,222,.12), inset 1px 0 0 rgba(255,255,255,.58), inset -1px 0 0 rgba(109,151,219,.08)';
       case '3d':
       case 'medium':
         return '0 5px 0 0 rgba(0, 0, 0, 0.18), 0 12px 24px -2px rgba(15, 23, 42, 0.22)';
@@ -73,7 +74,8 @@ function getShadowCSS(type, borderCol, mode) {
     }
   } else {
     switch (type) {
-      case 'soft': return '0 12px 30px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1.5px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(0, 0, 0, 0.4)';
+      case 'soft':
+        return '0 12px 30px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.25), inset 0 1.5px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.5)';
       case '3d':
       case 'medium':
         return '0 5px 0 0 rgba(0, 0, 0, 0.8), 0 14px 28px -3px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
@@ -218,6 +220,148 @@ function generateScript(c) {
   const darkShadow = getShadowCSS(userMsgDark.shadow, darkBorder, 'dark');
   const lightShadow = getShadowCSS(userMsgLight.shadow, lightBorder, 'light');
 
+    let softGlassRules = '';
+
+  if (isLightSoft) {
+    softGlassRules += `
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] > .w-full > div > .bg-card,
+      .theme-light [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
+      .theme-light [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
+      .theme-light [data-testid="user-input-step"] > .w-full > div > .bg-card {
+        isolation: isolate !important;
+        backdrop-filter: blur(20px) saturate(155%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(155%) !important;
+        transform: translateZ(0) !important;
+        overflow: hidden !important;
+      }
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] > .w-full > div > .bg-card::before,
+      .theme-light [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
+      .theme-light [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
+      .theme-light [data-testid="user-input-step"] > .w-full > div > .bg-card::before {
+        content: "" !important;
+        position: absolute !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        top: 1px !important;
+        left: 2% !important;
+        right: 2% !important;
+        height: 52% !important;
+        border-radius: 12px 12px 48% 48% / 10px 10px 36% 36% !important;
+        background: linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.36) 31%, rgba(255,255,255,0.08) 72%, transparent 100%) !important;
+        filter: blur(0.25px) !important;
+      }
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] > .w-full > div > .bg-card::after,
+      .theme-light [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
+      .theme-light [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
+      .theme-light [data-testid="user-input-step"] > .w-full > div > .bg-card::after {
+        content: "" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        border-radius: inherit !important;
+        background: radial-gradient(ellipse at 8% 0%, rgba(255,255,255,0.7), transparent 37%), radial-gradient(ellipse at 100% 100%, rgba(106,157,247,0.15), transparent 42%), linear-gradient(120deg, transparent 28%, rgba(255,255,255,0.2) 49%, transparent 68%) !important;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.24), inset 0 -7px 16px rgba(126,166,228,0.055) !important;
+      }
+      .theme-light [data-testid="user-input-step"] [data-quotable="true"],
+      .theme-light [data-testid="user-input-step"] .whitespace-pre-wrap {
+        text-shadow: 0 1px 0 rgba(255,255,255,0.9) !important;
+      }
+    `;
+  } else {
+    softGlassRules += `
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] > .w-full > div > .bg-card::before,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
+      body:not(.theme-dark):not(.dark) [data-testid="user-input-step"] > .w-full > div > .bg-card::after,
+      .theme-light [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
+      .theme-light [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
+      .theme-light [data-testid="user-input-step"] > .w-full > div > .bg-card::before,
+      .theme-light [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
+      .theme-light [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
+      .theme-light [data-testid="user-input-step"] > .w-full > div > .bg-card::after {
+        content: none !important;
+        display: none !important;
+      }
+    `;
+  }
+
+  if (isDarkSoft) {
+    softGlassRules += `
+      body.theme-dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
+      body.theme-dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
+      body.theme-dark [data-testid="user-input-step"] > .w-full > div > .bg-card,
+      body.dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
+      body.dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
+      body.dark [data-testid="user-input-step"] > .w-full > div > .bg-card {
+        isolation: isolate !important;
+        backdrop-filter: blur(20px) saturate(155%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(155%) !important;
+        transform: translateZ(0) !important;
+        overflow: hidden !important;
+      }
+      body.theme-dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
+      body.theme-dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
+      body.theme-dark [data-testid="user-input-step"] > .w-full > div > .bg-card::before,
+      body.dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
+      body.dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
+      body.dark [data-testid="user-input-step"] > .w-full > div > .bg-card::before {
+        content: "" !important;
+        position: absolute !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        top: 1px !important;
+        left: 2% !important;
+        right: 2% !important;
+        height: 52% !important;
+        border-radius: 12px 12px 48% 48% / 10px 10px 36% 36% !important;
+        background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 40%, transparent 100%) !important;
+        filter: blur(0.25px) !important;
+      }
+      body.theme-dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
+      body.theme-dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
+      body.theme-dark [data-testid="user-input-step"] > .w-full > div > .bg-card::after,
+      body.dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
+      body.dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
+      body.dark [data-testid="user-input-step"] > .w-full > div > .bg-card::after {
+        content: "" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        border-radius: inherit !important;
+        background: radial-gradient(ellipse at 8% 0%, rgba(255,255,255,0.15), transparent 37%), radial-gradient(ellipse at 100% 100%, rgba(59,130,246,0.12), transparent 42%), linear-gradient(120deg, transparent 28%, rgba(255,255,255,0.08) 49%, transparent 68%) !important;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), inset 0 -7px 16px rgba(0,0,0,0.3) !important;
+      }
+    `;
+  } else {
+    softGlassRules += `
+      body.theme-dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
+      body.theme-dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
+      body.theme-dark [data-testid="user-input-step"] > .w-full > div > .bg-card::before,
+      body.theme-dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
+      body.theme-dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
+      body.theme-dark [data-testid="user-input-step"] > .w-full > div > .bg-card::after,
+      body.dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
+      body.dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
+      body.dark [data-testid="user-input-step"] > .w-full > div > .bg-card::before,
+      body.dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
+      body.dark [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
+      body.dark [data-testid="user-input-step"] > .w-full > div > .bg-card::after {
+        content: none !important;
+        display: none !important;
+      }
+    `;
+  }
+
   const userMsgCSS = userMsgEnabled ? `
     :root, body, body.light, body.theme-light {
       --user-msg-bg: ${lightBg};
@@ -255,52 +399,7 @@ function generateScript(c) {
       transition: all 0.2s ease !important;
     }
 
-    ${(isLightSoft || isDarkSoft) ? `
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
-      [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
-      [data-testid="user-input-step"] > .w-full > div > .bg-card {
-        isolation: isolate !important;
-        backdrop-filter: blur(20px) saturate(155%) !important;
-        -webkit-backdrop-filter: blur(20px) saturate(155%) !important;
-        transform: translateZ(0) !important;
-        overflow: hidden !important;
-      }
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
-      [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::before,
-      [data-testid="user-input-step"] > .w-full > div > .bg-card::before {
-        content: "" !important;
-        position: absolute !important;
-        z-index: 0 !important;
-        pointer-events: none !important;
-        top: 1px !important;
-        left: 2% !important;
-        right: 2% !important;
-        height: 52% !important;
-        border-radius: 12px 12px 48% 48% / 10px 10px 36% 36% !important;
-        background: linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.36) 31%, rgba(255,255,255,0.08) 72%, transparent 100%) !important;
-        filter: blur(0.25px) !important;
-      }
-      [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::after,
-      [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container)::after,
-      [data-testid="user-input-step"] > .w-full > div > .bg-card::after {
-        content: "" !important;
-        position: absolute !important;
-        inset: 0 !important;
-        z-index: 0 !important;
-        pointer-events: none !important;
-        border-radius: inherit !important;
-        background: radial-gradient(ellipse at 8% 0%, rgba(255,255,255,0.7), transparent 37%), radial-gradient(ellipse at 100% 100%, rgba(106,157,247,0.15), transparent 42%), linear-gradient(120deg, transparent 28%, rgba(255,255,255,0.2) 49%, transparent 68%) !important;
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.24), inset 0 -7px 16px rgba(126,166,228,0.055) !important;
-      }
-      .theme-dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before,
-      .dark [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div::before {
-        background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 40%, transparent 100%) !important;
-      }
-      .theme-light [data-testid="user-input-step"] [data-quotable="true"],
-      .theme-light [data-testid="user-input-step"] .whitespace-pre-wrap {
-        text-shadow: 0 1px 0 rgba(255,255,255,0.9) !important;
-      }
-    ` : ''}
+    ${softGlassRules}
 
     [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
     [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
@@ -333,11 +432,20 @@ function generateScript(c) {
       color: var(--user-msg-text) !important;
     }
 
+    /* Hover Action Toolbar Padding & Collision Prevention */
+    [data-testid="user-input-step"] [data-quotable="true"],
+    [data-testid="user-input-step"] .whitespace-pre-wrap {
+      padding-right: 74px !important;
+    }
+
     /* Harmonized Action Toolbar */
     [data-testid="user-input-step"] .user-input-buttons-container {
       background: var(--user-msg-bg) !important;
       border: 1px solid var(--user-msg-border-color) !important;
-      box-shadow: 0 0 16px 6px var(--user-msg-bg) !important;
+      box-shadow: 0 0 16px 6px rgba(0, 0, 0, 0.15) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      z-index: 10 !important;
     }
     [data-testid="user-input-step"] .user-input-buttons-container button {
       color: var(--user-msg-text) !important;
@@ -351,26 +459,35 @@ function generateScript(c) {
     }
   ` : '';
 
+  const lightInputBg = isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' : (isLightSoft ? 'rgba(255, 255, 255, 0.92)' : 'transparent');
+  const darkInputBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : (isDarkSoft ? 'rgba(24, 32, 47, 0.88)' : 'transparent');
+  const lightInputBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' : (isLightSoft ? 'rgba(255, 255, 255, 0.96)' : lightBorder);
+  const darkInputBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : (isDarkSoft ? 'rgba(255, 255, 255, 0.14)' : darkBorder);
+  const lightInputShadow = isLightClay ? lightShadow : (isLightSoft ? '0 10px 28px rgba(67, 105, 169, 0.10), 0 2px 6px rgba(64, 101, 163, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.95)' : (userMsgLight.shadow === 'none' ? 'none' : lightShadow));
+  const darkInputShadow = isDarkClay ? darkShadow : (isDarkSoft ? '0 10px 28px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12)' : (userMsgDark.shadow === 'none' ? 'none' : darkShadow));
+
   const inputBoxCSS = inputBoxEnabled ? `
     :root, body, body.light, body.theme-light {
-      --input-box-bg: ${isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' : 'transparent'};
-      --input-box-border-color: ${lightBorder};
-      --input-box-border-width: ${lightBorderWidth}px;
-      --input-box-shadow: ${lightShadow};
+      --input-box-bg: ${lightInputBg};
+      --input-box-border-color: ${lightInputBorder};
+      --input-box-border-width: ${isLightSoft ? '1' : lightBorderWidth}px;
+      --input-box-shadow: ${lightInputShadow};
+      --input-box-radius: 18px;
     }
     body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark {
-      --input-box-bg: ${isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : 'transparent'};
-      --input-box-border-color: ${darkBorder};
-      --input-box-border-width: ${darkBorderWidth}px;
-      --input-box-shadow: ${darkShadow};
+      --input-box-bg: ${darkInputBg};
+      --input-box-border-color: ${darkInputBorder};
+      --input-box-border-width: ${isDarkSoft ? '1' : darkBorderWidth}px;
+      --input-box-shadow: ${darkInputShadow};
+      --input-box-radius: 18px;
     }
     [id="antigravity.agentSidePanelInputBox"], [id*="agentSidePanelInputBox"] {
       border: var(--input-box-border-width) solid var(--input-box-border-color) !important;
       box-shadow: var(--input-box-shadow) !important;
       background: var(--input-box-bg) !important;
+      border-radius: var(--input-box-radius, 18px) !important;
       transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
-    ${(isLightClay || isDarkClay) ? `
     [id="antigravity.agentSidePanelInputBox"] .bg-card, 
     [id*="agentSidePanelInputBox"] .bg-card {
       background: transparent !important;
@@ -380,7 +497,6 @@ function generateScript(c) {
       filter: brightness(1.02);
       transform: translateY(-1.5px);
     }
-    ` : ''}
   ` : '';
 
   return `

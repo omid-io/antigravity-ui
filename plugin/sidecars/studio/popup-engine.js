@@ -155,21 +155,31 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       if (type === 'none') return 'none';
       if (mode === 'light') {
         switch (type) {
-          case 'soft': return '0 12px 30px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1.5px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(0, 0, 0, 0.4)';
+          case 'soft':
+            return '0 12px 30px rgba(67, 105, 169, .12), 0 3px 8px rgba(64, 101, 163, .06), inset 0 1.5px 0 rgba(255,255,255,.99), inset 0 -1px 0 rgba(117,158,222,.12), inset 1px 0 0 rgba(255,255,255,.58), inset -1px 0 0 rgba(109,151,219,.08)';
           case '3d':
-          case 'medium': return '0 5px 0 0 rgba(0, 0, 0, 0.18), 0 12px 24px -2px rgba(15, 23, 42, 0.22)';
-          case 'clay': return '0 16px 32px -4px rgba(70, 95, 140, 0.2), 0 6px 14px -2px rgba(70, 95, 140, 0.1), inset 3.5px 3.5px 6px rgba(255, 255, 255, 0.95), inset -3.5px -3.5px 7px rgba(70, 95, 140, 0.12)';
-          case 'glow': return '0 0 0 1.5px ' + borderCol + ', 0 6px 22px 3px ' + borderCol + '66, 0 2px 6px ' + borderCol + '40';
-          default: return 'none';
+          case 'medium':
+            return '0 5px 0 0 rgba(0, 0, 0, 0.18), 0 12px 24px -2px rgba(15, 23, 42, 0.22)';
+          case 'glow':
+            return '0 0 0 1.5px ' + borderCol + ', 0 6px 22px 3px ' + borderCol + '66, 0 2px 6px ' + borderCol + '40';
+          case 'clay':
+            return '0 16px 32px -4px rgba(70, 95, 140, 0.2), 0 6px 14px -2px rgba(70, 95, 140, 0.1), inset 3.5px 3.5px 6px rgba(255, 255, 255, 0.95), inset -3.5px -3.5px 7px rgba(70, 95, 140, 0.12)';
+          default:
+            return 'none';
         }
       } else {
         switch (type) {
-          case 'soft': return '0 12px 30px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1.5px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(0, 0, 0, 0.4)';
+          case 'soft':
+            return '0 12px 30px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.25), inset 0 1.5px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.5)';
           case '3d':
-          case 'medium': return '0 5px 0 0 rgba(0, 0, 0, 0.8), 0 14px 28px -3px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
-          case 'clay': return '0 20px 40px -6px rgba(0, 0, 0, 0.75), 0 8px 16px -2px rgba(0, 0, 0, 0.6), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.22), inset -3.5px -3.5px 8px rgba(0, 0, 0, 0.75)';
-          case 'glow': return '0 0 0 1.5px ' + borderCol + ', 0 0 25px 4px ' + borderCol + '88, 0 0 50px 10px ' + borderCol + '44';
-          default: return 'none';
+          case 'medium':
+            return '0 5px 0 0 rgba(0, 0, 0, 0.8), 0 14px 28px -3px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+          case 'glow':
+            return '0 0 0 1.5px ' + borderCol + ', 0 0 25px 4px ' + borderCol + '88, 0 0 50px 10px ' + borderCol + '44';
+          case 'clay':
+            return '0 20px 40px -6px rgba(0, 0, 0, 0.75), 0 8px 16px -2px rgba(0, 0, 0, 0.6), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.22), inset -3.5px -3.5px 8px rgba(0, 0, 0, 0.75)';
+          default:
+            return 'none';
         }
       }
     }
