@@ -61,7 +61,7 @@ function getShadowCSS(type, borderCol, mode) {
   if (mode === 'light') {
     switch (type) {
       case 'soft':
-        return '0 -6px 22px rgba(67, 105, 169, 0.16), 0 12px 32px rgba(67, 105, 169, 0.14), 0 3px 8px rgba(64, 101, 163, 0.07), inset 0 1.5px 0 rgba(255,255,255,0.99), inset 0 -1px 0 rgba(117,158,222,0.12), inset 1px 0 0 rgba(255,255,255,0.58), inset -1px 0 0 rgba(109,151,219,0.08)';
+        return '0 -2px 8px rgba(67, 105, 169, 0.045), 0 12px 30px rgba(67, 105, 169, 0.11), 0 3px 8px rgba(64, 101, 163, 0.05), inset 0 1.5px 0 rgba(255,255,255,0.99), inset 0 -1px 0 rgba(117,158,222,0.12), inset 1px 0 0 rgba(255,255,255,0.58), inset -1px 0 0 rgba(109,151,219,0.08)';
       case '3d':
       case 'medium':
         return '0 5px 0 0 rgba(0, 0, 0, 0.18), 0 12px 24px -2px rgba(15, 23, 42, 0.22)';
@@ -75,7 +75,7 @@ function getShadowCSS(type, borderCol, mode) {
   } else {
     switch (type) {
       case 'soft':
-        return '0 -6px 22px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.25), inset 0 1.5px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.5)';
+        return '0 -2px 8px rgba(0, 0, 0, 0.18), 0 12px 30px rgba(0, 0, 0, 0.42), 0 3px 8px rgba(0, 0, 0, 0.22), inset 0 1.5px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.5)';
       case '3d':
       case 'medium':
         return '0 5px 0 0 rgba(0, 0, 0, 0.8), 0 14px 28px -3px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
@@ -382,7 +382,6 @@ function generateScript(c) {
     [data-testid="user-input-step"] {
       position: relative !important;
       z-index: 10 !important;
-      padding-top: 6px !important;
       padding-bottom: 8px !important;
       margin-bottom: 4px !important;
     }
