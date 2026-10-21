@@ -1528,18 +1528,18 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                 <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
               </div>
 
-              <div id="p-dark-bg-row" class="rtl-control-row rtl-collapsible-row">
-                <span>Background Color</span>
-                <div style="display: flex; align-items: center; gap: 5px;">
-                  <input type="color" id="p-dark-bg" class="rtl-color-input">
-                  <input type="text" id="p-dark-bg-hex" class="rtl-hex-input" maxlength="7">
-                </div>
-              </div>
               <div id="p-dark-text-row" class="rtl-control-row">
                 <span>Text Color</span>
                 <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-dark-text" class="rtl-color-input">
                   <input type="text" id="p-dark-text-hex" class="rtl-hex-input" maxlength="7">
+                </div>
+              </div>
+              <div id="p-dark-bg-row" class="rtl-control-row rtl-collapsible-row">
+                <span>Background Color</span>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                  <input type="color" id="p-dark-bg" class="rtl-color-input">
+                  <input type="text" id="p-dark-bg-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div id="p-dark-border-row" class="rtl-control-row rtl-collapsible-row">
@@ -1571,18 +1571,18 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                 <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
               </div>
 
-              <div id="p-light-bg-row" class="rtl-control-row rtl-collapsible-row">
-                <span>Background Color</span>
-                <div style="display: flex; align-items: center; gap: 5px;">
-                  <input type="color" id="p-light-bg" class="rtl-color-input">
-                  <input type="text" id="p-light-bg-hex" class="rtl-hex-input" maxlength="7">
-                </div>
-              </div>
               <div id="p-light-text-row" class="rtl-control-row">
                 <span>Text Color</span>
                 <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-light-text" class="rtl-color-input">
                   <input type="text" id="p-light-text-hex" class="rtl-hex-input" maxlength="7">
+                </div>
+              </div>
+              <div id="p-light-bg-row" class="rtl-control-row rtl-collapsible-row">
+                <span>Background Color</span>
+                <div style="display: flex; align-items: center; gap: 5px;">
+                  <input type="color" id="p-light-bg" class="rtl-color-input">
+                  <input type="text" id="p-light-bg-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
               <div id="p-light-border-row" class="rtl-control-row rtl-collapsible-row">
