@@ -155,7 +155,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       if (type === 'none') return 'none';
       if (mode === 'light') {
         switch (type) {
-          case 'soft': return '0 4px 14px -1px rgba(15, 23, 42, 0.12), 0 2px 6px -1px rgba(15, 23, 42, 0.08)';
+          case 'soft': return '0 12px 30px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1.5px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(0, 0, 0, 0.4)';
           case '3d':
           case 'medium': return '0 5px 0 0 rgba(0, 0, 0, 0.18), 0 12px 24px -2px rgba(15, 23, 42, 0.22)';
           case 'clay': return '0 16px 32px -4px rgba(70, 95, 140, 0.2), 0 6px 14px -2px rgba(70, 95, 140, 0.1), inset 3.5px 3.5px 6px rgba(255, 255, 255, 0.95), inset -3.5px -3.5px 7px rgba(70, 95, 140, 0.12)';
@@ -164,7 +164,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
       } else {
         switch (type) {
-          case 'soft': return '0 6px 18px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.3)';
+          case 'soft': return '0 12px 30px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.3), inset 0 1.5px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 0 rgba(0, 0, 0, 0.4)';
           case '3d':
           case 'medium': return '0 5px 0 0 rgba(0, 0, 0, 0.8), 0 14px 28px -3px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
           case 'clay': return '0 20px 40px -6px rgba(0, 0, 0, 0.75), 0 8px 16px -2px rgba(0, 0, 0, 0.6), inset 2.5px 2.5px 5px rgba(255, 255, 255, 0.22), inset -3.5px -3.5px 8px rgba(0, 0, 0, 0.75)';
@@ -176,17 +176,19 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
     const isDarkClay = userMsgDark.shadow === 'clay';
     const isLightClay = userMsgLight.shadow === 'clay';
+    const isDarkSoft = userMsgDark.shadow === 'soft';
+    const isLightSoft = userMsgLight.shadow === 'soft';
 
-    const lightBg = isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' : userMsgLight.bg;
-    const lightText = isLightClay ? '#0f172a' : userMsgLight.text;
-    const lightBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' : userMsgLight.border;
-    const lightBorderWidth = isLightClay ? '1.5' : userMsgLight.borderWidth;
+    const lightBg = isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' : (isLightSoft ? 'linear-gradient(112deg, rgba(255,255,255,0.97) 0%, rgba(249,252,255,0.96) 20%, rgba(236,244,255,0.94) 58%, rgba(222,235,255,0.95) 100%)' : userMsgLight.bg);
+    const lightText = isLightClay ? '#0f172a' : (isLightSoft ? '#243a59' : userMsgLight.text);
+    const lightBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' : (isLightSoft ? 'rgba(255, 255, 255, 0.96)' : userMsgLight.border);
+    const lightBorderWidth = isLightClay ? '1.5' : (isLightSoft ? (userMsgLight.borderWidth || '1') : userMsgLight.borderWidth);
     const lightBorderRadius = (userMsgLight && userMsgLight.borderRadius) || '14';
 
-    const darkBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : userMsgDark.bg;
-    const darkText = isDarkClay ? '#f8fafc' : userMsgDark.text;
-    const darkBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : userMsgDark.border;
-    const darkBorderWidth = isDarkClay ? '1.5' : userMsgDark.borderWidth;
+    const darkBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : (isDarkSoft ? 'linear-gradient(112deg, rgba(30, 41, 59, 0.95) 0%, rgba(23, 32, 48, 0.93) 50%, rgba(15, 23, 42, 0.92) 100%)' : userMsgDark.bg);
+    const darkText = isDarkClay ? '#f8fafc' : (isDarkSoft ? '#e2e8f0' : userMsgDark.text);
+    const darkBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : (isDarkSoft ? 'rgba(255, 255, 255, 0.16)' : userMsgDark.border);
+    const darkBorderWidth = isDarkClay ? '1.5' : (isDarkSoft ? (userMsgDark.borderWidth || '1') : userMsgDark.borderWidth);
     const darkBorderRadius = (userMsgDark && userMsgDark.borderRadius) || '14';
 
     const darkShadow = getShadow(userMsgDark.shadow, userMsgDark.border, 'dark');
@@ -226,6 +228,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         overflow: visible !important;
         transition: all 0.2s ease !important;
       }
+
+
+
       [data-testid="user-input-step"] [data-testid="lifted-context-menu-trigger"] > div,
       [data-testid="user-input-step"] .bg-card:not(.user-input-buttons-container),
       [data-testid="user-input-step"] > .w-full > div > .bg-card {
