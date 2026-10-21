@@ -1187,20 +1187,26 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         box-shadow: var(--rtl-shadow-pill) !important;
       }
 
-      /* Context-Aware Dynamic Row Animation */
-      .rtl-collapsible-row {
-        max-height: 48px;
+      /* Context-Aware Dynamic Wrapper Animation (Zero Residual Gap / Smooth Card Sizing) */
+      .rtl-collapsible-wrapper {
+        display: grid;
+        grid-template-rows: 1fr;
+        transition: grid-template-rows 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease, margin-top 0.24s ease;
         opacity: 1;
-        overflow: hidden;
-        transition: max-height 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, margin 0.22s ease, padding 0.22s ease;
+        margin-top: 0;
       }
-      .rtl-collapsible-row.rtl-row-hidden {
-        max-height: 0 !important;
-        opacity: 0 !important;
-        margin: 0 !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        pointer-events: none !important;
+      .rtl-collapsible-wrapper.rtl-wrapper-hidden {
+        grid-template-rows: 0fr;
+        opacity: 0;
+        margin-top: -7px;
+        pointer-events: none;
+      }
+      .rtl-collapsible-inner {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        min-height: 0;
       }
 
       /* Mode switcher */
@@ -1535,18 +1541,22 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                   <input type="text" id="p-dark-text-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
-              <div id="p-dark-bg-row" class="rtl-control-row rtl-collapsible-row">
-                <span>Background Color</span>
-                <div style="display: flex; align-items: center; gap: 5px;">
-                  <input type="color" id="p-dark-bg" class="rtl-color-input">
-                  <input type="text" id="p-dark-bg-hex" class="rtl-hex-input" maxlength="7">
-                </div>
-              </div>
-              <div id="p-dark-border-row" class="rtl-control-row rtl-collapsible-row">
-                <span>Border Color</span>
-                <div style="display: flex; align-items: center; gap: 5px;">
-                  <input type="color" id="p-dark-border" class="rtl-color-input">
-                  <input type="text" id="p-dark-border-hex" class="rtl-hex-input" maxlength="7">
+              <div id="p-dark-colors-wrapper" class="rtl-collapsible-wrapper">
+                <div class="rtl-collapsible-inner">
+                  <div id="p-dark-bg-row" class="rtl-control-row">
+                    <span>Background Color</span>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <input type="color" id="p-dark-bg" class="rtl-color-input">
+                      <input type="text" id="p-dark-bg-hex" class="rtl-hex-input" maxlength="7">
+                    </div>
+                  </div>
+                  <div id="p-dark-border-row" class="rtl-control-row">
+                    <span>Border Color</span>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <input type="color" id="p-dark-border" class="rtl-color-input">
+                      <input type="text" id="p-dark-border-hex" class="rtl-hex-input" maxlength="7">
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="rtl-dual-stepper-row">
@@ -1578,18 +1588,22 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                   <input type="text" id="p-light-text-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
-              <div id="p-light-bg-row" class="rtl-control-row rtl-collapsible-row">
-                <span>Background Color</span>
-                <div style="display: flex; align-items: center; gap: 5px;">
-                  <input type="color" id="p-light-bg" class="rtl-color-input">
-                  <input type="text" id="p-light-bg-hex" class="rtl-hex-input" maxlength="7">
-                </div>
-              </div>
-              <div id="p-light-border-row" class="rtl-control-row rtl-collapsible-row">
-                <span>Border Color</span>
-                <div style="display: flex; align-items: center; gap: 5px;">
-                  <input type="color" id="p-light-border" class="rtl-color-input">
-                  <input type="text" id="p-light-border-hex" class="rtl-hex-input" maxlength="7">
+              <div id="p-light-colors-wrapper" class="rtl-collapsible-wrapper">
+                <div class="rtl-collapsible-inner">
+                  <div id="p-light-bg-row" class="rtl-control-row">
+                    <span>Background Color</span>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <input type="color" id="p-light-bg" class="rtl-color-input">
+                      <input type="text" id="p-light-bg-hex" class="rtl-hex-input" maxlength="7">
+                    </div>
+                  </div>
+                  <div id="p-light-border-row" class="rtl-control-row">
+                    <span>Border Color</span>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <input type="color" id="p-light-border" class="rtl-color-input">
+                      <input type="text" id="p-light-border-hex" class="rtl-hex-input" maxlength="7">
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="rtl-dual-stepper-row">
@@ -1794,15 +1808,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     const isDarkAuto = (darkShadow === 'soft' || darkShadow === 'clay');
     const isLightAuto = (lightShadow === 'soft' || lightShadow === 'clay');
 
-    const darkBgRow = $('p-dark-bg-row');
-    const darkBorderRow = $('p-dark-border-row');
-    if (darkBgRow) darkBgRow.classList.toggle('rtl-row-hidden', isDarkAuto);
-    if (darkBorderRow) darkBorderRow.classList.toggle('rtl-row-hidden', isDarkAuto);
+    const darkWrapper = $('p-dark-colors-wrapper');
+    if (darkWrapper) darkWrapper.classList.toggle('rtl-wrapper-hidden', isDarkAuto);
 
-    const lightBgRow = $('p-light-bg-row');
-    const lightBorderRow = $('p-light-border-row');
-    if (lightBgRow) lightBgRow.classList.toggle('rtl-row-hidden', isLightAuto);
-    if (lightBorderRow) lightBorderRow.classList.toggle('rtl-row-hidden', isLightAuto);
+    const lightWrapper = $('p-light-colors-wrapper');
+    if (lightWrapper) lightWrapper.classList.toggle('rtl-wrapper-hidden', isLightAuto);
   }
 
   populateUI(currentConfig);
