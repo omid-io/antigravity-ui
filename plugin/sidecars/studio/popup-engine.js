@@ -1146,9 +1146,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         height: 22px !important;
       }
 
-      /* Clay Segmented shadow buttons */
+      /* Clay Segmented shadow buttons - Centered & Refined */
       .rtl-shadow-group {
         display: flex;
+        align-items: center;
+        justify-content: center;
         gap: 3px;
         background-color: var(--rtl-surface);
         border: 1px solid var(--rtl-border-subtle);
@@ -1156,18 +1158,22 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         padding: 2.5px;
         width: 100%;
         box-shadow: var(--rtl-shadow-inset) !important;
+        margin-bottom: 2px;
       }
       .rtl-shadow-btn {
         flex: 1 1 0;
-        padding: 4px 1px;
+        padding: 5px 2px;
         border: none;
         background: transparent;
         color: var(--rtl-text-secondary);
-        font-size: 10px;
+        font-size: 10.5px;
         font-weight: 500;
         border-radius: 7px;
         cursor: pointer;
         text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .rtl-shadow-btn:hover {
@@ -1179,6 +1185,22 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         color: #ffffff;
         font-weight: 600;
         box-shadow: var(--rtl-shadow-pill) !important;
+      }
+
+      /* Context-Aware Dynamic Row Animation */
+      .rtl-collapsible-row {
+        max-height: 48px;
+        opacity: 1;
+        overflow: hidden;
+        transition: max-height 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, margin 0.22s ease, padding 0.22s ease;
+      }
+      .rtl-collapsible-row.rtl-row-hidden {
+        max-height: 0 !important;
+        opacity: 0 !important;
+        margin: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        pointer-events: none !important;
       }
 
       /* Mode switcher */
@@ -1498,21 +1520,29 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
             <!-- Dark controls -->
             <div id="p-group-dark" style="display: flex; flex-direction: column; gap: 7px;">
-              <div class="rtl-control-row">
+              <div class="rtl-shadow-group" id="p-dark-shadow-group">
+                <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
+                <button type="button" class="rtl-shadow-btn" data-val="soft">Soft</button>
+                <button type="button" class="rtl-shadow-btn" data-val="3d">3D</button>
+                <button type="button" class="rtl-shadow-btn active" data-val="clay">Clay</button>
+                <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
+              </div>
+
+              <div id="p-dark-bg-row" class="rtl-control-row rtl-collapsible-row">
                 <span>Background Color</span>
                 <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-dark-bg" class="rtl-color-input">
                   <input type="text" id="p-dark-bg-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
-              <div class="rtl-control-row">
+              <div id="p-dark-text-row" class="rtl-control-row">
                 <span>Text Color</span>
                 <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-dark-text" class="rtl-color-input">
                   <input type="text" id="p-dark-text-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
-              <div class="rtl-control-row">
+              <div id="p-dark-border-row" class="rtl-control-row rtl-collapsible-row">
                 <span>Border Color</span>
                 <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-dark-border" class="rtl-color-input">
@@ -1529,35 +1559,33 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                   <input type="number" id="p-dark-br" class="rtl-number-input" min="0" max="36" step="1" value="14">
                 </div>
               </div>
-              <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 2px;">
-                <span style="font-size: 11px; color: var(--rtl-text-secondary); font-weight: 500;">Bubble Shadow & Depth</span>
-                <div class="rtl-shadow-group" id="p-dark-shadow-group">
-                  <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
-                  <button type="button" class="rtl-shadow-btn" data-val="soft">Soft</button>
-                  <button type="button" class="rtl-shadow-btn" data-val="3d">3D</button>
-                  <button type="button" class="rtl-shadow-btn active" data-val="clay">Clay</button>
-                  <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
-                </div>
-              </div>
             </div>
 
             <!-- Light controls -->
             <div id="p-group-light" style="display: none; flex-direction: column; gap: 7px;">
-              <div class="rtl-control-row">
+              <div class="rtl-shadow-group" id="p-light-shadow-group">
+                <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
+                <button type="button" class="rtl-shadow-btn" data-val="soft">Soft</button>
+                <button type="button" class="rtl-shadow-btn" data-val="3d">3D</button>
+                <button type="button" class="rtl-shadow-btn active" data-val="clay">Clay</button>
+                <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
+              </div>
+
+              <div id="p-light-bg-row" class="rtl-control-row rtl-collapsible-row">
                 <span>Background Color</span>
                 <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-light-bg" class="rtl-color-input">
                   <input type="text" id="p-light-bg-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
-              <div class="rtl-control-row">
+              <div id="p-light-text-row" class="rtl-control-row">
                 <span>Text Color</span>
                 <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-light-text" class="rtl-color-input">
                   <input type="text" id="p-light-text-hex" class="rtl-hex-input" maxlength="7">
                 </div>
               </div>
-              <div class="rtl-control-row">
+              <div id="p-light-border-row" class="rtl-control-row rtl-collapsible-row">
                 <span>Border Color</span>
                 <div style="display: flex; align-items: center; gap: 5px;">
                   <input type="color" id="p-light-border" class="rtl-color-input">
@@ -1572,16 +1600,6 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
                 <div class="rtl-stepper-item">
                   <span class="rtl-stepper-label">Border Radius</span>
                   <input type="number" id="p-light-br" class="rtl-number-input" min="0" max="36" step="1" value="14">
-                </div>
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 2px;">
-                <span style="font-size: 11px; color: var(--rtl-text-secondary); font-weight: 500;">Bubble Shadow & Depth</span>
-                <div class="rtl-shadow-group" id="p-light-shadow-group">
-                  <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
-                  <button type="button" class="rtl-shadow-btn" data-val="soft">Soft</button>
-                  <button type="button" class="rtl-shadow-btn" data-val="3d">3D</button>
-                  <button type="button" class="rtl-shadow-btn active" data-val="clay">Clay</button>
-                  <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
                 </div>
               </div>
             </div>
@@ -1766,7 +1784,27 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       document.querySelectorAll('#p-light-shadow-group .rtl-shadow-btn').forEach(b => b.classList.remove('active'));
       lightShadowBtn.classList.add('active');
     }
+    updatePresetVisibility();
   }
+
+  function updatePresetVisibility() {
+    const darkShadow = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'clay';
+    const lightShadow = document.querySelector('#p-light-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'clay';
+
+    const isDarkAuto = (darkShadow === 'soft' || darkShadow === 'clay');
+    const isLightAuto = (lightShadow === 'soft' || lightShadow === 'clay');
+
+    const darkBgRow = $('p-dark-bg-row');
+    const darkBorderRow = $('p-dark-border-row');
+    if (darkBgRow) darkBgRow.classList.toggle('rtl-row-hidden', isDarkAuto);
+    if (darkBorderRow) darkBorderRow.classList.toggle('rtl-row-hidden', isDarkAuto);
+
+    const lightBgRow = $('p-light-bg-row');
+    const lightBorderRow = $('p-light-border-row');
+    if (lightBgRow) lightBgRow.classList.toggle('rtl-row-hidden', isLightAuto);
+    if (lightBorderRow) lightBorderRow.classList.toggle('rtl-row-hidden', isLightAuto);
+  }
+
   populateUI(currentConfig);
 
   function syncConfigFromUI() {
@@ -1935,6 +1973,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     btn.addEventListener('click', () => {
       btn.parentElement.querySelectorAll('.rtl-shadow-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      updatePresetVisibility();
       syncConfigFromUI();
     });
   });
