@@ -318,6 +318,19 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     uiStyle.textContent = \`
       \${extraFontRules}
 
+      /* Seamless Sidebar Top Action Buttons Gap Fix (Prevents Search Icon Overflow) */
+      div:has(> button[aria-label="Toggle Sidebar"]) {
+        gap: 2px !important;
+      }
+      div.flex.items-center:has(> button[data-testid="app-icon-new-conversation-button"]) {
+        padding-left: 4px !important;
+      }
+      button[data-testid="app-icon-new-conversation-button"] {
+        padding-left: 2px !important;
+        padding-right: 4px !important;
+        margin-right: 2px !important;
+      }
+
       /* Compact Sidebar Resizer Support */
       div:has(> div > [role="navigation"][aria-label="Sidebar"]),
       div:has(> [role="navigation"][aria-label="Sidebar"]) {
