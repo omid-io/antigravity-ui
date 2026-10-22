@@ -2278,9 +2278,6 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           position: relative !important;
         }
         /* Invisible Resizer Sash & Vertical Border Line flush with Floating Island edge */
-        div:has([data-testid="sidebar-sash"]),
-        div:has(> [data-testid="sidebar-sash"]),
-        div:has(> div > [data-testid="sidebar-sash"]),
         div.flex-shrink-0:has([data-testid="sidebar-sash"]),
         div[class*="bg-border"]:has([data-testid="sidebar-sash"]),
         div.bg-border:has([data-testid="sidebar-sash"]),
@@ -2572,10 +2569,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           position: relative !important;
           z-index: 10 !important;
         }
-        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
+        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div:first-child {
           overflow: hidden !important;
         }
-        div:has([data-testid="sidebar-sash"]),
+        div.bg-border:has([data-testid="sidebar-sash"]),
+        div[class*="bg-border"]:has([data-testid="sidebar-sash"]),
         [data-testid="sidebar-sash"] {
           background: rgba(0, 0, 0, 0.12) !important;
           border: none !important;
@@ -2594,8 +2592,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           background: transparent !important;
           border-radius: 0 !important;
         }
-        .theme-dark div:has([data-testid="sidebar-sash"]),
-        .dark div:has([data-testid="sidebar-sash"]) {
+        .theme-dark div.bg-border:has([data-testid="sidebar-sash"]),
+        .theme-dark div[class*="bg-border"]:has([data-testid="sidebar-sash"]),
+        .dark div.bg-border:has([data-testid="sidebar-sash"]),
+        .dark div[class*="bg-border"]:has([data-testid="sidebar-sash"]),
+        .theme-dark [data-testid="sidebar-sash"],
+        .dark [data-testid="sidebar-sash"] {
           background: rgba(255, 255, 255, 0.1) !important;
         }
         [role="navigation"][aria-label="Sidebar"] a[href="/"],
