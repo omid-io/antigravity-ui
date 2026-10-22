@@ -1800,6 +1800,36 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         font-family: \${appCodeStack} !important;
       }
 
+      /* Modern Translucent Blockquote / Callout Card */
+      blockquote,
+      .prose blockquote,
+      [data-testid="chat-message"] blockquote,
+      .markdown-body blockquote {
+        background: rgba(59, 130, 246, 0.05) !important;
+        border: none !important;
+        border-inline-start: 3.5px solid var(--accent, #3b82f6) !important;
+        border-radius: 0 10px 10px 0 !important;
+        padding: 10px 16px !important;
+        margin: 12px 0 !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02) !important;
+        backdrop-filter: blur(6px) !important;
+        -webkit-backdrop-filter: blur(6px) !important;
+        color: inherit !important;
+        transition: background-color 0.2s ease, border-color 0.2s ease !important;
+      }
+      .theme-dark blockquote,
+      .theme-dark .prose blockquote,
+      .theme-dark [data-testid="chat-message"] blockquote,
+      .dark blockquote {
+        background: rgba(59, 130, 246, 0.1) !important;
+        border-inline-start-color: #60a5fa !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
+      }
+      [dir="rtl"] blockquote,
+      blockquote:dir(rtl) {
+        border-radius: 10px 0 0 10px !important;
+      }
+
       /* Pure CSS Compact Sidebar Architecture & Fluid Toolbar (160px) */
       \${c.compactSidebar !== false ? \`
         :root {
@@ -2161,6 +2191,22 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         direction: rtl !important;
         text-align: right !important;
         unicode-bidi: isolate !important;
+      }
+
+      /* Menu Dropdown Elevation (Prevents icons from overlaying open menus) */
+      [data-radix-popper-content-wrapper],
+      [role="menu"],
+      div[data-state="open"]:has([role="menuitem"]),
+      div[data-testid="menu-bar-item-dropdown"],
+      div:has(> [role="menu"]) {
+        z-index: 99999 !important;
+      }
+
+      /* Chat Input Hover Stability (Zero Jump / Wobble) */
+      [id="antigravity.agentSidePanelInputBox"]:hover, 
+      [id*="agentSidePanelInputBox"]:hover {
+        transform: none !important;
+        filter: none !important;
       }
 
       /* --- 6. TOP WINDOW TITLEBAR --- */
