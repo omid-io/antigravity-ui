@@ -2341,12 +2341,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           transform: translateY(-1px) !important;
           filter: brightness(1.06) !important;
         }
-        /* Folder Item Titles & Float Action Overlays */
+        /* Folder Item Titles & Solid Action Overlays */
         [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"],
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] {
           background: transparent !important;
           border-radius: 8px !important;
-          padding-right: 8px !important;
+          padding-right: 62px !important;
+          padding-left: 8px !important;
           position: relative !important;
           transition: background 0.15s ease !important;
         }
@@ -2356,48 +2357,46 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
         [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
-          background: rgba(0, 0, 0, 0.04) !important;
+          background: #eaf1fb !important;
         }
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
         .dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
         .theme-dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover,
         .dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
-          background: rgba(255, 255, 255, 0.05) !important;
+          background: #1c273a !important;
         }
-        /* Folder Header Action Buttons (+ and ...) Backdrop Mask */
-        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"],
-        [role="navigation"][aria-label="Sidebar"] div.group\/header div.absolute.right-1,
-        [role="navigation"][aria-label="Sidebar"] div.absolute.right-1.top-0:has(button[aria-label*="options"]),
-        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] div.opacity-0,
-        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] div.opacity-0 {
-          padding-left: 18px !important;
-          padding-right: 4px !important;
-          background: linear-gradient(to right, transparent 0%, rgba(243, 247, 254, 0.95) 24%, rgba(243, 247, 254, 0.98) 100%) !important;
-          backdrop-filter: blur(8px) !important;
-          -webkit-backdrop-filter: blur(8px) !important;
-          border-radius: 8px !important;
-          z-index: 5 !important;
-        }
-        .theme-dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"],
-        .theme-dark [role="navigation"][aria-label="Sidebar"] div.group\/header div.absolute.right-1,
-        .theme-dark [role="navigation"][aria-label="Sidebar"] div.absolute.right-1.top-0:has(button[aria-label*="options"]),
-        .dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"],
-        .theme-dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] div.opacity-0,
-        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] div.opacity-0 {
-          background: linear-gradient(to right, transparent 0%, rgba(20, 27, 41, 0.95) 24%, rgba(20, 27, 41, 0.98) 100%) !important;
-        }
-        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"] button,
-        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"] a {
-          width: 22px !important;
-          height: 22px !important;
+        /* Solid Harmonious Folder Action Box (No fade, no border, matching background) */
+        [role="navigation"][aria-label="Sidebar"] div:has(> button[aria-label*="Project options"]),
+        [role="navigation"][aria-label="Sidebar"] div:has(> a[aria-label*="New Conversation in Project"]),
+        [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 {
+          position: absolute !important;
+          top: 50% !important;
+          bottom: auto !important;
+          transform: translateY(-50%) !important;
+          right: 4px !important;
+          height: 24px !important;
+          padding: 0 4px !important;
+          background: #eaf1fb !important;
           border-radius: 6px !important;
-          transition: background-color 0.15s ease, color 0.15s ease !important;
+          border: none !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 2px !important;
+          z-index: 10 !important;
         }
-        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"] button:hover,
-        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"] a:hover {
-          background: rgba(59, 130, 246, 0.12) !important;
-          color: #2563eb !important;
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div:has(> button[aria-label*="Project options"]),
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div:has(> a[aria-label*="New Conversation in Project"]),
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1,
+        .dark [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1,
+        .dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 {
+          background: #1c273a !important;
         }
+
         /* Active & Hover Chat Rows */
         [role="navigation"][aria-label="Sidebar"] .bg-sidebar-secondary {
           background: var(--sb-item-active-bg) !important;
@@ -2419,19 +2418,20 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] {
           border-radius: 8px !important;
           padding-left: 14px !important;
+          padding-right: 8px !important;
           transition: background-color 0.15s ease, box-shadow 0.15s ease !important;
         }
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] * {
           direction: ltr !important;
         }
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"]:hover:not(.bg-sidebar-secondary) {
-          background-color: rgba(59, 130, 246, 0.08) !important;
+          background-color: #eaf1fb !important;
           --row-bg: #eaf1fb !important;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
         }
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"]:hover:not(.bg-sidebar-secondary),
         .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"]:hover:not(.bg-sidebar-secondary) {
-          background-color: rgba(59, 130, 246, 0.12) !important;
+          background-color: #1c273a !important;
           --row-bg: #1c273a !important;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
         }
@@ -2443,38 +2443,84 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           text-align: left !important;
           unicode-bidi: isolate !important;
         }
+        /* Prevent title text collision with action buttons */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.grow {
-          max-width: calc(100% - 28px) !important;
+          max-width: calc(100% - 82px) !important;
           min-width: 0 !important;
         }
-        /* Compact Hover Actions & Wide Click Area for Conversations */
-        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .shrink-0.pointer-events-auto {
-          position: absolute !important;
-          right: 4px !important;
-          top: 50% !important;
-          transform: translateY(-50%) !important;
-          z-index: 5 !important;
-          max-width: 68px !important;
-        }
-        /* Seamless Chat Row Hover Actions Fade Mask */
+        /* Solid Harmonious Chat Action Box (No fade, no border, matching background) */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div[class*="absolute"][class*="-right-"] {
-          padding-left: 20px !important;
-          padding-right: 4px !important;
-          background: linear-gradient(to right, transparent 0%, var(--row-bg, #eaf1fb) 35%, var(--row-bg, #eaf1fb) 100%) !important;
+          position: absolute !important;
+          top: 50% !important;
+          bottom: auto !important;
+          transform: translateY(-50%) !important;
+          right: 4px !important;
+          height: 24px !important;
+          padding: 0 4px !important;
+          background: #eaf1fb !important;
+          border-radius: 6px !important;
+          border: none !important;
+          box-shadow: none !important;
           backdrop-filter: none !important;
           -webkit-backdrop-filter: none !important;
-          border-radius: 0 8px 8px 0 !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 2px !important;
+          z-index: 10 !important;
         }
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div[class*="absolute"][class*="-right-"],
         .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1 {
-          background: linear-gradient(to right, transparent 0%, var(--row-bg, #1c273a) 35%, var(--row-bg, #1c273a) 100%) !important;
+          background: #1c273a !important;
         }
-        [data-testid="conversation-row-sidebar"] button {
+        /* Active Chat Row Action Box */
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div.absolute.-right-1,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div[class*="absolute"][class*="-right-"] {
+          background: var(--sb-item-active-bg, #e0ecfd) !important;
+        }
+        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div.absolute.-right-1,
+        .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div.absolute.-right-1 {
+          background: var(--sb-item-active-bg, #1e293b) !important;
+        }
+        /* Action Buttons inside both Chat and Folder Action Boxes */
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] button,
+        [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1 button,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 button,
+        [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1 a,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 a {
           width: 22px !important;
           height: 22px !important;
           padding: 2px !important;
+          border-radius: 4px !important;
+          background: transparent !important;
+          border: none !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          color: inherit !important;
+          transition: background-color 0.15s ease, color 0.15s ease !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] button:hover,
+        [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1 button:hover,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 button:hover,
+        [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1 a:hover,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 a:hover {
+          background: rgba(59, 130, 246, 0.14) !important;
+          color: #2563eb !important;
+        }
+        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] button:hover,
+        .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] button:hover,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1 button:hover,
+        .dark [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1 button:hover,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 button:hover,
+        .dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 button:hover,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1 a:hover,
+        .dark [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1 a:hover,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 a:hover,
+        .dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 a:hover {
+          background: rgba(59, 130, 246, 0.25) !important;
+          color: #60a5fa !important;
         }
         #antigravity-ui-sidebar-btn {
           border-radius: 10px !important;
@@ -2519,6 +2565,20 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         [data-testid="sidebar-sash"] {
           background: rgba(0, 0, 0, 0.12) !important;
           border: none !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"],
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] {
+          padding-right: 64px !important;
+          background: transparent !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 {
+          background: transparent !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div[class*="absolute"][class*="-right-"] {
+          background: transparent !important;
+          border-radius: 0 !important;
         }
         .theme-dark div:has([data-testid="sidebar-sash"]),
         .dark div:has([data-testid="sidebar-sash"]) {
