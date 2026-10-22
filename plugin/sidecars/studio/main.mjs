@@ -1867,31 +1867,39 @@ function generateScript(c) {
           transition: background 0.15s ease !important;
         }
         /* Chat Rows Styling, Left-Aligned LTR, Hover & Compact Clickable Area */
-        [data-testid="conversation-row-sidebar"] {
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] {
           border-radius: 8px !important;
+          padding-left: 14px !important;
           transition: background-color 0.15s ease, box-shadow 0.15s ease !important;
         }
-        [data-testid="conversation-row-sidebar"]:hover {
-          background: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.65)) !important;
-          --row-bg: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.65)) !important;
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] * {
+          direction: ltr !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"]:hover:not(.bg-sidebar-secondary) {
+          background-color: rgba(59, 130, 246, 0.08) !important;
+          --row-bg: #eaf1fb !important;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
         }
-        .theme-dark [data-testid="conversation-row-sidebar"]:hover,
-        .dark [data-testid="conversation-row-sidebar"]:hover {
-          background: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.07)) !important;
-          --row-bg: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.07)) !important;
+        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"]:hover:not(.bg-sidebar-secondary),
+        .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"]:hover:not(.bg-sidebar-secondary) {
+          background-color: rgba(59, 130, 246, 0.12) !important;
+          --row-bg: #1c273a !important;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
         }
-        /* LTR Mandate for Conversation Titles */
-        [data-testid="conversation-row-sidebar"] span,
-        [data-testid="conversation-row-sidebar"] .truncate,
-        [data-testid="conversation-row-sidebar"] div:has(> .truncate) {
+        /* LTR Mandate for Conversation Titles & Gap Protection */
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] span.truncate,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .truncate,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div:has(> .truncate) {
           direction: ltr !important;
           text-align: left !important;
           unicode-bidi: isolate !important;
         }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.grow {
+          max-width: calc(100% - 28px) !important;
+          min-width: 0 !important;
+        }
         /* Compact Hover Actions & Wide Click Area for Conversations */
-        [data-testid="conversation-row-sidebar"] .shrink-0.pointer-events-auto {
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .shrink-0.pointer-events-auto {
           position: absolute !important;
           right: 4px !important;
           top: 50% !important;
@@ -1899,14 +1907,19 @@ function generateScript(c) {
           z-index: 5 !important;
           max-width: 68px !important;
         }
-        [data-testid="conversation-row-sidebar"] div.absolute.-right-1 {
-          padding-left: 6px !important;
-          background: linear-gradient(to right, transparent 0%, var(--sb-item-hover-bg, rgba(255, 255, 255, 0.9)) 40%) !important;
-          backdrop-filter: blur(4px) !important;
-          border-radius: 6px !important;
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div[class*="absolute"][class*="-right-"] {
+          padding-left: 20px !important;
+          padding-right: 4px !important;
+          background: linear-gradient(to right, transparent 0%, rgba(243, 247, 254, 0.95) 24%, rgba(243, 247, 254, 0.98) 100%) !important;
+          backdrop-filter: blur(8px) !important;
+          -webkit-backdrop-filter: blur(8px) !important;
+          border-radius: 8px !important;
         }
-        .theme-dark [data-testid="conversation-row-sidebar"] div.absolute.-right-1 {
-          background: linear-gradient(to right, transparent 0%, rgba(30, 41, 59, 0.95) 40%) !important;
+        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div[class*="absolute"][class*="-right-"],
+        .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1 {
+          background: linear-gradient(to right, transparent 0%, rgba(20, 27, 41, 0.95) 24%, rgba(20, 27, 41, 0.98) 100%) !important;
         }
         [data-testid="conversation-row-sidebar"] button {
           width: 22px !important;
