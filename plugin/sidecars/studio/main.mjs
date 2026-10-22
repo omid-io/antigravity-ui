@@ -2149,6 +2149,7 @@ async function downloadAndApplyUpdate() {
       { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/popup-engine.js`, dest: join(HERE, 'popup-engine.js') },
       { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/main.mjs`, dest: join(HERE, 'main.mjs') },
       { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/index.html`, dest: join(HERE, 'index.html') },
+      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/app.js`, dest: join(HERE, 'app.js') },
       { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/styles.css`, dest: join(HERE, 'styles.css') }
     ];
 
