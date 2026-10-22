@@ -2346,8 +2346,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] {
           background: transparent !important;
           border-radius: 8px !important;
-          padding-right: 62px !important;
-          padding-left: 8px !important;
+          padding-right: 12px !important;
+          padding-left: 6px !important;
           position: relative !important;
           transition: background 0.15s ease !important;
         }
@@ -2358,6 +2358,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
           background: #eaf1fb !important;
+          padding-right: 56px !important;
         }
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
         .dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
@@ -2374,7 +2375,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           top: 50% !important;
           bottom: auto !important;
           transform: translateY(-50%) !important;
-          right: 4px !important;
+          right: 2px !important;
           height: 24px !important;
           padding: 0 4px !important;
           background: #eaf1fb !important;
@@ -2417,12 +2418,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         /* Chat Rows Styling, Left-Aligned LTR, Hover & Compact Clickable Area */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] {
           border-radius: 8px !important;
-          padding-left: 14px !important;
-          padding-right: 8px !important;
+          padding-left: 8px !important;
+          padding-right: 6px !important;
           transition: background-color 0.15s ease, box-shadow 0.15s ease !important;
-        }
-        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] * {
-          direction: ltr !important;
         }
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"]:hover:not(.bg-sidebar-secondary) {
           background-color: #eaf1fb !important;
@@ -2435,38 +2433,40 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           --row-bg: #1c273a !important;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
         }
-        /* LTR Mandate for Conversation Titles & Gap Protection */
+        /* BiDi Plaintext Support for Titles */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] span.truncate,
-        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .truncate,
-        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div:has(> .truncate) {
-          direction: ltr !important;
-          text-align: left !important;
-          unicode-bidi: isolate !important;
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .truncate {
+          unicode-bidi: plaintext !important;
+          text-align: start !important;
         }
-        /* Prevent title text collision with action buttons */
+        /* Chat Title Space: Full width (minus 26px timestamp) when idle */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.grow {
-          max-width: calc(100% - 82px) !important;
+          max-width: calc(100% - 26px) !important;
           min-width: 0 !important;
         }
-        /* Solid Harmonious Chat Action Box (No fade, no border, matching background) */
+        /* Only compress on hover to make room for action buttons */
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"]:hover div.grow {
+          max-width: calc(100% - 78px) !important;
+        }
+        /* Solid Harmonious Chat Action Box (Flush with right edge, covering timestamp cleanly) */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div[class*="absolute"][class*="-right-"] {
           position: absolute !important;
           top: 50% !important;
           bottom: auto !important;
           transform: translateY(-50%) !important;
-          right: 4px !important;
-          height: 24px !important;
+          right: 0 !important;
+          height: 26px !important;
           padding: 0 4px !important;
           background: #eaf1fb !important;
-          border-radius: 6px !important;
+          border-radius: 6px 0 0 6px !important;
           border: none !important;
           box-shadow: none !important;
           backdrop-filter: none !important;
           -webkit-backdrop-filter: none !important;
           display: flex !important;
           align-items: center !important;
-          gap: 2px !important;
+          gap: 1px !important;
           z-index: 10 !important;
         }
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
