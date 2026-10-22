@@ -2154,12 +2154,18 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           overflow: visible !important;
           position: relative !important;
         }
-        div.relative.flex:has(> div > div > [role="navigation"][aria-label="Sidebar"]) > div.bg-border.w-\\[1px\\] {
-          background-color: transparent !important;
+        /* Invisible Resizer Sash flush with Floating Island edge */
+        div.bg-border:has([data-testid="sidebar-sash"]),
+        div.bg-border.w-\\[1px\\],
+        div.bg-border.flex-shrink-0:has([data-testid="sidebar-sash"]),
+        div.relative.flex:has(> div > div > [role="navigation"][aria-label="Sidebar"]) > div.bg-border.w-\\[1px\\],
+        [data-testid="sidebar-sash"] {
+          background: transparent !important;
           border: none !important;
+          box-shadow: none !important;
         }
         [role="navigation"][aria-label="Sidebar"] {
-          margin: 10px 8px 10px 10px !important;
+          margin: 10px 0 10px 10px !important;
           height: calc(100% - 20px) !important;
           border-radius: var(--sb-radius, 16px) !important;
           background: var(--sb-bg) !important;
@@ -2170,6 +2176,15 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           overflow: hidden !important;
           box-sizing: border-box !important;
           transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease !important;
+        }
+        /* Top Action Toolbar Alignment inside Sidebar Island */
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]),
+        div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
+          top: 10px !important;
+          left: 10px !important;
+          padding-left: 6px !important;
+          padding-top: 4px !important;
+          z-index: 35 !important;
         }
         [role="navigation"][aria-label="Sidebar"] .bg-sidebar {
           background-color: transparent !important;
@@ -2206,18 +2221,48 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           transform: translateY(-1px) !important;
           filter: brightness(1.06) !important;
         }
-        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] {
+        /* Folder Item Titles & Float Action Overlays */
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"],
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] {
           background: transparent !important;
           border-radius: 8px !important;
+          padding-right: 8px !important;
+          position: relative !important;
           transition: background 0.15s ease !important;
         }
-        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover {
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] > div.flex-1 {
+          min-width: 0 !important;
+          overflow: hidden !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
           background: rgba(0, 0, 0, 0.04) !important;
         }
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
-        .dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover {
+        .dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover,
+        .dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
           background: rgba(255, 255, 255, 0.05) !important;
         }
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] div.opacity-0,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] div.opacity-0 {
+          position: absolute !important;
+          right: 4px !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          padding: 2px 4px !important;
+          border-radius: 6px !important;
+          backdrop-filter: blur(8px) !important;
+          -webkit-backdrop-filter: blur(8px) !important;
+          background: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.85)) !important;
+          box-shadow: -4px 0 10px rgba(0, 0, 0, 0.06) !important;
+        }
+        .theme-dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] div.opacity-0,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] div.opacity-0 {
+          background: rgba(30, 41, 59, 0.9) !important;
+          box-shadow: -4px 0 10px rgba(0, 0, 0, 0.25) !important;
+        }
+        /* Active & Hover Chat Rows */
         [role="navigation"][aria-label="Sidebar"] .bg-sidebar-secondary {
           background: var(--sb-item-active-bg) !important;
           color: var(--sb-item-active-color) !important;
@@ -2234,6 +2279,53 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           border-radius: 10px !important;
           transition: background 0.15s ease !important;
         }
+        /* Chat Rows Styling, Left-Aligned LTR, Hover & Compact Clickable Area */
+        [data-testid="conversation-row-sidebar"] {
+          border-radius: 8px !important;
+          transition: background-color 0.15s ease, box-shadow 0.15s ease !important;
+        }
+        [data-testid="conversation-row-sidebar"]:hover {
+          background: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.65)) !important;
+          --row-bg: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.65)) !important;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+        }
+        .theme-dark [data-testid="conversation-row-sidebar"]:hover,
+        .dark [data-testid="conversation-row-sidebar"]:hover {
+          background: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.07)) !important;
+          --row-bg: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.07)) !important;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+        }
+        /* LTR Mandate for Conversation Titles */
+        [data-testid="conversation-row-sidebar"] span,
+        [data-testid="conversation-row-sidebar"] .truncate,
+        [data-testid="conversation-row-sidebar"] div:has(> .truncate) {
+          direction: ltr !important;
+          text-align: left !important;
+          unicode-bidi: isolate !important;
+        }
+        /* Compact Hover Actions & Wide Click Area for Conversations */
+        [data-testid="conversation-row-sidebar"] .shrink-0.pointer-events-auto {
+          position: absolute !important;
+          right: 4px !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
+          z-index: 5 !important;
+          max-width: 68px !important;
+        }
+        [data-testid="conversation-row-sidebar"] div.absolute.-right-1 {
+          padding-left: 6px !important;
+          background: linear-gradient(to right, transparent 0%, var(--sb-item-hover-bg, rgba(255, 255, 255, 0.9)) 40%) !important;
+          backdrop-filter: blur(4px) !important;
+          border-radius: 6px !important;
+        }
+        .theme-dark [data-testid="conversation-row-sidebar"] div.absolute.-right-1 {
+          background: linear-gradient(to right, transparent 0%, rgba(30, 41, 59, 0.95) 40%) !important;
+        }
+        [data-testid="conversation-row-sidebar"] button {
+          width: 22px !important;
+          height: 22px !important;
+          padding: 2px !important;
+        }
         #antigravity-ui-sidebar-btn {
           border-radius: 10px !important;
           background: var(--sb-footer-bg, rgba(255, 255, 255, 0.65)) !important;
@@ -2246,6 +2338,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         #antigravity-ui-sidebar-btn:hover {
           transform: translateY(-0.5px) !important;
           border-color: var(--sb-item-active-border) !important;
+        }
         }
       \` : ''}
 .theme-dark div.group.flex.w-full.min-w-0.items-center.min-h-8.py-1.px-2.select-none.cursor-pointer.rounded-lg {
