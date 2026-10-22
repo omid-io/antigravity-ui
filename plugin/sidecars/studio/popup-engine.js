@@ -1802,7 +1802,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         font-family: \${appCodeStack} !important;
       }
 
-      /* Pure CSS Compact Sidebar Architecture - 100% Native Resilience */
+      /* Pure CSS Compact Sidebar Architecture & Fluid Toolbar (160px) */
       \${c.compactSidebar !== false ? \`
         :root {
           --compact-sidebar-width: \${(parseInt(localStorage.getItem('sidebarWidth'), 10) >= 160 && parseInt(localStorage.getItem('sidebarWidth'), 10) < 256) ? parseInt(localStorage.getItem('sidebarWidth'), 10) : 200}px;
@@ -1815,6 +1815,60 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
           width: 100% !important;
+        }
+
+        /* Responsive Fluid Top Toolbar - Tied to Compact Sidebar (160px) Switch */
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]),
+        div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
+          top: \${c.floatingSidebar !== false ? '10px' : '0px'} !important;
+          left: \${c.floatingSidebar !== false ? '10px' : '0px'} !important;
+          width: calc(var(--sidebar-width, 160px) - \${c.floatingSidebar !== false ? '20px' : '8px'}) !important;
+          max-width: calc(var(--sidebar-width, 160px) - \${c.floatingSidebar !== false ? '20px' : '8px'}) !important;
+          padding: 4px 6px !important;
+          box-sizing: border-box !important;
+          z-index: 35 !important;
+          overflow: hidden !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div {
+          width: 100% !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          padding: 0 !important;
+          gap: 2px !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: flex-end !important;
+          gap: clamp(1px, 1.2vw, 6px) !important;
+          flex: 1 1 auto !important;
+          min-width: 0 !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button {
+          width: clamp(20px, 4.5vw, 26px) !important;
+          height: clamp(20px, 4.5vw, 26px) !important;
+          min-width: 20px !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          flex-shrink: 0 !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button[aria-label="New Conversation"] {
+          width: clamp(20px, 4.5vw, 24px) !important;
+          height: clamp(20px, 4.5vw, 26px) !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          flex-shrink: 0 !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 > div {
+          display: flex !important;
+          align-items: center !important;
+          gap: 1px !important;
+          width: auto !important;
+          flex-shrink: 0 !important;
         }
       \` : ''}
 
@@ -2177,59 +2231,6 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           box-sizing: border-box !important;
           transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease !important;
         }
-        /* Responsive Fluid Top Toolbar inside Sidebar Island */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]),
-        div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
-          top: 10px !important;
-          left: 10px !important;
-          width: calc(var(--sidebar-width, 160px) - 20px) !important;
-          max-width: calc(var(--sidebar-width, 160px) - 20px) !important;
-          padding: 4px 6px !important;
-          box-sizing: border-box !important;
-          z-index: 35 !important;
-          overflow: hidden !important;
-        }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div {
-          width: 100% !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: space-between !important;
-          padding: 0 !important;
-          gap: 2px !important;
-        }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 {
-          display: flex !important;
-          align-items: center !important;
-          justify-content: flex-end !important;
-          gap: clamp(1px, 1.2vw, 6px) !important;
-          flex: 1 1 auto !important;
-          min-width: 0 !important;
-        }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button {
-          width: clamp(20px, 4.5vw, 26px) !important;
-          height: clamp(20px, 4.5vw, 26px) !important;
-          min-width: 20px !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          flex-shrink: 0 !important;
-        }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button[aria-label="New Conversation"] {
-          width: clamp(20px, 4.5vw, 24px) !important;
-          height: clamp(20px, 4.5vw, 26px) !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          flex-shrink: 0 !important;
-        }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 > div {
-          display: flex !important;
-          align-items: center !important;
-          gap: 1px !important;
-          width: auto !important;
-          flex-shrink: 0 !important;
-        }
         [role="navigation"][aria-label="Sidebar"] .bg-sidebar {
           background-color: transparent !important;
         }
@@ -2412,8 +2413,38 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           transform: translateY(-0.5px) !important;
           border-color: var(--sb-item-active-border) !important;
         }
+      \` : \`
+        /* --- CLEAN RESET TO DEFAULT DOCKED SIDEBAR WHEN FLOATING IS DISABLED --- */
+        [role="navigation"][aria-label="Sidebar"] {
+          margin: 0 !important;
+          height: 100% !important;
+          border-radius: 0 !important;
+          border: none !important;
+          border-right: 1px solid var(--sidebar-border, rgba(0, 0, 0, 0.12)) !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          background: var(--sidebar, #ffffff) !important;
         }
-      \` : ''}
+        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
+          overflow: hidden !important;
+          position: relative !important;
+          z-index: 10 !important;
+        }
+        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
+          overflow: hidden !important;
+        }
+        div.bg-border:has([data-testid="sidebar-sash"]),
+        div.bg-border.w-\\[1px\\],
+        [data-testid="sidebar-sash"] {
+          background: rgba(0, 0, 0, 0.12) !important;
+          border: none !important;
+        }
+        .theme-dark div.bg-border:has([data-testid="sidebar-sash"]),
+        .dark div.bg-border:has([data-testid="sidebar-sash"]) {
+          background: rgba(255, 255, 255, 0.1) !important;
+        }
+      \`}
 .theme-dark div.group.flex.w-full.min-w-0.items-center.min-h-8.py-1.px-2.select-none.cursor-pointer.rounded-lg {
         background: rgba(255, 255, 255, 0.03) !important;
         border-color: rgba(255, 255, 255, 0.06) !important;
