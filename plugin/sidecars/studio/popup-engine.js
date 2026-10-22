@@ -2564,14 +2564,6 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           background: var(--sidebar, #18181b) !important;
           border-right: 1px solid var(--sidebar-border, rgba(255, 255, 255, 0.1)) !important;
         }
-        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
-          overflow: hidden !important;
-          position: relative !important;
-          z-index: 10 !important;
-        }
-        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div:first-child {
-          overflow: hidden !important;
-        }
         div.bg-border:has([data-testid="sidebar-sash"]),
         div[class*="bg-border"]:has([data-testid="sidebar-sash"]),
         [data-testid="sidebar-sash"] {
@@ -4143,8 +4135,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     \`;
     settingsBtn.parentElement.insertBefore(btn, settingsBtn);
   }
+  if (window.__ANTIGRAVITY_BTN_INTERVAL__) {
+    clearInterval(window.__ANTIGRAVITY_BTN_INTERVAL__);
+    window.__ANTIGRAVITY_BTN_INTERVAL__ = null;
+  }
   attachSidebarBtn();
-  setInterval(attachSidebarBtn, 1500);
+  window.__ANTIGRAVITY_BTN_INTERVAL__ = setInterval(attachSidebarBtn, 2000);
 
   // Bind Form Controls
   const $ = (id) => document.getElementById(id);
@@ -4320,10 +4316,14 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
 
   // Dynamic observer for live Antigravity theme switches
   try {
-    const themeObserver = new MutationObserver(() => {
+    if (window.__ANTIGRAVITY_THEME_OBSERVER__) {
+      window.__ANTIGRAVITY_THEME_OBSERVER__.disconnect();
+      window.__ANTIGRAVITY_THEME_OBSERVER__ = null;
+    }
+    window.__ANTIGRAVITY_THEME_OBSERVER__ = new MutationObserver(() => {
       setMode(detectAntigravityTheme());
     });
-    themeObserver.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+    window.__ANTIGRAVITY_THEME_OBSERVER__.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
   } catch (_) {}
 
   // 3 Tabs Switcher

@@ -2131,14 +2131,6 @@ function generateScript(c) {
           background: var(--sidebar, #18181b) !important;
           border-right: 1px solid var(--sidebar-border, rgba(255, 255, 255, 0.1)) !important;
         }
-        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
-          overflow: hidden !important;
-          position: relative !important;
-          z-index: 10 !important;
-        }
-        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div:first-child {
-          overflow: hidden !important;
-        }
         div.bg-border:has([data-testid="sidebar-sash"]),
         div[class*="bg-border"]:has([data-testid="sidebar-sash"]),
         [data-testid="sidebar-sash"] {
@@ -2368,7 +2360,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.6.6';
+  return '3.6.7';
 }
 
 function compareVersions(v1, v2) {
