@@ -1764,14 +1764,58 @@ function generateScript(c) {
           box-sizing: border-box !important;
           transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease !important;
         }
-        /* Top Action Toolbar Alignment inside Sidebar Island */
+        /* Responsive Fluid Top Toolbar inside Sidebar Island */
         div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]),
         div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
           top: 10px !important;
           left: 10px !important;
-          padding-left: 6px !important;
-          padding-top: 4px !important;
+          width: calc(var(--sidebar-width, 160px) - 20px) !important;
+          max-width: calc(var(--sidebar-width, 160px) - 20px) !important;
+          padding: 4px 6px !important;
+          box-sizing: border-box !important;
           z-index: 35 !important;
+          overflow: hidden !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div {
+          width: 100% !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          padding: 0 !important;
+          gap: 2px !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: flex-end !important;
+          gap: clamp(1px, 1.2vw, 6px) !important;
+          flex: 1 1 auto !important;
+          min-width: 0 !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button {
+          width: clamp(20px, 4.5vw, 26px) !important;
+          height: clamp(20px, 4.5vw, 26px) !important;
+          min-width: 20px !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          flex-shrink: 0 !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button[aria-label="New Conversation"] {
+          width: clamp(20px, 4.5vw, 24px) !important;
+          height: clamp(20px, 4.5vw, 26px) !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          flex-shrink: 0 !important;
+        }
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 > div {
+          display: flex !important;
+          align-items: center !important;
+          gap: 1px !important;
+          width: auto !important;
+          flex-shrink: 0 !important;
         }
         [role="navigation"][aria-label="Sidebar"] .bg-sidebar {
           background-color: transparent !important;
