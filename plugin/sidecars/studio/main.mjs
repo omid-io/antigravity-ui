@@ -1832,7 +1832,7 @@ function generateScript(c) {
         nav.bg-sidebar .truncate {
           direction: ltr !important;
           text-align: left !important;
-          unicode-bidi: plaintext !important;
+          unicode-bidi: normal !important;
         }
 
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
@@ -2000,11 +2000,25 @@ function generateScript(c) {
           --row-bg: #1c273a !important;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
         }
-        /* BiDi Plaintext Support for Titles */
+        /* Strict Left-Aligned LTR Mandate for Both Persian and English Titles */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] span.truncate,
-        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .truncate {
-          unicode-bidi: plaintext !important;
-          text-align: start !important;
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .truncate,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] span.truncate,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] .truncate,
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] span.truncate,
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] .truncate,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] span.truncate {
+          direction: ltr !important;
+          text-align: left !important;
+          unicode-bidi: normal !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.grow,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] a,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] div,
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] div {
+          direction: ltr !important;
+          text-align: left !important;
+          justify-content: flex-start !important;
         }
         /* Chat Title Space: Full width (minus 26px timestamp) when idle */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.grow {
@@ -2165,6 +2179,15 @@ function generateScript(c) {
         }
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.grow {
           max-width: none !important;
+          direction: ltr !important;
+          text-align: left !important;
+          justify-content: flex-start !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] span.truncate,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] span.truncate {
+          direction: ltr !important;
+          text-align: left !important;
+          unicode-bidi: normal !important;
         }
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .shrink-0.pointer-events-auto {
           position: static !important;
