@@ -655,9 +655,9 @@ function generatePresetComponentVars(preset, isDark) {
   }
 }
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, unlinkSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { homedir } from 'node:os';
+import { homedir, tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import http from 'node:http';
 import { SidecarApp, Response } from 'sidecar_sdk';
@@ -669,6 +669,31 @@ process.on('uncaughtException', (err) => {
 });
 process.on('unhandledRejection', (reason) => {
   console.error('[antigravity-ui] Suppressed unhandledRejection:', reason?.message || reason);
+});
+
+// Singleton Sidecar Process Guard (Eliminates Zombie Duplicates Permanently)
+const SIDECAR_PID_FILE = join(tmpdir(), 'antigravity-ui-sidecar.pid');
+try {
+  if (existsSync(SIDECAR_PID_FILE)) {
+    const oldPid = parseInt(readFileSync(SIDECAR_PID_FILE, 'utf8').trim(), 10);
+    if (oldPid && oldPid !== process.pid) {
+      try {
+        process.kill(oldPid, 0);
+        console.log(`[antigravity-ui] Terminating older zombie sidecar instance PID ${oldPid}`);
+        process.kill(oldPid, 'SIGKILL');
+      } catch (_) {}
+    }
+  }
+  writeFileSync(SIDECAR_PID_FILE, String(process.pid), 'utf8');
+} catch (_) {}
+
+process.on('exit', () => {
+  try {
+    if (existsSync(SIDECAR_PID_FILE)) {
+      const p = parseInt(readFileSync(SIDECAR_PID_FILE, 'utf8').trim(), 10);
+      if (p === process.pid) unlinkSync(SIDECAR_PID_FILE);
+    }
+  } catch (_) {}
 });
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -2402,8 +2427,8 @@ function injectToLiveWindows(config, force = false) {
                     } catch (_) {}
                   }
 
-                  // ONLY touch DOM/evaluate if missing or outdated version or forced
-                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup || String(val.popupVersion) !== String(updateState.currentVersion)) {
+                  // ONLY touch DOM/evaluate if missing required UI elements or explicitly forced
+                  if (force || !val.hasStyle || !val.hasBtn || !val.hasPopup) {
                     ws.send(JSON.stringify({
                       id: 101,
                       method: 'Runtime.evaluate',
