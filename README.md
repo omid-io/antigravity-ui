@@ -14,7 +14,7 @@
 
 <p>
   <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.2.0)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.6.6)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
@@ -34,13 +34,14 @@
 
 ## 💡 Why Antigravity UI? (The Problems We Solve)
 
-| Default Google Antigravity | With Antigravity UI Studio (v3.0 Native) |
+| Default Google Antigravity | With Antigravity UI Studio (v3.6.6 Native) |
 | :--- | :--- |
 | **Invasive Binary Patches:** Vulnerable to desktop app updates wiping custom changes. | **100% Zero-Patch Plugin:** Official Google Plugin architecture that safely survives app updates. |
-| **Fixed 256px Sidebar:** Wastes ~100px of valuable screen space on laptop displays. | **Fluid 160px–420px Sidebar:** Smooth mouse dragging with anti-clipping text layout. |
+| **Fixed 256px Docked Sidebar:** Clunky vertical borders and wasted ~100px screen real estate. | **Floating Island Sidebar & 160px Fluid Resizer:** Detached frosted glass canvas with zero divider borders. |
 | **Rigid Chat Styling:** Fixed colors with no control over message contrast or borders. | **Dual Dark Glow & Light 3D Studio:** Custom colors, borders, shadows & live sliders with 0ms lag. |
+| **Crushed Titles & Overlapping Action Buttons:** Titles truncate into 2-letter fragments and collide with `+` / `...` buttons. | **Zero-Collision Action Boxes & Fluid Titles:** Solid, borderless action badges with dynamic hover masking. |
 | **Manual Theme Synchronization:** User must manually align settings to light/dark. | **Active Theme Auto-Detection:** Automatically switches to active theme (Light/Dark) in real time. |
-| **Fragmented Multilingual Text:** Persian/Arabic letters reversed, punctuation broken. | **Smart BiDi Engine:** Paragraph-level language detection + built-in Vazirmatn variable font. |
+| **Fragmented Multilingual Text:** Persian/Arabic letters reversed, punctuation broken, reverse ellipsis (`...پ`). | **Smart BiDi Plaintext Engine:** Natural paragraph language detection + built-in Vazirmatn variable font. |
 | **Disconnected IDE:** No unified typography between Chat and Code Editor. | **Companion IDE Extension:** Native VS Code status bar toggle and `Ctrl+Alt+R` hotkey. |
 
 ---
@@ -63,9 +64,9 @@
       <br><br>
       <div align="left">
         <ul>
-          <li><b>Zero Clutter:</b> Docked inside the sidebar, no floating button obstruction</li>
+          <li><b>Floating Island Canvas:</b> Elegant detached sidebar with rounded corners and invisible divider line</li>
           <li><b>Fluid 160px Dragging:</b> Natural mouse resize (160px–420px) breaking the 256px limit</li>
-          <li><b>Anti-Clipping:</b> Left-pinned text alignment keeps labels fully readable</li>
+          <li><b>Zero-Collision Action Boxes:</b> Harmonized hover badges cleanly masking timestamps without text collision</li>
           <li><b>Click-to-Toggle:</b> Opens on click; cleanly dismisses with <code>Esc</code> or outside click</li>
         </ul>
       </div>
@@ -82,13 +83,13 @@
 
 ```mermaid
 flowchart LR
-    A["Antigravity UI v3.0"] --> B["Official Plugin Sidecar<br/>(Zero Asar Patches)"]
+    A["Antigravity UI v3.6.6"] --> B["Official Plugin Sidecar<br/>(Zero Asar Patches)"]
     A --> C["IDE Extension Installer"]
-    B --> D["Antigravity Desktop App<br/>• Native Sidebar 🌌 Button<br/>• 480px Fixed-Height Studio<br/>• 0ms Direct In-Memory Styling<br/>• Active Theme Auto-Sync<br/>• 160px Fluid Resizer"]
+    B --> D["Antigravity Desktop App<br/>• Floating Island Sidebar<br/>• Native Sidebar 🌌 Button<br/>• 0ms Direct In-Memory Styling<br/>• Active Theme Auto-Sync<br/>• 160px Fluid Resizer"]
     C --> E["Antigravity IDE (VS Code Fork)<br/>• Status Bar RTL/LTR Toggle<br/>• Ctrl+Alt+R Shortcut<br/>• Editor Typography Injection<br/>• Unicode BiDi Markers"]
 ```
 
-1. **Antigravity Desktop App (Native Plugin Engine):** Loads as an official Antigravity plugin. Injects the native 🌌 studio button directly into the chat sidebar, enables 0ms in-memory theme and font mutations, smart bidirectional text, and the fluid 160px sidebar resizer.
+1. **Antigravity Desktop App (Native Plugin Engine):** Loads as an official Antigravity plugin. Injects the native 🌌 studio button directly into the chat sidebar, enables 0ms in-memory theme and font mutations, smart bidirectional text, floating island sidebar architecture, and the fluid 160px sidebar resizer.
 2. **Antigravity IDE (VS Code Fork):** Automatically detects `antigravity-ide` and installs the native companion extension, adding a status bar direction switch and `Ctrl+Alt+R` hotkey for code, markdown, and prompt editing.
 
 ---
@@ -99,14 +100,21 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.2.0` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Pure CSS Sidebar + BiDi Questions + VSIX Companion |
-| **Antigravity 2.16.x** | `1.107.0+` | `v3.2.0` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.2.0` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v3.2.0` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
+| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.6.6` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Floating Island Sidebar + Pure CSS 160px Resizer + BiDi Plaintext |
+| **Antigravity 2.16.x** | `1.107.0+` | `v3.6.6` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.6.6` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v3.6.6` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
 
 ---
 
 ## ✨ Features
+
+### 🏝️ Floating Island Sidebar & Workspace Ergonomics
+- **Floating Island Canvas**: Detaches the sidebar from window edges with custom elevations (`Soft`, `3D`, `Clay`, `Glow`, `Minimal`), rounded corners, and zero border clipping.
+- **Invisible Resizer Divider**: Eliminates distracting vertical sash divider lines between the sidebar and chat canvas while preserving smooth mouse dragging.
+- **Pure CSS Compact Sidebar (160px)**: Seamlessly resize the sidebar down to 160px with fluid scaling for the logo and top buttons.
+- **Zero-Collision Solid Action Badges**: Folders and conversation rows feature solid, borderless action boxes with matching hover backgrounds (`#eaf1fb` light / `#1c273a` dark), completely eliminating foreign grey blurred masks and preventing text collision with action buttons.
+- **100% Switch Isolation & Clean Reset**: Toggling the Floating Island switch off cleanly restores factory docked metrics without leaving residual padding or style anomalies.
 
 ### 🎨 Dual-Theme UI & Styling Engine
 - **Independent Theme Tabs**: Customize user message bubbles separately for **Dark Mode** (with vibrant Neon Glow) and **Light Mode** (with elevated 3D shadow and tactile Clay presets).
@@ -114,24 +122,17 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 - **Granular Visual Controls**: Custom background color, text color, border width, border color, and shadow intensity presets (`None`, `Soft`, `3D`, `Clay`, `Glow`).
 - **Synchronized Chat Input**: Automatically harmonizes the active prompt input box border with your personalized bubble styling.
 - **Autonomous 1-Click In-Place Updates**: Instant background updates streamed directly into the sidecar environment without opening external browser tabs.
-- **Decoupled Architecture**: Custom UI styling stays 100% active even when the RTL engine is toggled off (ideal for English-only developers who only want the UI perks!).
+- **Decoupled Architecture**: Custom UI styling stays 100% active even when the RTL engine is toggled off.
 
-### 📐 Ergonomic Workspace & Pure CSS Compact Sidebar (160px)
-- **Activity Sidebar Docking**: Integrates seamlessly right above the Settings gear icon, keeping the chat canvas clean.
-- **Pure CSS State-Driven Resilience**: Eliminates aggressive DOM MutationObservers; seamlessly toggles between 160px custom width and Google's native 500ms collapse animation without jumping or ghost margins.
-- **Fluid Mouse Resizing & React State Sync**: Smooth mouse dragging down to 160px with bidirectional React state synchronization (`H6b.onSidebarResize`) returning cleanly to standard 256px when turned off.
-- **Anti-Clipping Layout**: Left-pinned CSS rules prevent text clipping and preserve full readability on compact laptop screens.
-- **Click-to-Toggle**: Opens only on click and dismisses smoothly on outside click or the `Esc` key.
-
-### 📝 Smart Multilingual Typography & BiDi Engine
+### 📝 Smart Multilingual Typography & BiDi Plaintext Engine
 - **Intelligent Auto-Direction**: Dynamically detects paragraph language, right-aligning Persian/Arabic while keeping English and code blocks LTR.
+- **BiDi Plaintext Direction**: Fixes reversed ellipsis (`...پ`) on truncated titles, preserving the natural start of RTL words.
 - **Interactive Multi-Choice Question BiDi Support (`ask_question`)**: Automatically detects Persian prompts in interactive dialogs, right-aligns option choices, positions numbered badges on the right, and isolates mixed direction prefixes like `(Recommended)`.
 - **Force RTL Mode**: Option to align all content to the right when full RTL layout is preferred.
 - **Built-in Vazirmatn Font**: Ships with the modern, high-legibility Vazirmatn Variable font out of the box.
 - **Independent Font Families**: Configure separate fonts for RTL text, Latin text, and code blocks.
 - **Typography Sliders**: Fine-tune line height and font size with live responsive sliders.
 - **Persian Keyboard Optimization**: Automatically maps `Shift + 2` to type `@` instead of `٬` on Persian keyboard layouts.
-- **Zero White-Screen Startup Guard**: Runs inside an isolated IIFE with safe lifecycle hooks to prevent Electron startup race conditions.
 
 ---
 
@@ -151,7 +152,6 @@ Ensure [Node.js](https://nodejs.org) is installed (e.g. `brew install node`). Ru
 ```bash
 sudo npx antigravity-ui
 ```
-> **macOS Note:** If you encounter a "Permission Denied" error with `sudo`, ensure your terminal app has **App Management** permission in `System Settings > Privacy & Security > App Management`.
 
 ### Linux
 ```bash
@@ -164,11 +164,6 @@ sudo npx antigravity-ui
 - `--force`: (Optional) Force restore even if metadata is missing or hash mismatch is detected.
 - `--devtools`: (Optional) Enable Chromium DevTools in the packaged desktop app for custom DOM debugging.
 
-> [!TIP]
-> **Automatic Update Notifications:** The CLI automatically checks the official npm registry in the background during normal runs and alerts you with a clean update box if a newer release is published.
->
-> **Antigravity Upstream Updates:** Updating Antigravity Desktop will reset patched files. Simply re-run `npx antigravity-ui` (or `antigravity-ui update`) after any official app update to restore your custom studio. The patcher will automatically refresh its pristine backup to the new version.
-
 ---
 
 ## 🛡️ Security, Privacy & Safety Guarantees
@@ -177,10 +172,8 @@ Because Antigravity UI interacts with application packaging files, we hold trans
 
 - 🔒 **Zero Telemetry or Data Exfiltration:** The patcher never transmits code, chats, credentials, or workspace data to any server. A lightweight 24-hour cached version check queries only the official public npm registry for release updates with an ultra-fast non-blocking timeout.
 - 🛡️ **Version-Aware Safety Backup & SHA-256 Verification:** Automatically preserves an untouched backup (`app.asar.bak`) with full 64-character SHA-256 checksum and metadata (`app.asar.meta.json`) whenever a fresh official Google release is detected before patching. During `--restore`, the patcher calculates the backup hash and blocks the operation if any corruption or tampering is detected.
-- 💡 **Legacy Backup Semantics:** For backups created by older releases prior to metadata introduction, the restore command executes under a safe, unverified fallback without blocking your workflow, whereas all backups created by modern releases enforce strict cryptographic integrity.
-- ⚡ **One-Command Full Revert:** Run `npx antigravity-ui --restore` at any moment to cleanly return desktop files and the IDE extension to 100% factory state (overrideable with `--force` if needed).
-- 🎯 **Transparent Modifications:** Applies localized UI/DOM styling, font injection, and workspace ergonomics to the packaged desktop app and companion IDE extension; never reads, stores, or alters your API keys, credentials, or workspace projects.
-- 🛠️ **Opt-In DevTools:** Chromium DevTools inspection is disabled by default and only unlocked if you explicitly pass the `--devtools` flag.
+- ⚡ **One-Command Full Revert:** Run `npx antigravity-ui --restore` at any moment to cleanly return desktop files and the IDE extension to 100% factory state.
+- 🎯 **Transparent Modifications:** Applies localized UI/DOM styling, font injection, and workspace ergonomics; never reads, stores, or alters your API keys, credentials, or workspace projects.
 
 ---
 
@@ -208,9 +201,9 @@ npx antigravity-ui --restore
 
 <div align="center">
 
-## سوئیت جامع ارتقای رابط کاربری، سایدبار ارگونومیک و پشتیبانی هوشمند فارسی در Antigravity
+## سوئیت جامع ارتقای رابط کاربری، سایدبار ارگونومیک شناور و پشتیبانی هوشمند فارسی در Antigravity
 
-**شخصی سازی پیشرفته رابط کاربری، کاهش عرض سایدبار تا ۱۶۰ پیکسل، پشتیبانی کامل از فونت وزیرمتن و هماهنگی همزمان با ادیتور کد Antigravity IDE**
+**طراحی نوین سایدبار جزیره ای شناور، کاهش عرض سایدبار تا ۱۶۰ پیکسل با دکمه های روان، باکس های اکشن یکدست بدون تداخل، فونت وزیرمتن و هماهنگی همزمان با Antigravity IDE**
 
 <br>
 
@@ -222,12 +215,14 @@ npx antigravity-ui --restore
 
 ### 💡 چرا Antigravity UI؟ (مشکلاتی که حل می کنیم)
 
-| پیش فرض Google Antigravity | با Antigravity UI Studio |
+| پیش فرض Google Antigravity | با Antigravity UI Studio (نسخه ۳.۶.۶) |
 | :--- | :--- |
-| **سایدبار ثابت ۲۵۶ پیکسل:** هدر رفتن فضای ارزشمند مانیتور به خصوص در لپ تاپ ها. | **سایدبار منعطف ۱۶۰ تا ۴۲۰ پیکسل:** درگ کاملاً روان موس با چیدمان ضد بریدگی متن. |
-| **ظاهر ثابت و یکنواخت چت:** عدم امکان شخصی سازی رنگ یا خوانایی حباب پیام ها. | **استودیو تم دارک نئونی و لایت ۳ بعدی:** کنترل اسلایدرهای فونت، حاشیه و سایه. |
-| **به هم ریختگی متون چندزبانه:** برعکس شدن حروف فارسی/عربی و پرش علائم نگارشی. | **موتور هوشمند BiDi:** تشخیص خودکار زبان پاراگراف + فونت توکار وزیرمتن. |
-| **ناهماهنگی ادیتور و چت:** عدم وجود فونت و جهت مناسب در ادیتور کد Antigravity IDE. | **افزونه اختصاصی ادیتور:** سوییچ جهت در Status Bar و میانبر `Ctrl+Alt+R`. |
+| **سایدبار متصل و ثابت ۲۵۶ پیکسل:** خط مرزی اضافی و هدر رفتن فضای مانیتور لپ تاپ ها. | **سایدبار شناور جزیره ای ۱۶۰ تا ۴۲۰ پیکسل:** طراحی مینیمال شیشه ای بدون خط مرزی مزاحم و درگ کاملا روان موس. |
+| **تداخل دکمه ها با عناوین:** افتادن دکمه های سه نقطه و + روی نام فولدرها و کلمات چت. | **باکس های اکشن یکدست بدون تداخل:** باکس های همرنگ با هاور، بدون خط بردر و با پوشش ۱۰۰٪ زمان چت. |
+| **ترانکیت شدید عناوین چت:** کوتاه شدن کلمات به ۲ حرف حین فشرده سازی سایدبار. | **عناوین پویا و هوشمند:** اختصاص حداکثر عرض در حالت عادی و فشرده سازی هوشمند صرفا در لحظه هاور. |
+| **ترانکیت معکوس فارسی:** نمایش ناقص انتهای کلمات به صورت معکوس (`...پ`). | **موتور هوشمند BiDi Plaintext:** نمایش صحیح کلمات فارسی از ابتدای کلمه با جهت یابی طبیعی. |
+| **ظاهر ثابت چت:** عدم امکان شخصی سازی رنگ یا خوانایی حباب پیام ها. | **استودیو تم دارک نئونی و لایت ۳ بعدی:** کنترل اسلایدرهای فونت، حاشیه و سایه بدون تاخیر. |
+| **عدم وجود فونت مناسب در ادیتور:** | **افزونه اختصاصی ادیتور:** سوییچ جهت در Status Bar و میانبر `Ctrl+Alt+R`. |
 
 ---
 
@@ -235,48 +230,28 @@ npx antigravity-ui --restore
 
 | نسخه Antigravity | ادیتور Antigravity IDE | نسخه Antigravity UI | وضعیت | توضیحات فنی |
 | :--- | :--- | :--- | :---: | :--- |
-| **نسخه های 2.17.x (جدیدترین)** | `1.107.0` به بالا | `v2.0.9` | 🟢 **تست شده و فعال** | سایدبار ۱۶۰px و نصب خودکار VSIX |
-| **نسخه های 2.16.x** | سری 1.107.x | `v2.0.9` | 🟢 **تست شده و فعال** | تزریق استاندارد با انکر لودینگ |
-| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v2.0.9` | 🟡 **سازگار** | ساختار سازگار Asar و هسته الکترون |
-| **نسخه های 1.x** | سری 1.x | `v2.0.9` | 🟡 **سازگار قبلی** | پچ پایه با قابلیت بازگردانی |
-| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v2.0.9` | 🟢 **تایید شده در CI** | اجرای ماتریس ۹ تایی ابری (نود ۱۸، ۲۰ و ۲۲ روی اوبونتو، مک و ویندوز) |
+| **نسخه های 2.17.x تا 2.20.x+ (جدیدترین)** | `1.107.0` به بالا | `v3.6.6` | 🟢 **تست شده و فعال** | سایدبار شناور جزیره ای، سایدبار ۱۶۰px، باکس های اکشن هماهنگ و BiDi |
+| **نسخه های 2.16.x** | سری 1.107.x | `v3.6.6` | 🟢 **تست شده و فعال** | موتور سایدکار نیتِیو بدون پچ باینری |
+| **سایر بیلدهای 2.x** | سری 1.100.x به بالا | `v3.6.6` | 🟢 **سازگار** | ساختار سازگار Asar و پلاگین رسمی |
+| **سیستم عامل ها** | ویندوز، مک، لینوکس | `v3.6.6` | 🟢 **تایید شده در CI** | اعتبارسنجی شده در تمامی پلتفرم ها بدون نشت اطلاعات (Gitleaks Passed) |
 
 ---
 
-### 🌟 قابلیت های کلیدی (نسخه ۳.۰ نیتِیو)
+### 🌟 قابلیت های کلیدی نسخه ۳.۶.۶
 
-#### ۱. معماری ۱۰۰٪ بدون پچ (Zero-Patch Architecture)
-* **پلاگین رسمی Antigravity:** بدون هیچ گونه دستکاری یا پچ کردن فایلهای باینری هسته گوگل (app.asar)؛ افزونه به صورت پلاگین رسمی اجرا شده و با به روزرسانی های نرم افزار پاک نمی شود.
-* **دکمه یکپارچه در سایدبار 🌌:** اضافه شدن دکمه استودیو مستقیماً در سایدبار اصلی بالای دکمه Settings با طراحی کاملاً بومی.
-* **ادیتور کد Antigravity IDE:** شناسایی خودکار ادیتور کد و نصب افزونه اختصاصی با کلید میانبر `Ctrl+Alt+R` و دکمه تغییر جهت در نوار وضعیت (Status Bar).
+#### ۱. سایدبار جزیره ای شناور (Floating Island Sidebar)
+* **طراحی شناور و مدرن:** سایدبار با فواصل متقارن از لبه های پنجره جدا شده و گوشه های گرد با افکت های بصری (`Soft` شیشه ای، `3D` برجسته، `Clay` حجمی و `Glow` نئونی) به خود می گیرد.
+* **حذف کامل خط مرزی ساش:** خط عمودی جداکننده میان سایدبار و محیط گفتگو کاملا حذف و شفاف شده تا محیط کار خلوت و یکپارچه باشد.
+* **اتصال کامل به کلید سوییچ:** تمام استایل های سایدبار به کلید Floating Island متصل هستند و در صورت خاموش کردن، سایدبار در لحظه به ساختار پیش فرض کارخانه بازمی گردد.
 
-#### ۲. استودیو شخصی سازی و انطباق خودکار تم (Dynamic Theme Auto-Sync)
-* **تشخیص هوشمند تم فعال:** استودیو به صورت خودکار تم جاری پنجره (روشن یا تاریک) را شناسایی کرده و تب مربوطه را باز می کند.
-* **تغییرات زنده بدون تاخیر (0ms In-Memory Mutation):** کلیه تغییرات رنگ، سایه و کادرها در لحظه در حافظه مرورگر اعمال می شوند بدون نیاز به ریستارت یا درخواست شبکه.
-* **ارتفاع ثابت و پایدار ۴۸۰ پیکسل:** فریم پنجره پاپ آپ در تمامی تب ها روی ۴۸۰ پیکسل ثابت مانده و حین تغییر تب هیچ پرشی ندارد.
-* **کنتراست استاندارد WCAG AAA:** تضمین خوانایی ۱۰۰٪ متون و لیبل ها در هر دو تم بدون هیچ گونه وارونگی یا محو شدگی.
-* **فوتر حمایتی با ستاره گیت هاب:** دکمه تعاملی برای ستاره دادن و حمایت از توسعه پروژه.
+#### ۲. باکس های اکشن یکدست و بدون تداخل (Zero-Collision Action Boxes)
+* **حذف بلر خاکستری و ترنزیشن های ناهمخوان:** دکمه های سه نقطه، پین و آرشیو درون یک باکس یکدست همرنگ با هاور ردیف قرار می گیرند.
+* **پوشش کامل زمان چت:** باکس ها مستقیما به لبه راست ردیف می چسبند و مانع بیرون زدن ثانیه ها و دقایق چت در لحظه هاور می شوند.
+* **رفع تداخل دکمه های فولدر:** دکمه های `+` و سه نقطه فولدر پروژه نیز درون باکس هماهنگ قرار گرفته و با اعمال فواصل مناسب، هرگز روی عنوان فولدر نمی افتند.
 
-#### ۳. سایدبار ارگونومیک فشرده (Compact 160px)
-* **درگ آزاد و روان موس بین ۱۶۰ تا ۴۲۰ پیکسل:** شکستن محدودیت ۲۵۶ پیکسلی پیش فرض نرم افزار و صرفه جویی در فضای مانیتور لپ تاپ ها.
-* **بدون بریدگی متون:** چیدمان پین شده به چپ برای حفظ خوانایی منوها حتی در عرض ۱۶۰ پیکسل.
-
-#### ۴. تایپوگرافی کریستالی و فونت وزیرمتن
-* **رندرینگ ساب پیکسل بدون تاری:** حذف فیلترهای بلور و ترنسفرم های کسری جهت دستیابی به حداکثر شفافیت ClearType.
-* **راست چین خودکار پاراگراف ها:** تشخیص هوشمند زبان هر پاراگراف؛ متن فارسی راست چین و کدهای انگلیسی چپ چین می مانند.
-* **فونت توکار Vazirmatn Variable:** بالاترین سطح وضوح و خوانایی با وزن ۴۰۰ متعادل.
-* **حل مشکل کیبورد فارسی:** نگاشت خودکار کلید ترکیبی `Shift + 2` برای تایپ کاراکتر `@` در چیدمان فارسی.
-
----
-
-### 🛡️ تضمین های امنیتی و حفظ حریم خصوصی
-
-- 🔒 **عدم ارسال تله متری و حفظ کامل داده ها:** پچر هرگز کدها، گفتگوها، توکن ها یا اطلاعات کاری شما را به هیچ سروری ارسال نمی کند. صرفاً یک بررسی سبک و کش شده ۲۴ ساعته نسخه پکیج مستقیماً با رجیستری عمومی npm برای اطلاع رسانی آپدیت ها با تایم اوت بسیار سریع و بدون معطلی انجام می پذیرد.
-- 🛡️ **بکاپ هوشمند آگاه از نسخه و اعتبارسنجی SHA-256:** ایجاد خودکار نسخه پشتیبان دست نخورده (`app.asar.bak`) با ثبت هش کامل ۶۴ کاراکتری SHA-256 و متادیتا (`app.asar.meta.json`) با هر بار به روزرسانی رسمی گوگل؛ حین دستور بازگردانی (`--restore`)، سلامت فایل بکاپ اعتبارسنجی شده و در صورت هرگونه نقص یا دستکاری، عملیات مسدود می شود.
-- 💡 **سمانتیک بکاپ های قدیمی:** بکاپ های مربوط به نسخه های پیشین (که فاقد متادیتا هستند) حین بازگردانی به صورت خودکار و سازگار (Graceful Fallback) بازیابی می شوند تا کاربر دچار وقفه کاری نشود؛ در حالی که بکاپ های نسخه های جدید منحصراً با شرط تطابق ۱۰۰٪ اثر انگشت رمزنگاری بازیابی می گردند.
-- ⚡ **بازگردانی ۱۰۰٪ با یک دستور:** قابلیت بازگشت کامل به حالت کارخانه در هر لحظه با اجرای `npx antigravity-ui --restore` (و در صورت نیاز اضطراری با فلگ `--force`).
-- 🎯 **تغییرات شفاف و بدون مداخله در اسرار:** صرفاً استایل های فرانت اند، فونت وزیرمتن و ارگونومی سایدبار اعمال شده و ابزار هیچ گونه دسترسی یا تغییری در کلیدهای API، توکن ها و سورس کدهای شما ندارد.
-- 🛠️ **حفظ امنیت:** ابزار DevTools به صورت پیش فرض خاموش است و صرفاً در صورت ارسال فلگ اختیاری `--devtools` برای برنامه نویسان فعال می شود.
+#### ۳. عناوین پویا در سایدبار فشرده (Fluid Titles)
+* در حالت عادی (عدم هاور)، عناوین چت ها و فولدرها حداکثر فضای ردیف را به خود اختصاص داده و دیگر کلمات به ۲ حرف ترانکیت نمی شوند.
+* به لطف `unicode-bidi: plaintext`، متون فارسی به صورت طبیعی از ابتدای کلمه نمایش داده شده و از انتهای کلمه ترانکیت معکوس نمی گردند.
 
 ---
 
