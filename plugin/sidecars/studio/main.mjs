@@ -665,7 +665,7 @@ import { generatePopupBundle } from './popup-engine.js';
 
 // Immortal Sidecar Process Immunity (Zero-Crash Guarantee)
 process.on('uncaughtException', (err) => {
-  console.error('[antigravity-ui] Suppressed uncaughtException:', err?.message || err);
+  console.error('[antigravity-ui] Suppressed uncaughtException:', err?.stack || err);
 });
 process.on('unhandledRejection', (reason) => {
   console.error('[antigravity-ui] Suppressed unhandledRejection:', reason?.message || reason);
@@ -2318,7 +2318,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.5.2';
+  return '3.6.6';
 }
 
 function compareVersions(v1, v2) {
@@ -2477,16 +2477,27 @@ async function checkGitHubUpdate() {
   updateState.checking = true;
   updateState.error = null;
   try {
-    const res = await fetch(`${GITHUB_RAW_BASE}/package.json`, {
-      signal: AbortSignal.timeout(5000)
-    });
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.version) {
-        updateState.latestVersion = data.version;
-        updateState.hasUpdate = compareVersions(data.version, updateState.currentVersion) > 0;
-        updateState.checkedAt = Date.now();
-      }
+    let data = null;
+    try {
+      const res = await fetch(`${GITHUB_RAW_BASE}/package.json?t=${Date.now()}`, {
+        signal: AbortSignal.timeout(5000)
+      });
+      if (res.ok) data = await res.json();
+    } catch (_) {}
+
+    if (!data) {
+      try {
+        const cdnRes = await fetch(`https://cdn.jsdelivr.net/gh/omid-io/antigravity-ui@main/package.json?t=${Date.now()}`, {
+          signal: AbortSignal.timeout(5000)
+        });
+        if (cdnRes.ok) data = await cdnRes.json();
+      } catch (_) {}
+    }
+
+    if (data && data.version) {
+      updateState.latestVersion = data.version;
+      updateState.hasUpdate = compareVersions(data.version, updateState.currentVersion) > 0;
+      updateState.checkedAt = Date.now();
     }
   } catch (err) {
     updateState.error = err.message;
@@ -2504,23 +2515,45 @@ setTimeout(() => {
 async function downloadAndApplyUpdate() {
   try {
     const filesToUpdate = [
-      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/package.json`, dest: join(HERE, 'package.json') },
-      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/popup-engine.js`, dest: join(HERE, 'popup-engine.js') },
-      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/main.mjs`, dest: join(HERE, 'main.mjs') },
-      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/index.html`, dest: join(HERE, 'index.html') },
-      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/app.js`, dest: join(HERE, 'app.js') },
-      { url: `${GITHUB_RAW_BASE}/plugin/sidecars/studio/styles.css`, dest: join(HERE, 'styles.css') }
+      { name: 'package.json', rel: 'plugin/sidecars/studio/package.json', dest: join(HERE, 'package.json') },
+      { name: 'popup-engine.js', rel: 'plugin/sidecars/studio/popup-engine.js', dest: join(HERE, 'popup-engine.js') },
+      { name: 'main.mjs', rel: 'plugin/sidecars/studio/main.mjs', dest: join(HERE, 'main.mjs') },
+      { name: 'index.html', rel: 'plugin/sidecars/studio/index.html', dest: join(HERE, 'index.html') },
+      { name: 'app.js', rel: 'plugin/sidecars/studio/app.js', dest: join(HERE, 'app.js') },
+      { name: 'styles.css', rel: 'plugin/sidecars/studio/styles.css', dest: join(HERE, 'styles.css') }
     ];
 
+    const downloadedContents = {};
+
     for (const f of filesToUpdate) {
+      let content = null;
       try {
-        const resp = await fetch(f.url, { signal: AbortSignal.timeout(8000) });
-        if (!resp.ok) continue;
-        const text = await resp.text();
-        if (text && text.length > 5) {
-          writeFileSync(f.dest, text, 'utf8');
+        const resp = await fetch(`${GITHUB_RAW_BASE}/${f.rel}?t=${Date.now()}`, { signal: AbortSignal.timeout(8000) });
+        if (resp.ok) {
+          const text = await resp.text();
+          if (text && text.length > 5) content = text;
         }
       } catch (_) {}
+
+      if (!content) {
+        try {
+          const resp = await fetch(`https://cdn.jsdelivr.net/gh/omid-io/antigravity-ui@main/${f.rel}?t=${Date.now()}`, { signal: AbortSignal.timeout(8000) });
+          if (resp.ok) {
+            const text = await resp.text();
+            if (text && text.length > 5) content = text;
+          }
+        } catch (_) {}
+      }
+
+      if (!content) {
+        return { success: false, error: `Failed to download ${f.name} from mirrors` };
+      }
+      downloadedContents[f.name] = { dest: f.dest, content };
+    }
+
+    for (const name of Object.keys(downloadedContents)) {
+      const item = downloadedContents[name];
+      writeFileSync(item.dest, item.content, 'utf8');
     }
 
     CURRENT_VERSION = updateState.latestVersion;
@@ -2562,55 +2595,62 @@ app.api('/api/perform-update', async () => {
   return await downloadAndApplyUpdate();
 }, 'POST');
 
-// Dedicated Local HTTP Server for 1-Click Zero-Downtime Live Updates
-const LOCAL_UPDATE_PORT = 58888;
-try {
-  const localHttp = http.createServer(async (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+// Dedicated Local HTTP Server with Auto-Port Fallback for 1-Click Zero-Downtime Live Updates
+function startLocalUpdateServer(port = 58888) {
+  try {
+    const localHttp = http.createServer(async (req, res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    if (req.method === 'OPTIONS') {
-      res.writeHead(204);
-      res.end();
-      return;
-    }
-
-    const url = new URL(req.url, `http://127.0.0.1:${LOCAL_UPDATE_PORT}`);
-    if (url.pathname === '/api/check-update') {
-      const st = await checkGitHubUpdate();
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({
-        updateAvailable: st.hasUpdate,
-        currentVersion: updateState.currentVersion,
-        remoteVersion: st.latestVersion
-      }));
-      return;
-    }
-
-    if (url.pathname === '/api/perform-update' && req.method === 'POST') {
-      try {
-        const result = await downloadAndApplyUpdate();
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(result));
-      } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: false, error: err.message }));
+      if (req.method === 'OPTIONS') {
+        res.writeHead(204);
+        res.end();
+        return;
       }
-      return;
-    }
 
-    res.writeHead(404);
-    res.end('Not Found');
-  });
+      const url = new URL(req.url, `http://127.0.0.1:${port}`);
+      if (url.pathname === '/api/check-update') {
+        const st = await checkGitHubUpdate();
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          updateAvailable: st.hasUpdate,
+          currentVersion: updateState.currentVersion,
+          remoteVersion: st.latestVersion
+        }));
+        return;
+      }
 
-  localHttp.listen(LOCAL_UPDATE_PORT, '127.0.0.1', () => {
-    console.log(`[antigravity-ui] Dedicated update server listening on 127.0.0.1:${LOCAL_UPDATE_PORT}`);
-  });
-  localHttp.on('error', (err) => {
-    console.warn('[antigravity-ui] Update server port already bound or in use:', err.message);
-  });
-} catch (_) {}
+      if (url.pathname === '/api/perform-update' && req.method === 'POST') {
+        try {
+          const result = await downloadAndApplyUpdate();
+          res.writeHead(result.success ? 200 : 500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify(result));
+        } catch (err) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: err.message }));
+        }
+        return;
+      }
+
+      res.writeHead(404);
+      res.end('Not Found');
+    });
+
+    localHttp.listen(port, '127.0.0.1', () => {
+      console.log(`[antigravity-ui] Dedicated update server listening on 127.0.0.1:${port}`);
+    });
+    localHttp.on('error', (err) => {
+      if (err.code === 'EADDRINUSE' && port === 58888) {
+        startLocalUpdateServer(58889);
+      } else {
+        console.warn(`[antigravity-ui] Update server port ${port} error:`, err.message);
+      }
+    });
+  } catch (_) {}
+}
+
+startLocalUpdateServer(58888);
 
 app.api('/api/config', () => {
   return loadConfig();

@@ -655,7 +655,7 @@ function generatePresetComponentVars(preset, isDark) {
   }
 }
 
-export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.5.5', bundledFonts = {}) {
+export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.6.6', bundledFonts = {}) {
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
@@ -2252,7 +2252,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       
 
       /* --- 9. FLOATING ISLAND SIDEBAR & INNER COMPONENTS ARCHITECTURE --- */
-      ${c.floatingSidebar !== false ? `
+      \${c.floatingSidebar !== false ? \`
         /* Sidebar Navigation & Chat Titles: Left-Aligned LTR Mandate */
         [role="navigation"][aria-label="Sidebar"],
         [role="navigation"][aria-label="Sidebar"] *,
@@ -2535,7 +2535,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           transform: translateY(-0.5px) !important;
           border-color: var(--sb-item-active-border) !important;
         }
-      ` : `
+      \` : \`
         /* --- CLEAN RESET TO DEFAULT DOCKED SIDEBAR WHEN FLOATING IS DISABLED --- */
         [role="navigation"][aria-label="Sidebar"] {
           margin: 0 !important;
@@ -2614,7 +2614,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           border: none !important;
           box-shadow: none !important;
         }
-      `}
+      \`}
 .theme-dark div.group.flex.w-full.min-w-0.items-center.min-h-8.py-1.px-2.select-none.cursor-pointer.rounded-lg {
         background: rgba(255, 255, 255, 0.03) !important;
         border-color: rgba(255, 255, 255, 0.06) !important;
@@ -4217,7 +4217,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (isCheckingUpdate || isPerformingUpdate) return;
     isCheckingUpdate = true;
     if (capsuleBtn) capsuleBtn.classList.add('rtl-checking');
-    let clientCurrentVer = window.__ANTIGRAVITY_APP_VERSION__ || "${currentVersion}";
+    let clientCurrentVer = "${currentVersion}" || window.__ANTIGRAVITY_APP_VERSION__;
     window.__ANTIGRAVITY_APP_VERSION__ = clientCurrentVer;
     const currentVer = clientCurrentVer;
     let updateFound = false;
@@ -4236,8 +4236,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     }
 
     try {
-      // 1. Try dedicated local server on 58888 or sidecar port
-      const portsToCheck = [58888, SIDECAR_PORT].filter(p => p > 0);
+      // 1. Try dedicated local server on 58888, 58889, or sidecar port
+      const portsToCheck = [58888, 58889, SIDECAR_PORT].filter(p => p > 0);
       for (const p of portsToCheck) {
         try {
           const res = await fetch('http://127.0.0.1:' + p + '/api/check-update', {
@@ -4321,7 +4321,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (versionText) versionText.textContent = 'Updating...';
 
     try {
-      const portsToTry = [58888, SIDECAR_PORT].filter(p => p > 0);
+      const portsToTry = [58888, 58889, SIDECAR_PORT].filter(p => p > 0);
       let updateResult = null;
 
       for (const p of portsToTry) {
@@ -4359,7 +4359,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         return;
       }
 
-      if (versionText) versionText.textContent = 'Update Failed ⚠️';
+      // Resilient fallback: If sidecar server is unavailable (e.g. standalone ASAR mode), copy 1-click update command
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText('npx antigravity-ui');
+        }
+      } catch (_) {}
+      if (versionText) versionText.textContent = 'Copied: npx antigravity-ui';
       setTimeout(() => {
         if (availableUpdateInfo) {
           if (capsuleBtn) capsuleBtn.classList.add('rtl-update-available');
@@ -4367,7 +4373,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         } else {
           if (versionText) versionText.textContent = 'v' + currentVer;
         }
-      }, 2500);
+      }, 3500);
     } catch (err) {
       if (versionText) versionText.textContent = 'Update Failed ⚠️';
       setTimeout(() => {
