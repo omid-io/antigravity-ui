@@ -2623,6 +2623,181 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         background: rgba(255, 255, 255, 0.06) !important;
         border-color: rgba(255, 255, 255, 0.12) !important;
       }
+
+      /* In-App Update Modal Styles */
+      .rtl-modal-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        z-index: 100000 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 16px !important;
+        animation: rtlModalFadeIn 0.15s ease-out !important;
+      }
+      .rtl-modal-card {
+        background: #182234 !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        border-radius: 16px !important;
+        width: 100% !important;
+        max-width: 430px !important;
+        box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+        padding: 22px !important;
+        color: #f1f5f9 !important;
+        font-family: inherit !important;
+        direction: rtl !important;
+        text-align: right !important;
+        animation: rtlModalZoomIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-sizing: border-box !important;
+      }
+      .theme-light .rtl-modal-card {
+        background: #ffffff !important;
+        border-color: rgba(0, 0, 0, 0.12) !important;
+        box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
+        color: #0f172a !important;
+      }
+      @keyframes rtlModalFadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes rtlModalZoomIn {
+        from { opacity: 0; transform: scale(0.94); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      .rtl-modal-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin-bottom: 14px !important;
+      }
+      .rtl-modal-title {
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+      .rtl-modal-close {
+        background: transparent !important;
+        border: none !important;
+        color: #94a3b8 !important;
+        font-size: 16px !important;
+        cursor: pointer !important;
+        padding: 4px 8px !important;
+        border-radius: 6px !important;
+        transition: all 0.15s ease !important;
+      }
+      .rtl-modal-close:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #ffffff !important;
+      }
+      .theme-light .rtl-modal-close:hover {
+        background: rgba(0, 0, 0, 0.06) !important;
+        color: #0f172a !important;
+      }
+      .rtl-modal-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 4px 12px !important;
+        border-radius: 20px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        background: rgba(37, 99, 235, 0.18) !important;
+        border: 1px solid rgba(59, 130, 246, 0.4) !important;
+        color: #60a5fa !important;
+        margin-bottom: 12px !important;
+        direction: ltr !important;
+      }
+      .rtl-modal-desc {
+        font-size: 13px !important;
+        line-height: 1.6 !important;
+        color: #cbd5e1 !important;
+        margin-bottom: 14px !important;
+      }
+      .theme-light .rtl-modal-desc {
+        color: #475569 !important;
+      }
+      .rtl-modal-codebox {
+        background: rgba(0, 0, 0, 0.35) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px !important;
+        padding: 10px 14px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        cursor: pointer !important;
+        direction: ltr !important;
+        transition: border-color 0.15s ease, background 0.15s ease !important;
+        margin-bottom: 16px !important;
+      }
+      .theme-light .rtl-modal-codebox {
+        background: #f8fafc !important;
+        border-color: #cbd5e1 !important;
+      }
+      .rtl-modal-codebox:hover {
+        border-color: rgba(59, 130, 246, 0.7) !important;
+        background: rgba(0, 0, 0, 0.5) !important;
+      }
+      .theme-light .rtl-modal-codebox:hover {
+        background: #f1f5f9 !important;
+        border-color: #3b82f6 !important;
+      }
+      .rtl-modal-code {
+        font-family: monospace !important;
+        font-size: 13px !important;
+        color: #38bdf8 !important;
+        font-weight: 600 !important;
+        user-select: all !important;
+      }
+      .theme-light .rtl-modal-code {
+        color: #0284c7 !important;
+      }
+      .rtl-modal-copy-btn {
+        font-size: 11px !important;
+        font-family: inherit !important;
+        direction: rtl !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        color: #cbd5e1 !important;
+        transition: all 0.15s ease !important;
+      }
+      .theme-light .rtl-modal-copy-btn {
+        background: #ffffff !important;
+        border-color: #cbd5e1 !important;
+        color: #334155 !important;
+      }
+      .rtl-modal-codebox:hover .rtl-modal-copy-btn {
+        background: #2563eb !important;
+        border-color: #3b82f6 !important;
+        color: #ffffff !important;
+      }
+      .rtl-modal-actions {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 10px !important;
+      }
+      .rtl-modal-btn-link {
+        font-size: 12px !important;
+        color: #94a3b8 !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        padding: 6px 12px !important;
+        border-radius: 8px !important;
+        background: transparent !important;
+        border: none !important;
+        transition: color 0.15s ease !important;
+      }
+      .rtl-modal-btn-link:hover {
+        color: #38bdf8 !important;
+        text-decoration: underline !important;
+      }
     \`;
 
     /* Pure CSS Compact Sidebar Synchronization */
@@ -4311,86 +4486,124 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     }
   }
 
-  async function triggerUpdateFlow() {
-    if (isPerformingUpdate) return;
-    isPerformingUpdate = true;
-    if (capsuleBtn) {
-      capsuleBtn.classList.add('rtl-updating');
-      capsuleBtn.classList.add('rtl-checking');
-    }
-    if (versionText) versionText.textContent = 'Updating...';
+  function showUpdateModal(remoteVer, currentVer) {
+    const existing = document.getElementById('antigravity-update-modal');
+    if (existing) existing.remove();
 
+    const overlay = document.createElement('div');
+    overlay.id = 'antigravity-update-modal';
+    overlay.className = 'rtl-modal-overlay';
+
+    overlay.innerHTML = \`
+      <div class="rtl-modal-card">
+        <div class="rtl-modal-header">
+          <div class="rtl-modal-title">
+            <span>🚀 بروزرسانی Antigravity UI</span>
+          </div>
+          <button type="button" class="rtl-modal-close" id="p-modal-close-btn" title="بستن">✕</button>
+        </div>
+        <div class="rtl-modal-badge">
+          <span>v\${currentVer}</span>
+          <span>→</span>
+          <span style="color:#38bdf8;font-weight:700;">v\${remoteVer}</span>
+        </div>
+        <div class="rtl-modal-desc">
+          نسخه جدید منتشر شد! برای ارتقا به این نسخه، دستور زیر را در ترمینال اجرا کنید (دستور در کلیپ بورد کپی شد):
+        </div>
+        <div class="rtl-modal-codebox" id="p-modal-codebox" title="برای کپی کلیک کنید">
+          <code class="rtl-modal-code">npx antigravity-ui</code>
+          <span class="rtl-modal-copy-btn" id="p-modal-copy-status">📋 کپی دستور</span>
+        </div>
+        <div class="rtl-modal-actions">
+          <button type="button" class="rtl-modal-btn-link" id="p-modal-github-btn">
+            مشاهده تغییرات در گیت هاب ↗
+          </button>
+        </div>
+      </div>
+    \`;
+
+    document.body.appendChild(overlay);
+
+    // Auto-copy to clipboard
     try {
-      const portsToTry = [58888, 58889, SIDECAR_PORT].filter(p => p > 0);
-      let updateResult = null;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText('npx antigravity-ui');
+        const st = overlay.querySelector('#p-modal-copy-status');
+        if (st) st.textContent = '✔ کپی شد!';
+      }
+    } catch (_) {}
 
-      for (const p of portsToTry) {
+    const closeBtn = overlay.querySelector('#p-modal-close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => overlay.remove());
+    }
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove();
+    });
+
+    const codeBox = overlay.querySelector('#p-modal-codebox');
+    if (codeBox) {
+      codeBox.addEventListener('click', () => {
         try {
-          const res = await fetch('http://127.0.0.1:' + p + '/api/perform-update', {
-            method: 'POST',
-            signal: AbortSignal.timeout(15000)
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data && data.success) {
-              updateResult = data;
-              break;
-            }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText('npx antigravity-ui');
           }
         } catch (_) {}
-      }
-
-      if (updateResult) {
-        if (capsuleBtn) {
-          capsuleBtn.classList.remove('rtl-update-available');
-          capsuleBtn.classList.remove('rtl-updating');
-          capsuleBtn.classList.remove('rtl-checking');
+        const st = overlay.querySelector('#p-modal-copy-status');
+        if (st) {
+          st.textContent = '✔ کپی شد!';
+          setTimeout(() => { if (st) st.textContent = '📋 کپی دستور'; }, 2000);
         }
-        const iconWrap = $('p-capsule-icon-wrap');
-        const refreshSvgHtml = '<svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
-        if (iconWrap) iconWrap.innerHTML = refreshSvgHtml;
-        const newV = updateResult.version || availableUpdateInfo?.remoteVersion || currentVer;
-        window.__ANTIGRAVITY_APP_VERSION__ = newV;
-        if (versionText) versionText.textContent = 'Updated to v' + newV + '! 🎉';
-        availableUpdateInfo = null;
-        setTimeout(() => {
-          if (versionText) versionText.textContent = 'v' + newV;
-        }, 3000);
-        return;
-      }
-
-      // Resilient fallback: If sidecar server is unavailable (e.g. standalone ASAR mode), copy 1-click update command
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText('npx antigravity-ui');
-        }
-      } catch (_) {}
-      if (versionText) versionText.textContent = 'Copied: npx antigravity-ui';
-      setTimeout(() => {
-        if (availableUpdateInfo) {
-          if (capsuleBtn) capsuleBtn.classList.add('rtl-update-available');
-          if (versionText) versionText.textContent = 'Update v' + availableUpdateInfo.remoteVersion;
-        } else {
-          if (versionText) versionText.textContent = 'v' + currentVer;
-        }
-      }, 3500);
-    } catch (err) {
-      if (versionText) versionText.textContent = 'Update Failed ⚠️';
-      setTimeout(() => {
-        if (availableUpdateInfo) {
-          if (capsuleBtn) capsuleBtn.classList.add('rtl-update-available');
-          if (versionText) versionText.textContent = 'Update v' + availableUpdateInfo.remoteVersion;
-        } else {
-          if (versionText) versionText.textContent = 'v' + currentVer;
-        }
-      }, 2500);
-    } finally {
-      if (capsuleBtn) {
-        capsuleBtn.classList.remove('rtl-updating');
-        capsuleBtn.classList.remove('rtl-checking');
-      }
-      isPerformingUpdate = false;
+      });
     }
+
+    const ghBtn = overlay.querySelector('#p-modal-github-btn');
+    if (ghBtn) {
+      ghBtn.addEventListener('click', () => {
+        const url = 'https://github.com/omid-io/antigravity-ui/releases/latest';
+        try {
+          if (window.electronNative && typeof window.electronNative.openExternal === 'function') {
+            window.electronNative.openExternal(url);
+          } else {
+            window.open(url, '_blank');
+          }
+        } catch (_) {
+          window.open(url, '_blank');
+        }
+      });
+    }
+
+    const escHandler = (e) => {
+      if (e.key === 'Escape') {
+        overlay.remove();
+        document.removeEventListener('keydown', escHandler);
+      }
+    };
+    document.addEventListener('keydown', escHandler);
+  }
+
+  function triggerUpdateFlow() {
+    const remoteVer = availableUpdateInfo?.remoteVersion || '3.6.6';
+    const curV = window.__ANTIGRAVITY_APP_VERSION__ || "${currentVersion}";
+
+    // Auto-copy command to clipboard immediately
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText('npx antigravity-ui');
+      }
+    } catch (_) {}
+
+    if (versionText) {
+      const orig = versionText.textContent;
+      versionText.textContent = 'Copied: npx antigravity-ui';
+      setTimeout(() => {
+        if (versionText) versionText.textContent = orig;
+      }, 2500);
+    }
+
+    // Open the interactive update modal
+    showUpdateModal(remoteVer, curV);
   }
 
   if (capsuleBtn) {
@@ -4409,6 +4622,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     checkUpdateStatus(true);
   }, 1000);
 
+  window.__ANTIGRAVITY_SHOW_UPDATE_MODAL__ = showUpdateModal;
   window.__ANTIGRAVITY_SYNC_CONFIG__ = (cfg) => {
     currentConfig = cfg;
     populateUI(cfg);
