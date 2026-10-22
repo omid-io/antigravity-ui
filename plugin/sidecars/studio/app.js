@@ -85,6 +85,7 @@ let currentConfig = {
   fixAtSign: true,
   sidebarWidth: 256,
   compactSidebar: true,
+  floatingSidebar: true,
   userMsgEnabled: true,
   inputBoxEnabled: false,
   userMsgDark: { bg: '#1e2433', text: '#f1f5f9', border: '#384c6e', borderWidth: '1.5', shadow: 'soft' },
@@ -106,6 +107,7 @@ function collectConfig() {
     enFont: $('cfg-enFont').value.trim(),
     codeFont: $('cfg-codeFont').value.trim(),
     compactSidebar: $('cfg-compactSidebar').checked,
+    floatingSidebar: $('cfg-floatingSidebar').checked,
     userMsgEnabled: $('cfg-userMsgEnabled').checked,
     inputBoxEnabled: $('cfg-inputBoxEnabled').checked,
     userMsgDark: {
@@ -181,6 +183,7 @@ async function loadConfig() {
 
     // Tab 3
     $('cfg-compactSidebar').checked = currentConfig.compactSidebar !== false;
+  $('cfg-floatingSidebar').checked = currentConfig.floatingSidebar !== false;
   } catch (_) {}
 }
 
@@ -222,6 +225,7 @@ $('cfg-fixAtSign').addEventListener('change', liveSync);
 $('cfg-userMsgEnabled').addEventListener('change', liveSync);
 $('cfg-inputBoxEnabled').addEventListener('change', liveSync);
 $('cfg-compactSidebar').addEventListener('change', liveSync);
+  $('cfg-floatingSidebar').addEventListener('change', liveSync);
 
 // Border widths
 $('cfg-dark-bw').addEventListener('input', (e) => {
