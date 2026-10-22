@@ -2288,23 +2288,39 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         .dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
           background: rgba(255, 255, 255, 0.05) !important;
         }
+        /* Folder Header Action Buttons (+ and ...) Backdrop Mask */
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"],
+        [role="navigation"][aria-label="Sidebar"] div.group\/header div.absolute.right-1,
+        [role="navigation"][aria-label="Sidebar"] div.absolute.right-1.top-0:has(button[aria-label*="options"]),
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] div.opacity-0,
         [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] div.opacity-0 {
-          position: absolute !important;
-          right: 4px !important;
-          top: 50% !important;
-          transform: translateY(-50%) !important;
-          padding: 2px 4px !important;
-          border-radius: 6px !important;
+          padding-left: 18px !important;
+          padding-right: 4px !important;
+          background: linear-gradient(to right, transparent 0%, rgba(243, 247, 254, 0.95) 24%, rgba(243, 247, 254, 0.98) 100%) !important;
           backdrop-filter: blur(8px) !important;
           -webkit-backdrop-filter: blur(8px) !important;
-          background: var(--sb-item-hover-bg, rgba(255, 255, 255, 0.85)) !important;
-          box-shadow: -4px 0 10px rgba(0, 0, 0, 0.06) !important;
+          border-radius: 8px !important;
+          z-index: 5 !important;
         }
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"],
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div.group\/header div.absolute.right-1,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div.absolute.right-1.top-0:has(button[aria-label*="options"]),
+        .dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"],
         .theme-dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] div.opacity-0,
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] div.opacity-0 {
-          background: rgba(30, 41, 59, 0.9) !important;
-          box-shadow: -4px 0 10px rgba(0, 0, 0, 0.25) !important;
+          background: linear-gradient(to right, transparent 0%, rgba(20, 27, 41, 0.95) 24%, rgba(20, 27, 41, 0.98) 100%) !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"] button,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"] a {
+          width: 22px !important;
+          height: 22px !important;
+          border-radius: 6px !important;
+          transition: background-color 0.15s ease, color 0.15s ease !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"] button:hover,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] div[class*="absolute"][class*="right-1"] a:hover {
+          background: rgba(59, 130, 246, 0.12) !important;
+          color: #2563eb !important;
         }
         /* Active & Hover Chat Rows */
         [role="navigation"][aria-label="Sidebar"] .bg-sidebar-secondary {
