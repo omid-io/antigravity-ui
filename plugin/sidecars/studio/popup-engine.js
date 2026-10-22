@@ -1691,21 +1691,6 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         min-width: 0 !important;
       }
 
-      /* Sidebar Navigation & Chat Titles: Left-Aligned LTR Mandate */
-      [role="navigation"][aria-label="Sidebar"],
-      [role="navigation"][aria-label="Sidebar"] *,
-      nav.bg-sidebar,
-      nav.bg-sidebar * {
-        direction: ltr !important;
-        text-align: left !important;
-      }
-      [role="navigation"][aria-label="Sidebar"] .truncate,
-      nav.bg-sidebar .truncate {
-        direction: ltr !important;
-        text-align: left !important;
-        unicode-bidi: plaintext !important;
-      }
-
       /* Typography & Fonts - Strict BiDi Scoped Application */
       :root, :host, html, body,
       .prose, .prose p, .prose span:not(pre *):not(code *), .prose li,
@@ -2267,7 +2252,22 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       
 
       /* --- 9. FLOATING ISLAND SIDEBAR & INNER COMPONENTS ARCHITECTURE --- */
-      \${c.floatingSidebar !== false ? \`
+      ${c.floatingSidebar !== false ? `
+        /* Sidebar Navigation & Chat Titles: Left-Aligned LTR Mandate */
+        [role="navigation"][aria-label="Sidebar"],
+        [role="navigation"][aria-label="Sidebar"] *,
+        nav.bg-sidebar,
+        nav.bg-sidebar * {
+          direction: ltr !important;
+          text-align: left !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] .truncate,
+        nav.bg-sidebar .truncate {
+          direction: ltr !important;
+          text-align: left !important;
+          unicode-bidi: plaintext !important;
+        }
+
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
           overflow: visible !important;
           position: relative !important;
@@ -2277,13 +2277,19 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           overflow: visible !important;
           position: relative !important;
         }
-        /* Invisible Resizer Sash flush with Floating Island edge */
+        /* Invisible Resizer Sash & Vertical Border Line flush with Floating Island edge */
+        div:has([data-testid="sidebar-sash"]),
+        div:has(> [data-testid="sidebar-sash"]),
+        div:has(> div > [data-testid="sidebar-sash"]),
+        div.flex-shrink-0:has([data-testid="sidebar-sash"]),
+        div[class*="bg-border"]:has([data-testid="sidebar-sash"]),
         div.bg-border:has([data-testid="sidebar-sash"]),
-        div.bg-border.w-\\[1px\\],
-        div.bg-border.flex-shrink-0:has([data-testid="sidebar-sash"]),
-        div.relative.flex:has(> div > div > [role="navigation"][aria-label="Sidebar"]) > div.bg-border.w-\\[1px\\],
-        [data-testid="sidebar-sash"] {
+        div.relative.flex:has(> div > div > [role="navigation"][aria-label="Sidebar"]) > div.bg-border,
+        [data-testid="sidebar-sash"],
+        [data-testid="sidebar-sash"] * {
+          background-color: transparent !important;
           background: transparent !important;
+          border-color: transparent !important;
           border: none !important;
           box-shadow: none !important;
         }
@@ -2450,19 +2456,20 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           z-index: 5 !important;
           max-width: 68px !important;
         }
+        /* Seamless Chat Row Hover Actions Fade Mask */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div[class*="absolute"][class*="-right-"] {
           padding-left: 20px !important;
           padding-right: 4px !important;
-          background: linear-gradient(to right, transparent 0%, rgba(243, 247, 254, 0.95) 24%, rgba(243, 247, 254, 0.98) 100%) !important;
-          backdrop-filter: blur(8px) !important;
-          -webkit-backdrop-filter: blur(8px) !important;
-          border-radius: 8px !important;
+          background: linear-gradient(to right, transparent 0%, var(--row-bg, #eaf1fb) 35%, var(--row-bg, #eaf1fb) 100%) !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          border-radius: 0 8px 8px 0 !important;
         }
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1,
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div[class*="absolute"][class*="-right-"],
         .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.absolute.-right-1 {
-          background: linear-gradient(to right, transparent 0%, rgba(20, 27, 41, 0.95) 24%, rgba(20, 27, 41, 0.98) 100%) !important;
+          background: linear-gradient(to right, transparent 0%, var(--row-bg, #1c273a) 35%, var(--row-bg, #1c273a) 100%) !important;
         }
         [data-testid="conversation-row-sidebar"] button {
           width: 22px !important;
@@ -2482,7 +2489,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           transform: translateY(-0.5px) !important;
           border-color: var(--sb-item-active-border) !important;
         }
-      \` : \`
+      ` : `
         /* --- CLEAN RESET TO DEFAULT DOCKED SIDEBAR WHEN FLOATING IS DISABLED --- */
         [role="navigation"][aria-label="Sidebar"] {
           margin: 0 !important;
@@ -2495,6 +2502,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           -webkit-backdrop-filter: none !important;
           background: var(--sidebar, #ffffff) !important;
         }
+        .theme-dark [role="navigation"][aria-label="Sidebar"],
+        .dark [role="navigation"][aria-label="Sidebar"] {
+          background: var(--sidebar, #18181b) !important;
+          border-right: 1px solid var(--sidebar-border, rgba(255, 255, 255, 0.1)) !important;
+        }
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
           overflow: hidden !important;
           position: relative !important;
@@ -2503,17 +2515,46 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
           overflow: hidden !important;
         }
-        div.bg-border:has([data-testid="sidebar-sash"]),
-        div.bg-border.w-\\[1px\\],
+        div:has([data-testid="sidebar-sash"]),
         [data-testid="sidebar-sash"] {
           background: rgba(0, 0, 0, 0.12) !important;
           border: none !important;
         }
-        .theme-dark div.bg-border:has([data-testid="sidebar-sash"]),
-        .dark div.bg-border:has([data-testid="sidebar-sash"]) {
+        .theme-dark div:has([data-testid="sidebar-sash"]),
+        .dark div:has([data-testid="sidebar-sash"]) {
           background: rgba(255, 255, 255, 0.1) !important;
         }
-      \`}
+        [role="navigation"][aria-label="Sidebar"] a[href="/"],
+        [role="navigation"][aria-label="Sidebar"] [aria-label="Create New Project"] {
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          color: inherit !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] {
+          padding-left: 8px !important;
+          border-radius: 6px !important;
+          box-shadow: none !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] div.grow {
+          max-width: none !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] .shrink-0.pointer-events-auto {
+          position: static !important;
+          transform: none !important;
+          max-width: none !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] .bg-sidebar-secondary {
+          border: none !important;
+          box-shadow: none !important;
+          border-radius: 6px !important;
+        }
+        #antigravity-ui-sidebar-btn {
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+        }
+      `}
 .theme-dark div.group.flex.w-full.min-w-0.items-center.min-h-8.py-1.px-2.select-none.cursor-pointer.rounded-lg {
         background: rgba(255, 255, 255, 0.03) !important;
         border-color: rgba(255, 255, 255, 0.06) !important;
