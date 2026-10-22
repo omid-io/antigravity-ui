@@ -1,53 +1,52 @@
 function generatePresetComponentVars(preset, isDark) {
   const p = (preset || 'none').toLowerCase();
-  
+
   if (p === 'clay') {
     if (!isDark) {
       return `
-        --code-card-bg: #f0f4f9;
-        --code-card-border: rgba(255, 255, 255, 0.95);
-        --code-card-border-hover: rgba(255, 255, 255, 1);
-        --code-card-radius: 18px;
-        --code-card-shadow: 6px 6px 14px rgba(166, 180, 200, 0.45), -6px -6px 14px rgba(255, 255, 255, 0.95), inset 1px 1px 2px rgba(255, 255, 255, 0.8);
-        --code-header-bg: rgba(230, 238, 248, 0.7);
-        --code-header-border: rgba(210, 224, 240, 0.8);
-        --code-lang-color: #1e3a5f;
-        --code-lang-bg: #e2ecf9;
-        --code-lang-border: rgba(255, 255, 255, 0.9);
-        --code-btn-color: #475569;
-        --code-btn-hover-color: #0f172a;
+        --code-card-bg: #f8fafc;
+        --code-card-border: rgba(210, 224, 240, 0.9);
+        --code-card-border-hover: rgba(147, 197, 253, 0.8);
+        --code-card-radius: 16px;
+        --code-card-shadow: 0 8px 20px rgba(166, 180, 200, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        --code-header-bg: linear-gradient(180deg, #f0f6ff 0%, #e2ecfa 100%);
+        --code-header-border: rgba(210, 224, 240, 0.9);
+        --code-header-color: #2d3b55;
+        --code-lang-color: #2d3b55;
+        --code-lang-bg: #ffffff;
+        --code-lang-border: rgba(210, 224, 240, 0.9);
+        --code-btn-color: #2d3b55;
+        --code-btn-hover-color: #1d4ed8;
         --code-btn-hover-bg: #ffffff;
-        --review-card-bg: #f0f4f9;
-        --review-card-border: rgba(255, 255, 255, 0.95);
-        --review-card-border-hover: rgba(255, 255, 255, 1);
-        --review-card-radius: 16px;
-        --review-card-shadow: 5px 5px 12px rgba(166, 180, 200, 0.4), -5px -5px 12px rgba(255, 255, 255, 0.9);
-        --review-btn-bg: #e2ecf9;
-        --review-btn-color: #1e3a5f;
-        --review-btn-border: rgba(255, 255, 255, 0.95);
-        --review-btn-shadow: 3px 3px 6px rgba(166, 180, 200, 0.45), -2px -2px 6px rgba(255, 255, 255, 0.95), inset 1px 1px 2px rgba(255, 255, 255, 0.8);
-        --review-btn-hover-bg: #ffffff;
-        --review-btn-hover-color: #0284c7;
-        --review-btn-hover-border: #93c5fd;
-        --diff-list-bg: #f0f4f9;
-        --table-bg: #f0f4f9;
-        --table-border: rgba(255, 255, 255, 0.95);
-        --table-radius: 16px;
-        --table-shadow: 6px 6px 14px rgba(166, 180, 200, 0.4), -6px -6px 14px rgba(255, 255, 255, 0.9);
-        --table-th-bg: #e6eef8;
-        --table-th-color: #1e3a5f;
-        --table-th-border: rgba(210, 224, 240, 0.8);
-        --table-tr-even-bg: rgba(230, 238, 248, 0.5);
-        --table-tr-hover-bg: rgba(222, 235, 250, 0.8);
-        --table-td-color: #0f172a;
-        --table-td-border: rgba(218, 230, 245, 0.7);
-        --artifact-card-bg: #f0f4f9;
-        --artifact-card-border: rgba(255, 255, 255, 0.95);
-        --artifact-card-border-hover: rgba(255, 255, 255, 1);
+        --review-bar-bg: linear-gradient(180deg, #f0f6ff 0%, #e2ecfa 100%);
+        --review-bar-border: rgba(210, 224, 240, 0.9);
+        --review-bar-shadow: 0 8px 20px rgba(166, 180, 200, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        --review-btn-bg: #3b82f6;
+        --review-btn-color: #ffffff;
+        --review-btn-border: #2563eb;
+        --review-btn-shadow: 0 4px 10px rgba(59, 130, 246, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        --review-btn-hover-bg: #2563eb;
+        --review-btn-hover-color: #ffffff;
+        --review-btn-hover-border: #1d4ed8;
+        --diff-list-bg: #ffffff;
+        --table-bg: #ffffff;
+        --table-border: rgba(210, 224, 240, 0.9);
+        --table-radius: 14px;
+        --table-shadow: 0 8px 20px rgba(166, 180, 200, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        --table-th-bg: linear-gradient(180deg, #f0f6ff 0%, #e2ecfa 100%);
+        --table-th-color: #1e293b;
+        --table-th-border: rgba(210, 224, 240, 0.9);
+        --table-tr-even-bg: rgba(240, 246, 255, 0.5);
+        --table-tr-hover-bg: rgba(226, 238, 255, 0.7);
+        --table-td-color: #1e293b;
+        --table-td-border: rgba(230, 238, 248, 0.8);
+        --artifact-card-bg: linear-gradient(180deg, #f8fafc 0%, #f0f6ff 100%);
+        --artifact-card-border: rgba(210, 224, 240, 0.9);
+        --artifact-card-border-hover: rgba(147, 197, 253, 0.9);
         --artifact-card-radius: 16px;
-        --artifact-card-shadow: 5px 5px 12px rgba(166, 180, 200, 0.4), -5px -5px 12px rgba(255, 255, 255, 0.9);
-        --artifact-title-color: #1e3a5f;
-        --artifact-summary-color: #334155;
+        --artifact-card-shadow: 0 8px 20px rgba(166, 180, 200, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        --artifact-title-color: #0f172a;
+        --artifact-summary-color: #475569;
         --titlebar-bg: #eaf0f8;
         --titlebar-border: rgba(210, 224, 240, 0.6);
         --titlebar-shadow: 0 2px 6px rgba(166, 180, 200, 0.15);
@@ -55,50 +54,49 @@ function generatePresetComponentVars(preset, isDark) {
       `;
     } else {
       return `
-        --code-card-bg: #182030;
+        --code-card-bg: linear-gradient(180deg, #182234 0%, #141b29 100%);
         --code-card-border: rgba(255, 255, 255, 0.08);
-        --code-card-border-hover: rgba(147, 197, 253, 0.2);
-        --code-card-radius: 18px;
-        --code-card-shadow: 6px 6px 16px rgba(0, 0, 0, 0.5), -4px -4px 12px rgba(45, 58, 85, 0.2), inset 1px 1px 2px rgba(255, 255, 255, 0.08);
-        --code-header-bg: rgba(20, 28, 44, 0.7);
-        --code-header-border: rgba(255, 255, 255, 0.06);
+        --code-card-border-hover: rgba(147, 197, 253, 0.35);
+        --code-card-radius: 16px;
+        --code-card-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        --code-header-bg: #1c273a;
+        --code-header-border: rgba(255, 255, 255, 0.08);
+        --code-header-color: #94a3b8;
         --code-lang-color: #93c5fd;
-        --code-lang-bg: #1e283d;
-        --code-lang-border: rgba(255, 255, 255, 0.1);
-        --code-btn-color: #94a3b8;
-        --code-btn-hover-color: #93c5fd;
-        --code-btn-hover-bg: #243048;
-        --review-card-bg: #182030;
-        --review-card-border: rgba(255, 255, 255, 0.08);
-        --review-card-border-hover: rgba(147, 197, 253, 0.2);
-        --review-card-radius: 16px;
-        --review-card-shadow: 5px 5px 14px rgba(0, 0, 0, 0.5), -3px -3px 10px rgba(45, 58, 85, 0.2);
-        --review-btn-bg: #1e283d;
-        --review-btn-color: #93c5fd;
-        --review-btn-border: rgba(255, 255, 255, 0.1);
-        --review-btn-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4), -2px -2px 6px rgba(45, 58, 85, 0.2), inset 1px 1px 2px rgba(255, 255, 255, 0.1);
-        --review-btn-hover-bg: #27344f;
+        --code-lang-bg: #1e2a40;
+        --code-lang-border: rgba(255, 255, 255, 0.08);
+        --code-btn-color: #cbd5e1;
+        --code-btn-hover-color: #60a5fa;
+        --code-btn-hover-bg: #263550;
+        --review-bar-bg: linear-gradient(180deg, #182234 0%, #141b29 100%);
+        --review-bar-border: rgba(255, 255, 255, 0.08);
+        --review-bar-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        --review-btn-bg: #2563eb;
+        --review-btn-color: #ffffff;
+        --review-btn-border: rgba(147, 197, 253, 0.3);
+        --review-btn-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        --review-btn-hover-bg: #1d4ed8;
         --review-btn-hover-color: #ffffff;
-        --review-btn-hover-border: rgba(147, 197, 253, 0.4);
-        --diff-list-bg: #182030;
-        --table-bg: #182030;
+        --review-btn-hover-border: rgba(147, 197, 253, 0.5);
+        --diff-list-bg: #141b29;
+        --table-bg: #101622;
         --table-border: rgba(255, 255, 255, 0.08);
-        --table-radius: 16px;
-        --table-shadow: 6px 6px 16px rgba(0, 0, 0, 0.5);
-        --table-th-bg: #141b29;
-        --table-th-color: #93c5fd;
-        --table-th-border: rgba(255, 255, 255, 0.07);
-        --table-tr-even-bg: rgba(20, 28, 44, 0.4);
-        --table-tr-hover-bg: rgba(30, 40, 60, 0.6);
-        --table-td-color: #e2e8f0;
-        --table-td-border: rgba(255, 255, 255, 0.05);
-        --artifact-card-bg: #182030;
+        --table-radius: 14px;
+        --table-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        --table-th-bg: #182234;
+        --table-th-color: #e2e8f0;
+        --table-th-border: rgba(255, 255, 255, 0.08);
+        --table-tr-even-bg: rgba(255, 255, 255, 0.02);
+        --table-tr-hover-bg: rgba(59, 130, 246, 0.12);
+        --table-td-color: #cbd5e1;
+        --table-td-border: rgba(255, 255, 255, 0.06);
+        --artifact-card-bg: linear-gradient(180deg, #182234 0%, #141b29 100%);
         --artifact-card-border: rgba(255, 255, 255, 0.08);
-        --artifact-card-border-hover: rgba(147, 197, 253, 0.2);
+        --artifact-card-border-hover: rgba(147, 197, 253, 0.35);
         --artifact-card-radius: 16px;
-        --artifact-card-shadow: 5px 5px 14px rgba(0, 0, 0, 0.5);
-        --artifact-title-color: #93c5fd;
-        --artifact-summary-color: #cbd5e1;
+        --artifact-card-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        --artifact-title-color: #f1f5f9;
+        --artifact-summary-color: #94a3b8;
         --titlebar-bg: #141b29;
         --titlebar-border: rgba(255, 255, 255, 0.06);
         --titlebar-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
@@ -110,104 +108,104 @@ function generatePresetComponentVars(preset, isDark) {
   if (p === '3d') {
     if (!isDark) {
       return `
-        --code-card-bg: #ffffff;
-        --code-card-border: #d1d5db;
-        --code-card-border-hover: #9ca3af;
-        --code-card-radius: 12px;
-        --code-card-shadow: 0 8px 0 #e5e7eb, 0 10px 16px rgba(0, 0, 0, 0.06);
-        --code-header-bg: #f9fafb;
-        --code-header-border: #e5e7eb;
-        --code-lang-color: #374151;
-        --code-lang-bg: #f3f4f6;
-        --code-lang-border: #d1d5db;
-        --code-btn-color: #4b5563;
-        --code-btn-hover-color: #111827;
-        --code-btn-hover-bg: #f3f4f6;
-        --review-card-bg: #ffffff;
-        --review-card-border: #d1d5db;
-        --review-card-border-hover: #9ca3af;
-        --review-card-radius: 12px;
-        --review-card-shadow: 0 4px 0 #e5e7eb, 0 6px 12px rgba(0, 0, 0, 0.05);
-        --review-btn-bg: #2563eb;
+        --code-card-bg: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        --code-card-border: #94a3b8;
+        --code-card-border-hover: #64748b;
+        --code-card-radius: 14px;
+        --code-card-shadow: 0 6px 0 #94a3b8, 0 14px 26px rgba(15, 23, 42, 0.16), inset 0 1.5px 0 #ffffff;
+        --code-header-bg: linear-gradient(180deg, #f8fafc 0%, #e2ecfa 100%);
+        --code-header-border: #cbd5e1;
+        --code-lang-color: #0f172a;
+        --code-lang-bg: #ffffff;
+        --code-lang-border: #94a3b8;
+        --code-btn-color: #1e293b;
+        --code-btn-hover-color: #0f172a;
+        --code-btn-hover-bg: #ffffff;
+        --review-bar-bg: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        --review-bar-border: #94a3b8;
+        --review-bar-border-hover: #64748b;
+        --review-card-radius: 14px;
+        --review-bar-shadow: 0 6px 0 #94a3b8, 0 14px 24px rgba(15, 23, 42, 0.14), inset 0 1.5px 0 #ffffff;
+        --review-btn-bg: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
         --review-btn-color: #ffffff;
-        --review-btn-border: #1d4ed8;
-        --review-btn-shadow: 0 2px 0 #1d4ed8;
-        --review-btn-hover-bg: #1d4ed8;
+        --review-btn-border: #1e40af;
+        --review-btn-shadow: 0 3px 0 #1e3a8a, 0 6px 12px rgba(29, 78, 216, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        --review-btn-hover-bg: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
         --review-btn-hover-color: #ffffff;
-        --review-btn-hover-border: #1e40af;
+        --review-btn-hover-border: #172554;
         --diff-list-bg: #ffffff;
         --table-bg: #ffffff;
-        --table-border: #d1d5db;
-        --table-radius: 10px;
-        --table-shadow: 0 6px 0 #e5e7eb, 0 8px 14px rgba(0, 0, 0, 0.05);
-        --table-th-bg: #f9fafb;
-        --table-th-color: #374151;
-        --table-th-border: #e5e7eb;
-        --table-tr-even-bg: #f9fafb;
-        --table-tr-hover-bg: #f3f4f6;
-        --table-td-color: #111827;
-        --table-td-border: #e5e7eb;
-        --artifact-card-bg: #ffffff;
-        --artifact-card-border: #d1d5db;
-        --artifact-card-border-hover: #9ca3af;
-        --artifact-card-radius: 12px;
-        --artifact-card-shadow: 0 4px 0 #e5e7eb, 0 6px 12px rgba(0, 0, 0, 0.05);
-        --artifact-title-color: #111827;
-        --artifact-summary-color: #4b5563;
-        --titlebar-bg: #f8fafc;
-        --titlebar-border: rgba(0, 0, 0, 0.05);
-        --titlebar-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        --table-border: #94a3b8;
+        --table-radius: 12px;
+        --table-shadow: 0 6px 0 #94a3b8, 0 16px 28px rgba(15, 23, 42, 0.14), inset 0 1.5px 0 #ffffff;
+        --table-th-bg: linear-gradient(180deg, #f8fafc 0%, #e2ecfa 100%);
+        --table-th-color: #0f172a;
+        --table-th-border: #cbd5e1;
+        --table-tr-even-bg: #f8fafc;
+        --table-tr-hover-bg: #e2e8f0;
+        --table-td-color: #0f172a;
+        --table-td-border: #e2e8f0;
+        --artifact-card-bg: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        --artifact-card-border: #94a3b8;
+        --artifact-card-border-hover: #64748b;
+        --artifact-card-radius: 14px;
+        --artifact-card-shadow: 0 6px 0 #94a3b8, 0 14px 26px rgba(15, 23, 42, 0.14), inset 0 1.5px 0 #ffffff;
+        --artifact-title-color: #0f172a;
+        --artifact-summary-color: #334155;
+        --titlebar-bg: #ffffff;
+        --titlebar-border: #cbd5e1;
+        --titlebar-shadow: 0 3px 0 #cbd5e1, 0 6px 12px rgba(0, 0, 0, 0.04);
         --backdrop-blur: none;
       `;
     } else {
       return `
-        --code-card-bg: #111827;
-        --code-card-border: rgba(255, 255, 255, 0.12);
-        --code-card-border-hover: rgba(255, 255, 255, 0.2);
-        --code-card-radius: 12px;
-        --code-card-shadow: 0 8px 0 #030712, 0 12px 24px rgba(0, 0, 0, 0.6);
-        --code-header-bg: #0f172a;
-        --code-header-border: rgba(255, 255, 255, 0.08);
-        --code-lang-color: #e5e7eb;
-        --code-lang-bg: #1f2937;
-        --code-lang-border: rgba(255, 255, 255, 0.14);
-        --code-btn-color: #9ca3af;
-        --code-btn-hover-color: #f3f4f6;
-        --code-btn-hover-bg: #1f2937;
-        --review-card-bg: #111827;
-        --review-card-border: rgba(255, 255, 255, 0.12);
-        --review-card-border-hover: rgba(255, 255, 255, 0.2);
-        --review-card-radius: 12px;
-        --review-card-shadow: 0 4px 0 #030712, 0 6px 14px rgba(0, 0, 0, 0.5);
-        --review-btn-bg: #3b82f6;
+        --code-card-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        --code-card-border: #334155;
+        --code-card-border-hover: #475569;
+        --code-card-radius: 14px;
+        --code-card-shadow: 0 6px 0 #020617, 0 18px 32px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        --code-header-bg: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+        --code-header-border: #475569;
+        --code-lang-color: #f1f5f9;
+        --code-lang-bg: #0f172a;
+        --code-lang-border: #334155;
+        --code-btn-color: #cbd5e1;
+        --code-btn-hover-color: #ffffff;
+        --code-btn-hover-bg: #334155;
+        --review-bar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        --review-bar-border: #334155;
+        --review-card-border-hover: #475569;
+        --review-card-radius: 14px;
+        --review-bar-shadow: 0 6px 0 #020617, 0 18px 32px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        --review-btn-bg: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
         --review-btn-color: #ffffff;
-        --review-btn-border: #2563eb;
-        --review-btn-shadow: 0 2px 0 #1d4ed8;
-        --review-btn-hover-bg: #2563eb;
+        --review-btn-border: #1e40af;
+        --review-btn-shadow: 0 3px 0 #020617, 0 6px 14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        --review-btn-hover-bg: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
         --review-btn-hover-color: #ffffff;
-        --review-btn-hover-border: #1d4ed8;
-        --diff-list-bg: #111827;
-        --table-bg: #111827;
-        --table-border: rgba(255, 255, 255, 0.1);
-        --table-radius: 10px;
-        --table-shadow: 0 6px 0 #030712, 0 8px 18px rgba(0, 0, 0, 0.5);
-        --table-th-bg: #0f172a;
-        --table-th-color: #e5e7eb;
-        --table-th-border: rgba(255, 255, 255, 0.1);
+        --review-btn-hover-border: #172554;
+        --diff-list-bg: #0f172a;
+        --table-bg: #0f172a;
+        --table-border: #334155;
+        --table-radius: 12px;
+        --table-shadow: 0 6px 0 #020617, 0 18px 32px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        --table-th-bg: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+        --table-th-color: #f8fafc;
+        --table-th-border: #475569;
         --table-tr-even-bg: rgba(255, 255, 255, 0.02);
         --table-tr-hover-bg: rgba(255, 255, 255, 0.06);
-        --table-td-color: #e5e7eb;
-        --table-td-border: rgba(255, 255, 255, 0.06);
-        --artifact-card-bg: #111827;
-        --artifact-card-border: rgba(255, 255, 255, 0.12);
-        --artifact-card-border-hover: rgba(255, 255, 255, 0.2);
-        --artifact-card-radius: 12px;
-        --artifact-card-shadow: 0 4px 0 #030712, 0 6px 14px rgba(0, 0, 0, 0.5);
-        --artifact-title-color: #f3f4f6;
-        --artifact-summary-color: #9ca3af;
+        --table-td-color: #e2e8f0;
+        --table-td-border: rgba(255, 255, 255, 0.08);
+        --artifact-card-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        --artifact-card-border: #334155;
+        --artifact-card-border-hover: #475569;
+        --artifact-card-radius: 14px;
+        --artifact-card-shadow: 0 6px 0 #020617, 0 18px 32px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        --artifact-title-color: #f1f5f9;
+        --artifact-summary-color: #94a3b8;
         --titlebar-bg: #0f172a;
-        --titlebar-border: rgba(255, 255, 255, 0.06);
-        --titlebar-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        --titlebar-border: #1e293b;
+        --titlebar-shadow: 0 3px 0 #020617, 0 8px 16px rgba(0, 0, 0, 0.4);
         --backdrop-blur: none;
       `;
     }
@@ -218,46 +216,46 @@ function generatePresetComponentVars(preset, isDark) {
       return `
         --code-card-bg: #ffffff;
         --code-card-border: rgba(56, 189, 248, 0.6);
-        --code-card-border-hover: rgba(14, 165, 233, 0.9);
+        --code-card-border-hover: rgba(56, 189, 248, 0.9);
         --code-card-radius: 14px;
-        --code-card-shadow: 0 0 16px rgba(14, 165, 233, 0.2), 0 4px 12px rgba(0, 0, 0, 0.04);
-        --code-header-bg: linear-gradient(90deg, rgba(224, 242, 254, 0.8) 0%, rgba(243, 232, 255, 0.8) 100%);
-        --code-header-border: rgba(56, 189, 248, 0.4);
+        --code-card-shadow: 0 0 20px rgba(56, 189, 248, 0.2), 0 4px 12px rgba(14, 165, 233, 0.1);
+        --code-header-bg: linear-gradient(90deg, rgba(14, 165, 233, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        --code-header-border: rgba(56, 189, 248, 0.3);
         --code-lang-color: #0284c7;
-        --code-lang-bg: #ffffff;
-        --code-lang-border: rgba(56, 189, 248, 0.5);
+        --code-lang-bg: rgba(56, 189, 248, 0.12);
+        --code-lang-border: rgba(56, 189, 248, 0.3);
         --code-btn-color: #0284c7;
         --code-btn-hover-color: #7c3aed;
-        --code-btn-hover-bg: #f0f9ff;
+        --code-btn-hover-bg: rgba(56, 189, 248, 0.12);
         --review-card-bg: #ffffff;
         --review-card-border: rgba(56, 189, 248, 0.6);
-        --review-card-border-hover: rgba(14, 165, 233, 0.9);
+        --review-card-border-hover: rgba(56, 189, 248, 0.9);
         --review-card-radius: 14px;
-        --review-card-shadow: 0 0 14px rgba(14, 165, 233, 0.18);
-        --review-btn-bg: linear-gradient(135deg, #0284c7 0%, #7c3aed 100%);
+        --review-card-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        --review-btn-bg: linear-gradient(135deg, #0284c7 0%, #8b5cf6 100%);
         --review-btn-color: #ffffff;
         --review-btn-border: transparent;
-        --review-btn-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
-        --review-btn-hover-bg: linear-gradient(135deg, #0369a1 0%, #6d28d9 100%);
+        --review-btn-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
+        --review-btn-hover-bg: linear-gradient(135deg, #0369a1 0%, #7c3aed 100%);
         --review-btn-hover-color: #ffffff;
         --review-btn-hover-border: transparent;
         --diff-list-bg: #ffffff;
         --table-bg: #ffffff;
-        --table-border: rgba(56, 189, 248, 0.5);
+        --table-border: rgba(56, 189, 248, 0.4);
         --table-radius: 12px;
-        --table-shadow: 0 0 16px rgba(14, 165, 233, 0.15);
-        --table-th-bg: linear-gradient(90deg, #f0f9ff 0%, #faf5ff 100%);
-        --table-th-color: #0369a1;
-        --table-th-border: rgba(56, 189, 248, 0.4);
-        --table-tr-even-bg: rgba(240, 249, 255, 0.4);
-        --table-tr-hover-bg: rgba(224, 242, 254, 0.6);
+        --table-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+        --table-th-bg: linear-gradient(90deg, rgba(14, 165, 233, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        --table-th-color: #0284c7;
+        --table-th-border: rgba(56, 189, 248, 0.3);
+        --table-tr-even-bg: rgba(56, 189, 248, 0.03);
+        --table-tr-hover-bg: rgba(56, 189, 248, 0.08);
         --table-td-color: #0f172a;
         --table-td-border: rgba(56, 189, 248, 0.15);
         --artifact-card-bg: #ffffff;
-        --artifact-card-border: rgba(56, 189, 248, 0.5);
-        --artifact-card-border-hover: rgba(14, 165, 233, 0.8);
+        --artifact-card-border: rgba(56, 189, 248, 0.45);
+        --artifact-card-border-hover: rgba(56, 189, 248, 0.8);
         --artifact-card-radius: 14px;
-        --artifact-card-shadow: 0 0 14px rgba(14, 165, 233, 0.18);
+        --artifact-card-shadow: 0 0 18px rgba(14, 165, 233, 0.18);
         --artifact-title-color: #0284c7;
         --artifact-summary-color: #334155;
         --titlebar-bg: #ffffff;
@@ -267,48 +265,48 @@ function generatePresetComponentVars(preset, isDark) {
       `;
     } else {
       return `
-        --code-card-bg: rgba(10, 15, 26, 0.92);
-        --code-card-border: rgba(56, 189, 248, 0.4);
-        --code-card-border-hover: rgba(56, 189, 248, 0.7);
+        --code-card-bg: rgba(10, 15, 26, 0.95);
+        --code-card-border: rgba(56, 189, 248, 0.5);
+        --code-card-border-hover: rgba(56, 189, 248, 0.8);
         --code-card-radius: 14px;
-        --code-card-shadow: 0 0 24px rgba(56, 189, 248, 0.22), inset 0 1px 0 rgba(56, 189, 248, 0.2);
-        --code-header-bg: linear-gradient(90deg, rgba(14, 165, 233, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
-        --code-header-border: rgba(56, 189, 248, 0.25);
+        --code-card-shadow: 0 0 24px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(56, 189, 248, 0.25);
+        --code-header-bg: linear-gradient(90deg, rgba(14, 165, 233, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+        --code-header-border: rgba(56, 189, 248, 0.3);
         --code-lang-color: #38bdf8;
-        --code-lang-bg: rgba(56, 189, 248, 0.12);
-        --code-lang-border: rgba(56, 189, 248, 0.3);
+        --code-lang-bg: rgba(56, 189, 248, 0.15);
+        --code-lang-border: rgba(56, 189, 248, 0.35);
         --code-btn-color: #38bdf8;
         --code-btn-hover-color: #a78bfa;
-        --code-btn-hover-bg: rgba(56, 189, 248, 0.15);
-        --review-card-bg: rgba(10, 15, 26, 0.92);
-        --review-card-border: rgba(56, 189, 248, 0.4);
-        --review-card-border-hover: rgba(56, 189, 248, 0.7);
+        --code-btn-hover-bg: rgba(56, 189, 248, 0.18);
+        --review-card-bg: rgba(10, 15, 26, 0.95);
+        --review-card-border: rgba(56, 189, 248, 0.5);
+        --review-card-border-hover: rgba(56, 189, 248, 0.8);
         --review-card-radius: 14px;
-        --review-card-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        --review-card-shadow: 0 0 22px rgba(56, 189, 248, 0.22);
         --review-btn-bg: linear-gradient(135deg, #0284c7 0%, #8b5cf6 100%);
         --review-btn-color: #ffffff;
         --review-btn-border: transparent;
-        --review-btn-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+        --review-btn-shadow: 0 0 16px rgba(56, 189, 248, 0.55);
         --review-btn-hover-bg: linear-gradient(135deg, #0369a1 0%, #7c3aed 100%);
         --review-btn-hover-color: #ffffff;
         --review-btn-hover-border: transparent;
-        --diff-list-bg: rgba(10, 15, 26, 0.92);
-        --table-bg: rgba(10, 15, 26, 0.92);
-        --table-border: rgba(56, 189, 248, 0.35);
+        --diff-list-bg: rgba(10, 15, 26, 0.95);
+        --table-bg: rgba(10, 15, 26, 0.95);
+        --table-border: rgba(56, 189, 248, 0.4);
         --table-radius: 12px;
-        --table-shadow: 0 0 22px rgba(56, 189, 248, 0.18);
-        --table-th-bg: linear-gradient(90deg, rgba(14, 165, 233, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+        --table-shadow: 0 0 22px rgba(56, 189, 248, 0.2);
+        --table-th-bg: linear-gradient(90deg, rgba(14, 165, 233, 0.18) 0%, rgba(139, 92, 246, 0.18) 100%);
         --table-th-color: #38bdf8;
-        --table-th-border: rgba(56, 189, 248, 0.25);
-        --table-tr-even-bg: rgba(56, 189, 248, 0.03);
-        --table-tr-hover-bg: rgba(56, 189, 248, 0.08);
+        --table-th-border: rgba(56, 189, 248, 0.3);
+        --table-tr-even-bg: rgba(56, 189, 248, 0.04);
+        --table-tr-hover-bg: rgba(56, 189, 248, 0.1);
         --table-td-color: #e2e8f0;
-        --table-td-border: rgba(56, 189, 248, 0.15);
-        --artifact-card-bg: rgba(10, 15, 26, 0.92);
-        --artifact-card-border: rgba(56, 189, 248, 0.35);
-        --artifact-card-border-hover: rgba(56, 189, 248, 0.6);
+        --table-td-border: rgba(56, 189, 248, 0.18);
+        --artifact-card-bg: rgba(10, 15, 26, 0.95);
+        --artifact-card-border: rgba(56, 189, 248, 0.4);
+        --artifact-card-border-hover: rgba(56, 189, 248, 0.7);
         --artifact-card-radius: 14px;
-        --artifact-card-shadow: 0 0 20px rgba(56, 189, 248, 0.18);
+        --artifact-card-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
         --artifact-title-color: #38bdf8;
         --artifact-summary-color: #cbd5e1;
         --titlebar-bg: #090d16;
@@ -323,40 +321,39 @@ function generatePresetComponentVars(preset, isDark) {
     if (!isDark) {
       return `
         --code-card-bg: rgba(255, 255, 255, 0.88);
-        --code-card-border: rgba(226, 232, 240, 0.95);
+        --code-card-border: rgba(226, 232, 240, 0.85);
         --code-card-border-hover: rgba(186, 215, 248, 1);
         --code-card-radius: 16px;
-        --code-card-shadow: 0 10px 28px -4px rgba(67, 105, 169, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.95);
-        --code-header-bg: linear-gradient(180deg, rgba(248, 250, 252, 0.85) 0%, rgba(241, 245, 249, 0.85) 100%);
-        --code-header-border: rgba(226, 232, 240, 0.9);
-        --code-lang-color: #334155;
-        --code-lang-bg: rgba(255, 255, 255, 0.9);
-        --code-lang-border: rgba(203, 213, 225, 0.8);
+        --code-card-shadow: 0 8px 24px -4px rgba(67, 105, 169, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        --code-header-bg: rgba(248, 250, 252, 0.88);
+        --code-header-border: rgba(226, 232, 240, 0.7);
+        --code-header-color: #475569;
+        --code-lang-color: #3b82f6;
+        --code-lang-bg: rgba(59, 130, 246, 0.08);
+        --code-lang-border: rgba(59, 130, 246, 0.2);
         --code-btn-color: #64748b;
-        --code-btn-hover-color: #0284c7;
-        --code-btn-hover-bg: rgba(255, 255, 255, 0.95);
-        --review-card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.92) 100%);
-        --review-card-border: rgba(226, 232, 240, 0.95);
-        --review-card-border-hover: rgba(186, 215, 248, 1);
-        --review-card-radius: 14px;
-        --review-card-shadow: 0 8px 24px -4px rgba(67, 105, 169, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
-        --review-btn-bg: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-        --review-btn-color: #0f172a;
-        --review-btn-border: rgba(203, 213, 225, 0.9);
-        --review-btn-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), inset 0 1px 0 #fff;
-        --review-btn-hover-bg: #ffffff;
-        --review-btn-hover-color: #0284c7;
-        --review-btn-hover-border: #38bdf8;
-        --diff-list-bg: rgba(255, 255, 255, 0.88);
+        --code-btn-hover-color: #1e293b;
+        --code-btn-hover-bg: rgba(0, 0, 0, 0.04);
+        --review-bar-bg: rgba(255, 255, 255, 0.88);
+        --review-bar-border: rgba(226, 232, 240, 0.85);
+        --review-bar-shadow: 0 8px 24px -4px rgba(67, 105, 169, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        --review-btn-bg: rgba(255, 255, 255, 0.95);
+        --review-btn-color: #1e293b;
+        --review-btn-border: rgba(226, 232, 240, 0.95);
+        --review-btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
+        --review-btn-hover-bg: #3b82f6;
+        --review-btn-hover-color: #ffffff;
+        --review-btn-hover-border: #2563eb;
+        --diff-list-bg: rgba(255, 255, 255, 0.95);
         --table-bg: rgba(255, 255, 255, 0.92);
-        --table-border: rgba(226, 232, 240, 0.95);
-        --table-radius: 14px;
-        --table-shadow: 0 8px 24px -4px rgba(67, 105, 169, 0.08);
-        --table-th-bg: linear-gradient(180deg, rgba(248, 250, 252, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%);
-        --table-th-color: #475569;
-        --table-th-border: rgba(226, 232, 240, 1);
-        --table-tr-even-bg: rgba(248, 250, 252, 0.65);
-        --table-tr-hover-bg: rgba(238, 244, 255, 0.8);
+        --table-border: rgba(226, 232, 240, 0.85);
+        --table-radius: 12px;
+        --table-shadow: 0 6px 20px -2px rgba(67, 105, 169, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        --table-th-bg: linear-gradient(180deg, rgba(248, 250, 252, 0.95) 0%, rgba(241, 245, 249, 0.85) 100%);
+        --table-th-color: #334155;
+        --table-th-border: rgba(226, 232, 240, 0.9);
+        --table-tr-even-bg: rgba(248, 250, 252, 0.5);
+        --table-tr-hover-bg: rgba(239, 246, 255, 0.7);
         --table-td-color: #1e293b;
         --table-td-border: rgba(241, 245, 249, 1);
         --artifact-card-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 250, 252, 0.92) 100%);
@@ -378,39 +375,38 @@ function generatePresetComponentVars(preset, isDark) {
         --code-card-border-hover: rgba(147, 197, 253, 0.3);
         --code-card-radius: 16px;
         --code-card-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        --code-header-bg: rgba(255, 255, 255, 0.03);
-        --code-header-border: rgba(255, 255, 255, 0.06);
-        --code-lang-color: #cbd5e1;
-        --code-lang-bg: rgba(255, 255, 255, 0.07);
-        --code-lang-border: rgba(255, 255, 255, 0.12);
+        --code-header-bg: rgba(24, 32, 47, 0.85);
+        --code-header-border: rgba(255, 255, 255, 0.08);
+        --code-header-color: #94a3b8;
+        --code-lang-color: #60a5fa;
+        --code-lang-bg: rgba(59, 130, 246, 0.15);
+        --code-lang-border: rgba(59, 130, 246, 0.25);
         --code-btn-color: #94a3b8;
-        --code-btn-hover-color: #38bdf8;
-        --code-btn-hover-bg: rgba(255, 255, 255, 0.1);
-        --review-card-bg: linear-gradient(135deg, rgba(22, 28, 44, 0.92) 0%, rgba(16, 22, 34, 0.88) 100%);
-        --review-card-border: rgba(255, 255, 255, 0.1);
-        --review-card-border-hover: rgba(147, 197, 253, 0.3);
-        --review-card-radius: 14px;
-        --review-card-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        --review-btn-bg: linear-gradient(180deg, #252e42 0%, #1a2233 100%);
-        --review-btn-color: #f1f5f9;
-        --review-btn-border: rgba(255, 255, 255, 0.14);
-        --review-btn-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        --review-btn-hover-bg: #2b354d;
-        --review-btn-hover-color: #38bdf8;
-        --review-btn-hover-border: rgba(56, 189, 248, 0.5);
-        --diff-list-bg: rgba(18, 24, 38, 0.88);
+        --code-btn-hover-color: #f8fafc;
+        --code-btn-hover-bg: rgba(255, 255, 255, 0.06);
+        --review-bar-bg: rgba(18, 24, 38, 0.85);
+        --review-bar-border: rgba(255, 255, 255, 0.1);
+        --review-bar-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        --review-btn-bg: rgba(30, 41, 59, 0.95);
+        --review-btn-color: #f8fafc;
+        --review-btn-border: rgba(255, 255, 255, 0.12);
+        --review-btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        --review-btn-hover-bg: #2563eb;
+        --review-btn-hover-color: #ffffff;
+        --review-btn-hover-border: #3b82f6;
+        --diff-list-bg: rgba(18, 24, 38, 0.85);
         --table-bg: rgba(18, 24, 38, 0.85);
         --table-border: rgba(255, 255, 255, 0.1);
-        --table-radius: 14px;
-        --table-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.5);
-        --table-th-bg: linear-gradient(180deg, rgba(28, 36, 56, 0.9) 0%, rgba(22, 29, 45, 0.9) 100%);
+        --table-radius: 12px;
+        --table-shadow: 0 8px 26px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        --table-th-bg: rgba(24, 32, 47, 0.9);
         --table-th-color: #cbd5e1;
-        --table-th-border: rgba(255, 255, 255, 0.1);
-        --table-tr-even-bg: rgba(255, 255, 255, 0.025);
-        --table-tr-hover-bg: rgba(255, 255, 255, 0.06);
-        --table-td-color: #e2e8f0;
+        --table-th-border: rgba(255, 255, 255, 0.08);
+        --table-tr-even-bg: rgba(255, 255, 255, 0.02);
+        --table-tr-hover-bg: rgba(59, 130, 246, 0.1);
+        --table-td-color: #cbd5e1;
         --table-td-border: rgba(255, 255, 255, 0.06);
-        --artifact-card-bg: linear-gradient(135deg, rgba(22, 28, 44, 0.92) 0%, rgba(16, 22, 34, 0.88) 100%);
+        --artifact-card-bg: linear-gradient(135deg, rgba(20, 26, 40, 0.96) 0%, rgba(15, 20, 32, 0.92) 100%);
         --artifact-card-border: rgba(255, 255, 255, 0.1);
         --artifact-card-border-hover: rgba(147, 197, 253, 0.3);
         --artifact-card-radius: 14px;
@@ -428,44 +424,43 @@ function generatePresetComponentVars(preset, isDark) {
   // Default 'none' (Sleek Linear Minimal)
   if (!isDark) {
     return `
-      --code-card-bg: #f8fafc;
+      --code-card-bg: #ffffff;
       --code-card-border: #e2e8f0;
       --code-card-border-hover: #cbd5e1;
-      --code-card-radius: 12px;
+      --code-card-radius: 10px;
       --code-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-      --code-header-bg: #f1f5f9;
+      --code-header-bg: #f8fafc;
       --code-header-border: #e2e8f0;
+      --code-header-color: #475569;
       --code-lang-color: #475569;
-      --code-lang-bg: #ffffff;
+      --code-lang-bg: #f1f5f9;
       --code-lang-border: #e2e8f0;
       --code-btn-color: #64748b;
       --code-btn-hover-color: #0f172a;
-      --code-btn-hover-bg: #ffffff;
-      --review-card-bg: #f8fafc;
-      --review-card-border: #e2e8f0;
-      --review-card-border-hover: #cbd5e1;
-      --review-card-radius: 10px;
-      --review-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-      --review-btn-bg: #ffffff;
-      --review-btn-color: #0f172a;
-      --review-btn-border: #cbd5e1;
-      --review-btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-      --review-btn-hover-bg: #f8fafc;
-      --review-btn-hover-color: #0284c7;
-      --review-btn-hover-border: #94a3b8;
-      --diff-list-bg: #f8fafc;
+      --code-btn-hover-bg: #f1f5f9;
+      --review-bar-bg: #ffffff;
+      --review-bar-border: #e2e8f0;
+      --review-bar-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      --review-btn-bg: #0f172a;
+      --review-btn-color: #ffffff;
+      --review-btn-border: #0f172a;
+      --review-btn-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --review-btn-hover-bg: #1e293b;
+      --review-btn-hover-color: #ffffff;
+      --review-btn-hover-border: #1e293b;
+      --diff-list-bg: #ffffff;
       --table-bg: #ffffff;
       --table-border: #e2e8f0;
       --table-radius: 8px;
-      --table-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+      --table-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       --table-th-bg: #f8fafc;
       --table-th-color: #475569;
       --table-th-border: #e2e8f0;
       --table-tr-even-bg: #f8fafc;
       --table-tr-hover-bg: #f1f5f9;
-      --table-td-color: #1e293b;
+      --table-td-color: #0f172a;
       --table-td-border: #f1f5f9;
-      --artifact-card-bg: #f8fafc;
+      --artifact-card-bg: #ffffff;
       --artifact-card-border: #e2e8f0;
       --artifact-card-border-hover: #cbd5e1;
       --artifact-card-radius: 10px;
@@ -531,7 +526,6 @@ function generatePresetComponentVars(preset, isDark) {
   }
 }
 
-
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { homedir } from 'node:os';
@@ -591,16 +585,16 @@ function getDevToolsPort() {
 }
 
 function getShadowCSS(type, borderCol, mode) {
-  if (type === 'none') return 'none';
+  if (type === 'none') return mode === 'light' ? '0 1px 3px rgba(0, 0, 0, 0.05)' : '0 1px 4px rgba(0, 0, 0, 0.3)';
   if (mode === 'light') {
     switch (type) {
       case 'soft':
         return '0 -2px 8px rgba(67, 105, 169, 0.045), 0 12px 30px rgba(67, 105, 169, 0.11), 0 3px 8px rgba(64, 101, 163, 0.05), inset 0 1.5px 0 rgba(255,255,255,0.99), inset 0 -1px 0 rgba(117,158,222,0.12), inset 1px 0 0 rgba(255,255,255,0.58), inset -1px 0 0 rgba(109,151,219,0.08)';
       case '3d':
       case 'medium':
-        return '0 5px 0 0 rgba(0, 0, 0, 0.18), 0 12px 24px -2px rgba(15, 23, 42, 0.22)';
+        return '0 6px 0 #94a3b8, 0 14px 28px -2px rgba(15, 23, 42, 0.2), inset 0 2px 0 #ffffff';
       case 'glow':
-        return `0 0 0 1.5px ${borderCol}, 0 6px 22px 3px ${borderCol}66, 0 2px 6px ${borderCol}40`;
+        return `0 0 0 1.5px ${borderCol}, 0 0 20px 2px ${borderCol}66, 0 2px 6px ${borderCol}40`;
       case 'clay':
         return '0 16px 32px -4px rgba(70, 95, 140, 0.2), 0 6px 14px -2px rgba(70, 95, 140, 0.1), inset 3.5px 3.5px 6px rgba(255, 255, 255, 0.95), inset -3.5px -3.5px 7px rgba(70, 95, 140, 0.12)';
       default:
@@ -612,7 +606,7 @@ function getShadowCSS(type, borderCol, mode) {
         return '0 -2px 8px rgba(0, 0, 0, 0.18), 0 12px 30px rgba(0, 0, 0, 0.42), 0 3px 8px rgba(0, 0, 0, 0.22), inset 0 1.5px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(0, 0, 0, 0.5)';
       case '3d':
       case 'medium':
-        return '0 5px 0 0 rgba(0, 0, 0, 0.8), 0 14px 28px -3px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.15)';
+        return '0 6px 0 #020617, 0 18px 34px -2px rgba(0, 0, 0, 0.9), inset 0 1.5px 0 rgba(255, 255, 255, 0.18)';
       case 'glow':
         return `0 0 0 1.5px ${borderCol}, 0 0 25px 4px ${borderCol}88, 0 0 50px 10px ${borderCol}44`;
       case 'clay':
@@ -654,26 +648,48 @@ function generateScript(c) {
     ...(c.userMsgLight || {})
   };
 
-  const isDarkClay = userMsgDark.shadow === 'clay';
   const isLightClay = userMsgLight.shadow === 'clay';
+  const isDarkClay = userMsgDark.shadow === 'clay';
+  const isLightSoft = userMsgLight.shadow === 'soft';
   const isDarkSoft = userMsgDark.shadow === 'soft';
+  const isLight3D = userMsgLight.shadow === '3d';
+  const isDark3D = userMsgDark.shadow === '3d';
+  const isLightGlow = userMsgLight.shadow === 'glow';
+  const isDarkGlow = userMsgDark.shadow === 'glow';
 
   const lightPresetName = (userMsgLight.preset || userMsgLight.shadow || 'none').toLowerCase();
   const darkPresetName = (userMsgDark.preset || userMsgDark.shadow || 'none').toLowerCase();
   const lightComponentVars = generatePresetComponentVars(lightPresetName, false);
   const darkComponentVars = generatePresetComponentVars(darkPresetName, true);
-  const isLightSoft = userMsgLight.shadow === 'soft';
 
-  const lightBg = isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' : (isLightSoft ? 'linear-gradient(112deg, rgba(255,255,255,0.97) 0%, rgba(249,252,255,0.96) 20%, rgba(236,244,255,0.94) 58%, rgba(222,235,255,0.95) 100%)' : userMsgLight.bg);
-  const lightText = isLightClay ? '#0f172a' : (isLightSoft ? '#243a59' : userMsgLight.text);
-  const lightBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' : (isLightSoft ? 'rgba(255, 255, 255, 0.96)' : userMsgLight.border);
-  const lightBorderWidth = isLightClay ? '1.5' : (isLightSoft ? (userMsgLight.borderWidth || '1') : userMsgLight.borderWidth);
+  const lightBg = isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' :
+                  (isLightSoft ? 'linear-gradient(112deg, rgba(255,255,255,0.97) 0%, rgba(249,252,255,0.96) 20%, rgba(236,244,255,0.94) 58%, rgba(222,235,255,0.95) 100%)' :
+                  (isLight3D ? 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%)' :
+                  (isLightGlow ? '#ffffff' : userMsgLight.bg)));
+
+  const lightText = isLightClay ? '#0f172a' : (isLightSoft ? '#243a59' : (isLight3D ? '#0f172a' : userMsgLight.text));
+
+  const lightBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' :
+                      (isLightSoft ? 'rgba(255, 255, 255, 0.96)' :
+                      (isLight3D ? '#94a3b8' :
+                      (isLightGlow ? 'rgba(56, 189, 248, 0.8)' : userMsgLight.border)));
+
+  const lightBorderWidth = (isLightClay || isLight3D || isLightGlow) ? '1.5' : (userMsgLight.borderWidth || '1');
   const lightBorderRadius = (userMsgLight && userMsgLight.borderRadius) || '14';
 
-  const darkBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : (isDarkSoft ? 'linear-gradient(112deg, rgba(30, 41, 59, 0.95) 0%, rgba(23, 32, 48, 0.93) 50%, rgba(15, 23, 42, 0.92) 100%)' : userMsgDark.bg);
-  const darkText = isDarkClay ? '#f8fafc' : (isDarkSoft ? '#e2e8f0' : userMsgDark.text);
-  const darkBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : (isDarkSoft ? 'rgba(255, 255, 255, 0.16)' : userMsgDark.border);
-  const darkBorderWidth = isDarkClay ? '1.5' : (isDarkSoft ? (userMsgDark.borderWidth || '1') : userMsgDark.borderWidth);
+  const darkBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' :
+                 (isDarkSoft ? 'linear-gradient(112deg, rgba(30, 41, 59, 0.95) 0%, rgba(23, 32, 48, 0.93) 50%, rgba(15, 23, 42, 0.92) 100%)' :
+                 (isDark3D ? 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)' :
+                 (isDarkGlow ? '#0b101b' : userMsgDark.bg)));
+
+  const darkText = isDarkClay ? '#f8fafc' : (isDarkSoft ? '#e2e8f0' : (isDark3D ? '#f8fafc' : userMsgDark.text));
+
+  const darkBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' :
+                     (isDarkSoft ? 'rgba(255, 255, 255, 0.16)' :
+                     (isDark3D ? '#334155' :
+                     (isDarkGlow ? 'rgba(56, 189, 248, 0.8)' : userMsgDark.border)));
+
+  const darkBorderWidth = (isDarkClay || isDark3D || isDarkGlow) ? '1.5' : (userMsgDark.borderWidth || '1');
   const darkBorderRadius = (userMsgDark && userMsgDark.borderRadius) || '14';
 
   // Strict Unicode-range virtual font definitions
@@ -998,12 +1014,37 @@ function generateScript(c) {
     }
   ` : '';
 
-  const lightInputBg = isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' : (isLightSoft ? 'rgba(255, 255, 255, 0.92)' : 'transparent');
-  const darkInputBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' : (isDarkSoft ? 'rgba(24, 32, 47, 0.88)' : 'transparent');
-  const lightInputBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' : (isLightSoft ? 'rgba(255, 255, 255, 0.96)' : lightBorder);
-  const darkInputBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' : (isDarkSoft ? 'rgba(255, 255, 255, 0.14)' : darkBorder);
-  const lightInputShadow = isLightClay ? lightShadow : (isLightSoft ? '0 10px 28px rgba(67, 105, 169, 0.10), 0 2px 6px rgba(64, 101, 163, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.95)' : (userMsgLight.shadow === 'none' ? 'none' : lightShadow));
-  const darkInputShadow = isDarkClay ? darkShadow : (isDarkSoft ? '0 10px 28px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12)' : (userMsgDark.shadow === 'none' ? 'none' : darkShadow));
+  const lightInputBg = isLightClay ? 'linear-gradient(145deg, #f0f6ff 0%, #e2ecfa 100%)' :
+                       (isLightSoft ? 'rgba(255, 255, 255, 0.92)' :
+                       (isLight3D ? 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)' :
+                       (isLightGlow ? '#ffffff' : 'transparent')));
+
+  const darkInputBg = isDarkClay ? 'linear-gradient(145deg, #1e2638 0%, #141b29 100%)' :
+                      (isDarkSoft ? 'rgba(24, 32, 47, 0.88)' :
+                      (isDark3D ? 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)' :
+                      (isDarkGlow ? '#0b101b' : 'transparent')));
+
+  const lightInputBorder = isLightClay ? 'rgba(255, 255, 255, 0.95)' :
+                           (isLightSoft ? 'rgba(255, 255, 255, 0.96)' :
+                           (isLight3D ? '#94a3b8' :
+                           (isLightGlow ? 'rgba(56, 189, 248, 0.8)' : lightBorder)));
+
+  const darkInputBorder = isDarkClay ? 'rgba(147, 197, 253, 0.24)' :
+                          (isDarkSoft ? 'rgba(255, 255, 255, 0.14)' :
+                          (isDark3D ? '#334155' :
+                          (isDarkGlow ? 'rgba(56, 189, 248, 0.8)' : darkBorder)));
+
+  const lightInputShadow = isLightClay ? lightShadow :
+                           (isLightSoft ? '0 10px 28px rgba(67, 105, 169, 0.10), 0 2px 6px rgba(64, 101, 163, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.95)' :
+                           (isLight3D ? '0 5px 0 #cbd5e1, 0 12px 24px rgba(15, 23, 42, 0.12), inset 0 1.5px 0 #ffffff' :
+                           (isLightGlow ? '0 0 0 1.5px rgba(56, 189, 248, 0.6), 0 0 20px rgba(56, 189, 248, 0.2)' :
+                           (userMsgLight.shadow === 'none' ? 'none' : lightShadow))));
+
+  const darkInputShadow = isDarkClay ? darkShadow :
+                          (isDarkSoft ? '0 10px 28px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12)' :
+                          (isDark3D ? '0 5px 0 #020617, 0 14px 28px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.15)' :
+                          (isDarkGlow ? '0 0 0 1.5px rgba(56, 189, 248, 0.6), 0 0 25px rgba(56, 189, 248, 0.3)' :
+                          (userMsgDark.shadow === 'none' ? 'none' : darkShadow))));
 
   const inputBoxCSS = inputBoxEnabled ? `
     :root, body, body.light, body.theme-light {
@@ -1682,7 +1723,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.2.0';
+  return '3.5.2';
 }
 
 function compareVersions(v1, v2) {
