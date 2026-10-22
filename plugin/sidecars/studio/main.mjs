@@ -1224,17 +1224,15 @@ function generateScript(c) {
     uiStyle.textContent = \`
       ${extraFontRules}
 
-      /* Seamless Sidebar Top Action Buttons Gap Fix (Prevents Search Icon Overflow) */
-      div:has(> button[aria-label="Toggle Sidebar"]) {
-        gap: 2px !important;
-      }
+      /* Antigravity Logo & Sidebar Top Actions Harmonious Spacing */
       div.flex.items-center:has(> button[data-testid="app-icon-new-conversation-button"]) {
         padding-left: 4px !important;
+        gap: 8px !important;
       }
       button[data-testid="app-icon-new-conversation-button"] {
-        padding-left: 2px !important;
-        padding-right: 4px !important;
-        margin-right: 2px !important;
+        padding: 0 2px !important;
+        margin-right: 4px !important;
+        flex-shrink: 0 !important;
       }
 
       /* Compact Sidebar Resizer Support */
@@ -1402,53 +1400,78 @@ function generateScript(c) {
         div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
           top: ${c.floatingSidebar !== false ? '10px' : '0px'} !important;
           left: ${c.floatingSidebar !== false ? '10px' : '0px'} !important;
+          padding-left: 4px !important;
+          padding-top: 4px !important;
+          padding-right: 4px !important;
           width: calc(var(--sidebar-width, 160px) - ${c.floatingSidebar !== false ? '20px' : '8px'}) !important;
           max-width: calc(var(--sidebar-width, 160px) - ${c.floatingSidebar !== false ? '20px' : '8px'}) !important;
-          padding: 4px 6px !important;
           box-sizing: border-box !important;
           z-index: 35 !important;
-          overflow: hidden !important;
         }
+
+        /* Toolbar direct container */
         div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div {
-          width: 100% !important;
           display: flex !important;
           align-items: center !important;
-          justify-content: space-between !important;
+          width: 100% !important;
           padding: 0 !important;
-          gap: 2px !important;
+          gap: 8px !important;
         }
+
+        /* Antigravity Logo - Standard native size, zero shrinking */
+        button[data-testid="app-icon-new-conversation-button"] {
+          padding: 0 !important;
+          margin: 0 !important;
+          width: 24px !important;
+          height: 28px !important;
+          flex-shrink: 0 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+        button[data-testid="app-icon-new-conversation-button"] svg {
+          width: 24px !important;
+          height: 24px !important;
+          fill: currentColor !important;
+        }
+        .theme-dark button[data-testid="app-icon-new-conversation-button"] svg,
+        .dark button[data-testid="app-icon-new-conversation-button"] svg {
+          fill: #f8fafc !important;
+        }
+
+        /* Action Buttons Container (Toggle, Back/Forward, Search) */
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div > div.flex.items-center {
+          display: flex !important;
+          align-items: center !important;
+          flex: 1 !important;
+          min-width: 0 !important;
+          gap: clamp(1px, calc((var(--sidebar-width, 160px) - 160px) / 12), 6px) !important;
+          justify-content: flex-start !important;
+        }
+
+        /* Back / Forward inner pair */
         div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 {
           display: flex !important;
           align-items: center !important;
-          justify-content: flex-end !important;
-          gap: clamp(1px, 1.2vw, 6px) !important;
-          flex: 1 1 auto !important;
-          min-width: 0 !important;
+          gap: clamp(1px, calc((var(--sidebar-width, 160px) - 160px) / 20), 4px) !important;
         }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button {
-          width: clamp(20px, 4.5vw, 26px) !important;
-          height: clamp(20px, 4.5vw, 26px) !important;
-          min-width: 20px !important;
+
+        /* Search icon */
+        button[data-testid="sidebar-search-button"] {
+          flex-shrink: 0 !important;
+          margin-left: auto !important;
+        }
+
+        /* Action Buttons - Standard native size, zero shrinking */
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) {
+          width: 26px !important;
+          height: 26px !important;
+          flex-shrink: 0 !important;
           padding: 0 !important;
-          margin: 0 !important;
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          flex-shrink: 0 !important;
         }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button[aria-label="New Conversation"] {
-          width: clamp(20px, 4.5vw, 24px) !important;
-          height: clamp(20px, 4.5vw, 26px) !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          flex-shrink: 0 !important;
-        }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 > div {
-          display: flex !important;
-          align-items: center !important;
-          gap: 1px !important;
-          width: auto !important;
-          flex-shrink: 0 !important;
+        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) svg {
+          width: 18px !important;
+          height: 18px !important;
         }
       ` : ''}
 
