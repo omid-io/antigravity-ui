@@ -1406,9 +1406,9 @@ function generateScript(c) {
           width: 100% !important;
         }
 
-        /* Responsive Fluid Top Toolbar - Tied to Compact Sidebar (160px) Switch */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]),
-        div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
+        /* Responsive Fluid Top Toolbar - Tied to Compact Sidebar (160px) Switch (Only when expanded) */
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]),
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
           top: ${c.floatingSidebar !== false ? '10px' : '0px'} !important;
           left: ${c.floatingSidebar !== false ? '10px' : '0px'} !important;
           padding-left: 4px !important;
@@ -1421,7 +1421,7 @@ function generateScript(c) {
         }
 
         /* Toolbar direct container */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div {
           display: flex !important;
           align-items: center !important;
           width: 100% !important;
@@ -1451,7 +1451,7 @@ function generateScript(c) {
         }
 
         /* Action Buttons Container (Toggle, Back/Forward, Search) */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div > div.flex.items-center {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div > div.flex.items-center {
           display: flex !important;
           align-items: center !important;
           flex: 1 !important;
@@ -1461,26 +1461,26 @@ function generateScript(c) {
         }
 
         /* Back / Forward inner pair */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 {
           display: flex !important;
           align-items: center !important;
           gap: clamp(1px, calc((var(--sidebar-width, 160px) - 160px) / 20), 4px) !important;
         }
 
         /* Search icon */
-        button[data-testid="sidebar-search-button"] {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) button[data-testid="sidebar-search-button"] {
           flex-shrink: 0 !important;
           margin-left: auto !important;
         }
 
         /* Action Buttons - Standard native size, zero shrinking */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) {
           width: 26px !important;
           height: 26px !important;
           flex-shrink: 0 !important;
           padding: 0 !important;
         }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) svg {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) svg {
           width: 18px !important;
           height: 18px !important;
         }
@@ -2360,7 +2360,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.6.7';
+  return '3.6.8';
 }
 
 function compareVersions(v1, v2) {

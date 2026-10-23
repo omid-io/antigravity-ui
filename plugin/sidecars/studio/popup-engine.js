@@ -1366,20 +1366,20 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     const inputBoxEnabled = Boolean(c.inputBoxEnabled);
 
     const userMsgDark = {
-      bg: '#1a2230',
+      bg: '#1e2433',
       text: '#f1f5f9',
-      border: '#3b4b66',
+      border: '#384c6e',
       borderWidth: '1.5',
-      shadow: 'clay',
+      shadow: 'soft',
       ...(c.userMsgDark || {})
     };
 
     const userMsgLight = {
-      bg: '#e8eef6',
+      bg: '#f0f4ff',
       text: '#0f172a',
-      border: '#c5d2e2',
+      border: '#cbd5e1',
       borderWidth: '1.5',
-      shadow: 'clay',
+      shadow: 'soft',
       ...(c.userMsgLight || {})
     };
 
@@ -1830,9 +1830,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           width: 100% !important;
         }
 
-        /* Responsive Fluid Top Toolbar - Tied to Compact Sidebar (160px) Switch */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]),
-        div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
+        /* Responsive Fluid Top Toolbar - Tied to Compact Sidebar (160px) Switch (Only when expanded) */
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]),
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label="Toggle Sidebar"]) {
           top: \${c.floatingSidebar !== false ? '10px' : '0px'} !important;
           left: \${c.floatingSidebar !== false ? '10px' : '0px'} !important;
           padding-left: 4px !important;
@@ -1845,7 +1845,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
 
         /* Toolbar direct container */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div {
           display: flex !important;
           align-items: center !important;
           width: 100% !important;
@@ -1875,7 +1875,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
 
         /* Action Buttons Container (Toggle, Back/Forward, Search) */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div > div.flex.items-center {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) > div > div.flex.items-center {
           display: flex !important;
           align-items: center !important;
           flex: 1 !important;
@@ -1885,26 +1885,26 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
 
         /* Back / Forward inner pair */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) div.flex.items-center.gap-1 {
           display: flex !important;
           align-items: center !important;
           gap: clamp(1px, calc((var(--sidebar-width, 160px) - 160px) / 20), 4px) !important;
         }
 
         /* Search icon */
-        button[data-testid="sidebar-search-button"] {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) button[data-testid="sidebar-search-button"] {
           flex-shrink: 0 !important;
           margin-left: auto !important;
         }
 
         /* Action Buttons - Standard native size, zero shrinking */
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) {
           width: 26px !important;
           height: 26px !important;
           flex-shrink: 0 !important;
           padding: 0 !important;
         }
-        div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) svg {
+        .h-screen:has([data-testid="sidebar-toggle"][aria-expanded="true"]) div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"]) button:not([data-testid="app-icon-new-conversation-button"]) svg {
           width: 18px !important;
           height: 18px !important;
         }
@@ -3010,8 +3010,66 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
       }
 
+      /* Light Mode Tokens (Default Soft Glass) */
+      :root, body, body.light, body.theme-light, body.vscode-light, .rtl-widget-panel.rtl-is-light, .rtl-widget-panel.rtl-popup-soft.rtl-is-light {
+        --rtl-bg: rgba(255, 255, 255, 0.94);
+        --rtl-surface: #f1f5f9;
+        --rtl-surface-hover: #e2e8f0;
+        --rtl-card-bg: #f8fafc;
+        --rtl-card-border: #e2e8f0;
+        --rtl-card-border-hover: rgba(147, 197, 253, 0.6);
+        --rtl-text: #0f172a;
+        --rtl-text-secondary: #334155;
+        --rtl-text-muted: #64748b;
+        --rtl-border: #e2e8f0;
+        --rtl-border-subtle: #f1f5f9;
+        --rtl-input-bg: #ffffff;
+        --rtl-input-border: #cbd5e1;
+        --rtl-slider-track: #e2e8f0;
+        --rtl-badge-bg: #f1f5f9;
+        --rtl-badge-border: #e2e8f0;
+        --rtl-accent: #2563eb;
+        --rtl-accent-hover: #1d4ed8;
+        --rtl-accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        --rtl-toggle-off: #cbd5e1;
+        --rtl-shadow-panel: 0 16px 36px -6px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(15, 23, 42, 0.06);
+        --rtl-shadow-card: 0 4px 14px -2px rgba(67, 105, 169, 0.06), 0 1px 2px rgba(0, 0, 0, 0.02);
+        --rtl-shadow-inset: none;
+        --rtl-shadow-pill: 0 2px 8px rgba(37, 99, 235, 0.25);
+        --rtl-ring: rgba(37, 99, 235, 0.25);
+      }
+
+      /* Dark Mode Tokens (Default Soft Dark Glass) */
+      body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark, .rtl-widget-panel.rtl-is-dark, .rtl-widget-panel.rtl-popup-soft.rtl-is-dark {
+        --rtl-bg: rgba(18, 24, 38, 0.94);
+        --rtl-surface: #121824;
+        --rtl-surface-hover: #1a2232;
+        --rtl-card-bg: rgba(24, 32, 48, 0.7);
+        --rtl-card-border: rgba(255, 255, 255, 0.08);
+        --rtl-card-border-hover: rgba(147, 197, 253, 0.25);
+        --rtl-text: #f8fafc;
+        --rtl-text-secondary: #cbd5e1;
+        --rtl-text-muted: #94a3b8;
+        --rtl-border: rgba(255, 255, 255, 0.09);
+        --rtl-border-subtle: rgba(255, 255, 255, 0.05);
+        --rtl-input-bg: #0e121a;
+        --rtl-input-border: rgba(255, 255, 255, 0.12);
+        --rtl-slider-track: #1e2638;
+        --rtl-badge-bg: #121824;
+        --rtl-badge-border: rgba(255, 255, 255, 0.08);
+        --rtl-accent: #3b82f6;
+        --rtl-accent-hover: #2563eb;
+        --rtl-accent-gradient: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+        --rtl-toggle-off: #334155;
+        --rtl-shadow-panel: 0 20px 42px -8px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+        --rtl-shadow-card: 0 6px 18px -2px rgba(0, 0, 0, 0.38);
+        --rtl-shadow-inset: none;
+        --rtl-shadow-pill: 0 4px 12px rgba(37, 99, 235, 0.35);
+        --rtl-ring: rgba(59, 130, 246, 0.35);
+      }
+
       /* Light Mode Tokens (Claymorphism 3D Soft Light) */
-      :root, body, body.light, body.theme-light, body.vscode-light, .rtl-widget-panel.rtl-is-light {
+      .rtl-widget-panel.rtl-popup-clay.rtl-is-light {
         --rtl-bg: #edf2f8;
         --rtl-surface: #e2e8f2;
         --rtl-surface-hover: #d7e0ec;
@@ -3040,7 +3098,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       }
 
       /* Dark Mode Tokens (Claymorphism 3D Soft Dark) */
-      body.dark, body.theme-dark, body.dark-theme, body.vscode-dark, :root.dark, .dark, .rtl-widget-panel.rtl-is-dark {
+      .rtl-widget-panel.rtl-popup-clay.rtl-is-dark {
         --rtl-bg: #141822;
         --rtl-surface: #10141d;
         --rtl-surface-hover: #19202c;
@@ -3100,10 +3158,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         border: 1px solid var(--rtl-border) !important;
         box-shadow: var(--rtl-shadow-panel) !important;
         border-radius: 20px !important;
+        backdrop-filter: blur(18px) !important;
+        -webkit-backdrop-filter: blur(18px) !important;
         opacity: 0 !important;
         visibility: hidden !important;
         pointer-events: none !important;
-        transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.18s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease !important;
         transform: translateY(10px) scale(0.99);
         transform-origin: bottom left;
         display: flex !important;
@@ -3902,9 +3962,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             <div id="p-group-dark" style="display: flex; flex-direction: column; gap: 7px;">
               <div class="rtl-shadow-group" id="p-dark-shadow-group">
                 <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
-                <button type="button" class="rtl-shadow-btn" data-val="soft">Soft</button>
+                <button type="button" class="rtl-shadow-btn active" data-val="soft">Soft</button>
                 <button type="button" class="rtl-shadow-btn" data-val="3d">3D</button>
-                <button type="button" class="rtl-shadow-btn active" data-val="clay">Clay</button>
+                <button type="button" class="rtl-shadow-btn" data-val="clay">Clay</button>
                 <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
               </div>
 
@@ -3949,9 +4009,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             <div id="p-group-light" style="display: none; flex-direction: column; gap: 7px;">
               <div class="rtl-shadow-group" id="p-light-shadow-group">
                 <button type="button" class="rtl-shadow-btn" data-val="none">None</button>
-                <button type="button" class="rtl-shadow-btn" data-val="soft">Soft</button>
+                <button type="button" class="rtl-shadow-btn active" data-val="soft">Soft</button>
                 <button type="button" class="rtl-shadow-btn" data-val="3d">3D</button>
-                <button type="button" class="rtl-shadow-btn active" data-val="clay">Clay</button>
+                <button type="button" class="rtl-shadow-btn" data-val="clay">Clay</button>
                 <button type="button" class="rtl-shadow-btn" data-val="glow">Glow</button>
               </div>
 
@@ -4181,24 +4241,25 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if ($('p-light-br')) $('p-light-br').value = light.borderRadius || '14';
     if ($('p-val-light-bw')) $('p-val-light-bw').textContent = (light.borderWidth || '1.5') + 'px';
 
-    const darkShadowVal = dark.shadow || 'clay';
+    const darkShadowVal = dark.shadow || 'soft';
     const darkShadowBtn = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn[data-val="' + darkShadowVal + '"]');
     if (darkShadowBtn) {
       document.querySelectorAll('#p-dark-shadow-group .rtl-shadow-btn').forEach(b => b.classList.remove('active'));
       darkShadowBtn.classList.add('active');
     }
-    const lightShadowVal = light.shadow || 'clay';
+    const lightShadowVal = light.shadow || 'soft';
     const lightShadowBtn = document.querySelector('#p-light-shadow-group .rtl-shadow-btn[data-val="' + lightShadowVal + '"]');
     if (lightShadowBtn) {
       document.querySelectorAll('#p-light-shadow-group .rtl-shadow-btn').forEach(b => b.classList.remove('active'));
       lightShadowBtn.classList.add('active');
     }
     updatePresetVisibility();
+    updatePopupTheme();
   }
 
   function updatePresetVisibility() {
-    const darkShadow = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'clay';
-    const lightShadow = document.querySelector('#p-light-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'clay';
+    const darkShadow = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'soft';
+    const lightShadow = document.querySelector('#p-light-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'soft';
 
     const isDarkAuto = (darkShadow === 'soft' || darkShadow === 'clay');
     const isLightAuto = (lightShadow === 'soft' || lightShadow === 'clay');
@@ -4210,12 +4271,29 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (lightWrapper) lightWrapper.classList.toggle('rtl-wrapper-hidden', isLightAuto);
   }
 
+  function updatePopupTheme() {
+    const panel = $('antigravity-ui-popup');
+    if (!panel) return;
+    const isLight = panel.classList.contains('rtl-is-light');
+    const shadowVal = isLight
+      ? (document.querySelector('#p-light-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'soft')
+      : (document.querySelector('#p-dark-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'soft');
+
+    if (shadowVal === 'clay') {
+      panel.classList.remove('rtl-popup-soft');
+      panel.classList.add('rtl-popup-clay');
+    } else {
+      panel.classList.remove('rtl-popup-clay');
+      panel.classList.add('rtl-popup-soft');
+    }
+  }
+
   populateUI(currentConfig);
 
   function syncConfigFromUI() {
     if (!$('p-isRTL')) return;
-    const darkShadow = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'clay';
-    const lightShadow = document.querySelector('#p-light-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'clay';
+    const darkShadow = document.querySelector('#p-dark-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'soft';
+    const lightShadow = document.querySelector('#p-light-shadow-group .rtl-shadow-btn.active')?.dataset.val || 'soft';
     const updated = {
       ...currentConfig,
       isRTL: $('p-isRTL').checked,
@@ -4285,6 +4363,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     if (panel) {
       panel.classList.toggle('rtl-is-light', mode === 'light');
       panel.classList.toggle('rtl-is-dark', mode === 'dark');
+      updatePopupTheme();
     }
 
     if (mode === 'light') {
@@ -4386,6 +4465,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       btn.parentElement.querySelectorAll('.rtl-shadow-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       updatePresetVisibility();
+      updatePopupTheme();
       syncConfigFromUI();
     });
   });
