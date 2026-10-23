@@ -10,10 +10,11 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   publish:
-    name: Build & Publish to npm Registry
+    name: Build & Publish to npm Registry (Trusted Publishing)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -22,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 22.x
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
@@ -31,7 +32,5 @@ jobs:
       - name: Run Tests & Verification
         run: npm test
 
-      - name: Publish to npm
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to npm via OIDC
+        run: npm publish --provenance --access public
