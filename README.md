@@ -1,12 +1,14 @@
 <div align="center">
 
-# 🌌 Antigravity UI Studio
+# 🌌 Antigravity UI & RTL Studio
 
-**The complete zero-patch UI enhancement, workspace ergonomics, and multilingual (RTL/BiDi) studio for Google Antigravity & Antigravity IDE.**
+**The complete zero-patch UI enhancement, native RTL & Persian/Arabic (راست چین) typography engine, workspace ergonomics, and tactile theme studio for Google Antigravity & Antigravity IDE.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/antigravity-ui.svg?color=cb3837)](https://www.npmjs.com/package/antigravity-ui)
 [![Open VSX](https://img.shields.io/open-vsx/v/omid-io/antigravity-rtl.svg?color=purple)](https://open-vsx.org/extension/omid-io/antigravity-rtl)
+[![RTL Support](https://img.shields.io/badge/RTL-Native%20BiDi%20(راست%20چین)-10b981.svg)](#-persian--arabic-rtl-engine)
+[![Persian & Arabic](https://img.shields.io/badge/Persian%20%26%20Arabic-Supported-blue.svg)](#-راهنمای-فارسی-persian-guide)
 [![CI](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/omid-io/antigravity-ui?color=blue&label=release)](https://github.com/omid-io/antigravity-ui/releases/latest)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
@@ -23,6 +25,11 @@
   <a href="#-security-privacy--safety-guarantees">Security & Trust</a> •
   <a href="#-راهنمای-فارسی-persian-guide">راهنمای فارسی</a>
 </p>
+
+```bash
+# Instant launch with zero permanent patches (survives all Google Antigravity updates)
+npx antigravity-ui
+```
 
 <br>
 
@@ -41,7 +48,7 @@
 | **Rigid Chat Styling:** Fixed colors with no control over message contrast or borders. | **Dual Dark Glow & Light 3D Studio:** Custom colors, borders, shadows & live sliders with 0ms lag. |
 | **Crushed Titles & Overlapping Action Buttons:** Titles truncate into 2-letter fragments and collide with `+` / `...` buttons. | **Zero-Collision Action Boxes & Fluid Titles:** Solid, borderless action badges with dynamic hover masking. |
 | **Manual Theme Synchronization:** User must manually align settings to light/dark. | **Active Theme Auto-Detection:** Automatically switches to active theme (Light/Dark) in real time. |
-| **Fragmented Multilingual Text:** Persian/Arabic letters reversed, punctuation broken, reverse ellipsis (`...پ`). | **Smart BiDi Plaintext Engine:** Natural paragraph language detection + built-in Vazirmatn variable font. |
+| **Fragmented Multilingual RTL & Inverted Text:** Persian/Arabic letters reversed, inverted brackets `(abc)`, broken punctuation, reverse ellipsis (`...پ`). | **Smart BiDi Plaintext & RTL Engine:** 100% native Right-to-Left (راست چین) rendering, natural paragraph language detection, inverted bracket auto-correction, and built-in Vazirmatn variable font. |
 | **Disconnected IDE:** No unified typography between Chat and Code Editor. | **Companion IDE Extension:** Native VS Code status bar toggle and `Ctrl+Alt+R` hotkey. |
 
 ---
@@ -52,24 +59,52 @@
 <table>
   <tr>
     <td align="center" width="46%" valign="top">
-      <h4>🎛️ Tactile UI Studio & Dual-Theme Engine</h4>
-      <p><sub>Claymorphism 3D Soft HUD, Dark (Glow) & Light modes, and Clay bubble depth preset</sub></p>
-      <img src="assets/tab-switch.gif" width="270" alt="Tab Switch Preview">
+      <h4>🎛️ Live Extension Studio & Dual-Theme Engine</h4>
+      <p><sub>All 3 tabs (Typography, Chat, Sidebar) captured live with active Dark Theme toggle</sub></p>
+      <img src="assets/tab-switch.gif" width="280" alt="Live Extension Studio Demo">
     </td>
     <td align="center" width="54%" valign="top">
       <h4>📍 Activity Bar Docking & Compact Mode</h4>
       <p><sub>Docked above Settings with fluid mouse dragging down to 160px</sub></p>
       <br>
-      <img src="assets/sidebar-placement.png" width="250" alt="Sidebar Placement">
+      <img src="assets/sidebar-placement.png" width="260" alt="Sidebar Placement">
       <br><br>
       <div align="left">
         <ul>
           <li><b>Floating Island Canvas:</b> Elegant detached sidebar with rounded corners and invisible divider line</li>
-          <li><b>Fluid 160px Dragging:</b> Natural mouse resize (160px–420px) breaking the 256px limit</li>
+          <li><b>Fluid 160px Dragging:</b> Natural mouse resize (160px–420px) breaking the default 256px limit</li>
           <li><b>Zero-Collision Action Boxes:</b> Harmonized hover badges cleanly masking timestamps without text collision</li>
-          <li><b>Click-to-Toggle:</b> Opens on click; cleanly dismisses with <code>Esc</code> or outside click</li>
+          <li><b>Live Dark & Light Auto-Sync:</b> Instant adaptation to active Light/Dark themes with zero lag</li>
+          <li><b>Native BiDi & RTL Support:</b> Full paragraph language detection for Persian, Arabic, and mixed codebases</li>
         </ul>
       </div>
+    </td>
+  </tr>
+</table>
+</div>
+
+<br>
+
+### 📸 Full Application Showcase (Click to Open High-Resolution in New Tab)
+
+<div align="center">
+<table>
+  <tr>
+    <td align="center" width="50%" valign="top">
+      <h4>🌙 Dark Mode • Ambient Neon Glow & RTL</h4>
+      <p><sub>Vazirmatn BiDi typography, floating island sidebar, and soft glow chat bubbles</sub></p>
+      <a href="screenshots/social-media/dark.jpg" target="_blank" rel="noopener noreferrer">
+        <img src="assets/screenshots/preview-dark.jpg" alt="Antigravity Dark Mode Full Screenshot" width="100%">
+      </a>
+      <p><sub>🔍 <i>Click image to view full 1920×1146 resolution</i></sub></p>
+    </td>
+    <td align="center" width="50%" valign="top">
+      <h4>☀️ Light Mode • Tactile 3D Soft Shadow & BiDi</h4>
+      <p><sub>High contrast WCAG AAA readability, clean floating canvas, and 3D depth</sub></p>
+      <a href="screenshots/social-media/light.jpg" target="_blank" rel="noopener noreferrer">
+        <img src="assets/screenshots/preview-light.jpg" alt="Antigravity Light Mode Full Screenshot" width="100%">
+      </a>
+      <p><sub>🔍 <i>Click image to view full 1920×1146 resolution</i></sub></p>
     </td>
   </tr>
 </table>
@@ -127,6 +162,11 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 ### 📝 Smart Multilingual Typography & BiDi Plaintext Engine
 - **Intelligent Auto-Direction**: Dynamically detects paragraph language, right-aligning Persian/Arabic while keeping English and code blocks LTR.
 - **BiDi Plaintext Direction**: Fixes reversed ellipsis (`...پ`) on truncated titles, preserving the natural start of RTL words.
+
+> [!TIP]
+> **Visual BiDi Difference (Before vs. After):**
+> - **Without Antigravity UI:** `...متن تستی با پرانتز معکوس (abc) و سه نقطه برعکس` (reversed punctuation, inverted brackets `)(`, flipped ellipsis).
+> - **With Antigravity UI:** `متن تستی با پرانتز صحیح (abc) و سه نقطه استاندارد...` (100% natural right-to-left flow, crisp Vazirmatn variable font).
 - **Interactive Multi-Choice Question BiDi Support (`ask_question`)**: Automatically detects Persian prompts in interactive dialogs, right-aligns option choices, positions numbered badges on the right, and isolates mixed direction prefixes like `(Recommended)`.
 - **Force RTL Mode**: Option to align all content to the right when full RTL layout is preferred.
 - **Built-in Vazirmatn Font**: Ships with the modern, high-legibility Vazirmatn Variable font out of the box.
@@ -158,6 +198,17 @@ sudo npx antigravity-ui
 sudo npx antigravity-ui
 ```
 
+### ⌨️ Keyboard Shortcuts & Gestures
+
+| Shortcut / Gesture | Action | Target / Scope |
+| :--- | :--- | :--- |
+| `Ctrl+Alt+R` / `Cmd+Alt+R` | Toggle Real-time RTL / LTR Direction | Antigravity IDE & Code Editor |
+| `Esc` or Click Outside | Instantly Dismiss UI Studio Panel | Antigravity Desktop App |
+| `Drag Divider` | Fluid Sidebar Resize (160px – 420px) | Left Workspace Pane |
+| `Ctrl+Shift+P` → `Antigravity RTL` | Open Command Palette RTL Actions | Antigravity IDE |
+
+---
+
 ### CLI Commands & Flags
 - `update` or `--update`: Check the npm registry for new versions, automatically upgrade via npm, and synchronize desktop and IDE patches.
 - `--restore`: Revert Antigravity Desktop and IDE to their factory state after verifying SHA-256 backup integrity.
@@ -174,6 +225,38 @@ Because Antigravity UI interacts with application packaging files, we hold trans
 - 🛡️ **Version-Aware Safety Backup & SHA-256 Verification:** Automatically preserves an untouched backup (`app.asar.bak`) with full 64-character SHA-256 checksum and metadata (`app.asar.meta.json`) whenever a fresh official Google release is detected before patching. During `--restore`, the patcher calculates the backup hash and blocks the operation if any corruption or tampering is detected.
 - ⚡ **One-Command Full Revert:** Run `npx antigravity-ui --restore` at any moment to cleanly return desktop files and the IDE extension to 100% factory state.
 - 🎯 **Transparent Modifications:** Applies localized UI/DOM styling, font injection, and workspace ergonomics; never reads, stores, or alters your API keys, credentials, or workspace projects.
+
+---
+
+## ❓ Frequently Asked Questions (FAQ)
+
+<details>
+<summary><b>1. Will this survive official Google Antigravity desktop updates?</b></summary>
+<br>
+<b>Yes, 100%.</b> Unlike legacy binary asar patchers that get wiped out on every desktop app update, Antigravity UI Studio operates exclusively on Google's official <b>Plugin Sidecar Architecture</b>. Your themes, typography preferences, and sidebar settings safely survive all desktop application updates without needing to re-patch.
+</details>
+
+<details>
+<summary><b>2. Does it work completely offline?</b></summary>
+<br>
+<b>Yes.</b> All variable fonts (including Vazirmatn Variable), icons, and stylesheets are bundled 100% locally within the package. There are zero external CDN requests, telemetry trackers, or external network dependencies.
+</details>
+
+<details>
+<summary><b>3. Can I use custom Persian or Arabic fonts?</b></summary>
+<br>
+<b>Yes.</b> Inside the UI Studio popup under the <b>Typography</b> tab, you can enter any installed font family name (such as <i>Vazirmatn</i>, <i>Noto Sans Arabic</i>, <i>Rubik</i>, <i>Markazi Text</i>, or your custom fonts). It applies instantly with 0ms lag.
+</details>
+
+<details>
+<summary><b>4. How do I install the companion IDE extension directly?</b></summary>
+<br>
+Run the following command in your terminal:
+```bash
+code --install-extension omid-io.antigravity-rtl
+```
+Or search for <code>Antigravity RTL</code> in the VS Code / Open VSX Extension Marketplace.
+</details>
 
 ---
 
@@ -201,9 +284,9 @@ npx antigravity-ui --restore
 
 <div align="center">
 
-## سوئیت جامع ارتقای رابط کاربری، سایدبار ارگونومیک شناور و پشتیبانی هوشمند فارسی در Antigravity
+## سوئیت جامع ارتقای رابط کاربری، پشتیبانی کامل راست چین (RTL) و تایپوگرافی فارسی در Antigravity
 
-**طراحی نوین سایدبار جزیره ای شناور، کاهش عرض سایدبار تا ۱۶۰ پیکسل با دکمه های روان، باکس های اکشن یکدست بدون تداخل، فونت وزیرمتن و هماهنگی همزمان با Antigravity IDE**
+**حل ریشه ای برعکس شدن متون فارسی و عربی (راستچین / راست چین)، پرانتزها و علائم نگارشی، فونت متغیر وزیرمتن، سایدبار جزیره ای شناور ۱۶۰ پیکسل و هماهنگی کامل دارک و لایت**
 
 <br>
 
@@ -252,6 +335,20 @@ npx antigravity-ui --restore
 #### ۳. عناوین پویا در سایدبار فشرده (Fluid Titles)
 * در حالت عادی (عدم هاور)، عناوین چت ها و فولدرها حداکثر فضای ردیف را به خود اختصاص داده و دیگر کلمات به ۲ حرف ترانکیت نمی شوند.
 * به لطف `unicode-bidi: plaintext`، متون فارسی به صورت طبیعی از ابتدای کلمه نمایش داده شده و از انتهای کلمه ترانکیت معکوس نمی گردند.
+
+#### ۴. موتور هوشمند راست چین و رفع معکوس شدن پرانتزها (Smart BiDi RTL Engine)
+* تشخیص خودکار زبان پاراگراف ها و راست چین کردن استاندارد متون فارسی و عربی همزمان با چپ چین ماندن کدهای انگلیسی.
+* حل قطعی مشکل برعکس شدن پرانتزها، براکت ها مانند `(abc)` و علامت های نگارشی بدون نیاز به دستکاری ساختار کد.
+* تعبیه فونت متغیر وزیرمتن (Vazirmatn) با خوانایی فوق العاده و پشتیبانی کامل از گلیف های فارسی و عربی.
+
+#### ۵. پریست های عمق سه بعدی و سافت (Tactile 3D & Soft Depth Presets)
+* انتخاب سریع استایل های بصری شامل Soft Ambient (سایه نرم ارگونومیک)، Elevated 3D، Claymorphism و Neon Glow.
+* تنظیم هماهنگ و بلادرنگ کادر دور ورودی متن چت با استایل حباب کاربر.
+
+#### ۶. کلیدهای میانبر سریع و ژست های حرکتی
+* `Ctrl+Alt+R` (یا `Cmd+Alt+R` در مک): تغییر آنی جهت متن بین راست چین و چپ چین در ادیتور کد و پنجره چت
+* `Esc` (یا کلیک در فضای خالی): بستن آنی پنجره استودیو
+* درگ موس روی خط جداکننده: کاهش عرض سایدبار از ۲۲۰ تا ۱۶۰ پیکسل بدون محدودیت
 
 ---
 
