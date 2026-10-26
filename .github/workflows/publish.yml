@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   publish:
-    name: Build & Publish to npm Registry (Trusted Publishing)
+    name: Build & Publish to npm Registry
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -32,5 +32,19 @@ jobs:
       - name: Run Tests & Verification
         run: npm test
 
-      - name: Publish to npm via OIDC
-        run: npm publish --provenance --access public
+      - name: Publish to npm Registry
+        run: |
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          echo "Current package version: $CURRENT_VERSION"
+          
+          # Check if this version already exists on npm registry
+          EXISTS=$(npm view "antigravity-ui@$CURRENT_VERSION" version 2>/dev/null || echo "")
+          if [ -n "$EXISTS" ]; then
+            echo "Notice: Version $CURRENT_VERSION is already published on npm registry. Skipping publish step safely."
+            exit 0
+          fi
+          
+          echo "Publishing version $CURRENT_VERSION to npm..."
+          npm publish --provenance --access public || npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
