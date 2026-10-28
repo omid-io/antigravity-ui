@@ -152,6 +152,16 @@ function getAntigravityIdeBinPath() {
     return null;
 }
 
+function handleGeminiPlugin() {
+    const geminiPluginDir = path.join(os.homedir(), '.gemini', 'config', 'plugins', 'antigravity-ui');
+    const sourcePluginDir = path.join(__dirname, '..', 'plugin');
+    if (fs.existsSync(geminiPluginDir) && fs.existsSync(sourcePluginDir)) {
+        try {
+            fs.cpSync(sourcePluginDir, geminiPluginDir, { recursive: true, force: true });
+        } catch (e) {}
+    }
+}
+
 function handleIdeExtension(isRestore = false) {
     const ideBin = getAntigravityIdeBinPath();
     if (!ideBin) {
@@ -312,6 +322,7 @@ async function main() {
                 spinner.succeed('Antigravity Desktop is already patched with UI Studio!');
                 fs.rmSync(extractDir, { recursive: true, force: true });
                 handleIdeExtension(false);
+                handleGeminiPlugin();
                 console.log(green('\n✨ Enjoy your Antigravity UI Studio experience!\n'));
                 process.exit(0);
             }
@@ -342,6 +353,7 @@ async function main() {
         fs.rmSync(extractDir, { recursive: true, force: true });
         spinner.succeed('Successfully patched Antigravity Desktop!');
         handleIdeExtension(false);
+        handleGeminiPlugin();
         console.log(green('\n✨ Antigravity UI Studio is fully enabled. Please restart Antigravity to see the changes.\n'));
 
         let updateInfo = null;
