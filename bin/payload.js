@@ -1594,7 +1594,7 @@ win.webContents.on('dom-ready', () => {
                 const sidebar = document.querySelector('[role="navigation"][aria-label="Sidebar"]');
                 const parent = sidebar ? sidebar.parentElement : null;
                 const grandParent = parent ? parent.parentElement : null;
-                const root = document.querySelector('.h-screen.w-screen') || document.body;
+                const root = document.querySelector('[style*="--sidebar-width"]') || document.body;
 
                 if (window.__RTL_SIDEBAR_OBSERVER__) {
                     window.__RTL_SIDEBAR_OBSERVER__.disconnect();
@@ -1603,14 +1603,14 @@ win.webContents.on('dom-ready', () => {
 
                 if (compactSidebar && grandParent) {
                     const storedW = parseInt(localStorage.getItem('sidebarWidth'), 10);
-                    const targetW = (storedW && storedW >= 160 && storedW < 256) ? storedW : 0;
+                    const targetW = (storedW && storedW >= 160 && storedW <= 450) ? storedW : 0;
 
                     function applyWidthIfOpen() {
                         if (!grandParent) return;
                         const isClosed = grandParent.style.visibility === 'hidden' || grandParent.style.width === '0px' || grandParent.offsetWidth === 0;
                         if (isClosed) return;
 
-                        if (targetW >= 160 && targetW < 256) {
+                        if (targetW >= 160 && targetW <= 450) {
                             const targetStr = targetW + 'px';
                             if (grandParent.style.width !== targetStr) {
                                 grandParent.style.width = targetStr;

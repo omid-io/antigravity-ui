@@ -2748,3 +2748,5 @@ function loadConfig() {
 }
 
 try { app.run(); } catch (_) {}
+
+export { generateScript, injectToLiveWindows };
