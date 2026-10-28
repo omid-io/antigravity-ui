@@ -1391,23 +1391,24 @@ function generateScript(c) {
         font-family: ${appCodeStack} !important;
       }
 
-      /* Pure CSS Compact Sidebar Architecture & Fluid Toolbar (160px) */
+      /* Pure CSS Compact Sidebar Architecture (160px) */
       ${c.compactSidebar !== false ? `
         :root {
           --compact-sidebar-width: ${(parseInt(c.sidebarWidth, 10) >= 160 && parseInt(c.sidebarWidth, 10) <= 450) ? parseInt(c.sidebarWidth, 10) : 200}px;
         }
-        body:has([aria-label*="Sidebar"][aria-expanded="true"]) [style*="--sidebar-width"],
-        [style*="--sidebar-width"] {
+        body:has([aria-label*="Sidebar"][aria-expanded="true"]) [style*="--sidebar-width"] {
           --sidebar-width: var(--compact-sidebar-width, 200px) !important;
         }
-        div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
-          width: var(--compact-sidebar-width, 200px) !important;
+        body:has([aria-label*="Sidebar"][aria-expanded="true"]) div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
+          max-width: var(--compact-sidebar-width, 200px) !important;
         }
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
           width: 100% !important;
         }
+      ` : ''}
 
-        /* Responsive Fluid Top Toolbar - Tied to Compact Sidebar (160px) Switch (Only when expanded) */
+      /* Responsive Fluid Top Toolbar & Icons - Tied to Sidebar Architecture (Only when expanded) */
+      ${(c.floatingSidebar !== false || c.compactSidebar !== false) ? `
         div.absolute.left-0.top-0:has(button[aria-label*="Sidebar"][aria-expanded="true"]),
         div.absolute.left-0.top-0:has(button[data-testid="sidebar-toggle"][aria-expanded="true"]) {
           top: ${c.floatingSidebar !== false ? '10px' : '0px'} !important;
@@ -1415,8 +1416,8 @@ function generateScript(c) {
           padding-left: 6px !important;
           padding-top: 4px !important;
           padding-right: 6px !important;
-          width: calc(var(--sidebar-width, 160px) - ${c.floatingSidebar !== false ? '20px' : '8px'}) !important;
-          max-width: calc(var(--sidebar-width, 160px) - ${c.floatingSidebar !== false ? '20px' : '8px'}) !important;
+          width: calc(var(--sidebar-width, 256px) - ${c.floatingSidebar !== false ? '20px' : '8px'}) !important;
+          max-width: calc(var(--sidebar-width, 256px) - ${c.floatingSidebar !== false ? '20px' : '8px'}) !important;
           box-sizing: border-box !important;
           z-index: 35 !important;
         }
@@ -1459,7 +1460,7 @@ function generateScript(c) {
           align-items: center !important;
           flex: 1 !important;
           min-width: 0 !important;
-          gap: clamp(1px, calc((var(--sidebar-width, 160px) - 160px) / 12), 6px) !important;
+          gap: clamp(1px, calc((var(--sidebar-width, 256px) - 160px) / 12), 6px) !important;
           justify-content: flex-start !important;
         }
 
@@ -1468,7 +1469,7 @@ function generateScript(c) {
         div.absolute.left-0.top-0:has(button[data-testid="sidebar-toggle"][aria-expanded="true"]) div.flex.items-center.gap-1 {
           display: flex !important;
           align-items: center !important;
-          gap: clamp(1px, calc((var(--sidebar-width, 160px) - 160px) / 20), 4px) !important;
+          gap: clamp(1px, calc((var(--sidebar-width, 256px) - 160px) / 20), 4px) !important;
         }
 
         /* Search icon */
@@ -1843,12 +1844,10 @@ function generateScript(c) {
         }
 
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
-          overflow: visible !important;
           position: relative !important;
           z-index: 30 !important;
         }
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
-          overflow: visible !important;
           position: relative !important;
         }
         /* Invisible Resizer Sash & Vertical Border Line flush with Floating Island edge */
@@ -2367,7 +2366,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.6.10';
+  return '3.6.11';
 }
 
 function compareVersions(v1, v2) {
@@ -2489,13 +2488,17 @@ function injectToLiveWindows(config, force = false) {
   }).on('error', () => {});
 }
 
-// Continuous background health check (every 3s, zero reflow, zero DOM touch unless missing)
-setInterval(() => {
-  injectToLiveWindows(currentActiveConfig, false);
-}, 3000);
+const isDirectRun = Boolean(process.argv[1] && (process.argv[1].endsWith('main.mjs') || process.argv[1].endsWith('main.js')));
 
-// Initial forced injection
-injectToLiveWindows(currentActiveConfig, true);
+if (isDirectRun) {
+  // Continuous background health check (every 3s, zero reflow, zero DOM touch unless missing)
+  setInterval(() => {
+    injectToLiveWindows(currentActiveConfig, false);
+  }, 3000);
+
+  // Initial forced injection
+  injectToLiveWindows(currentActiveConfig, true);
+}
 
 // ---------------------------------------------------------------------------
 let app;
@@ -2747,6 +2750,8 @@ function loadConfig() {
   }
 }
 
-try { app.run(); } catch (_) {}
+if (isDirectRun) {
+  try { app.run(); } catch (_) {}
+}
 
 export { generateScript, injectToLiveWindows };
