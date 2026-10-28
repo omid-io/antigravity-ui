@@ -2,6 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import http from 'http';
 import { fileURLToPath } from 'url';
 import { execSync, spawnSync } from 'child_process';
 import crypto from 'crypto';
@@ -111,12 +112,9 @@ function getDefaultPath() {
 async function getAsarPath() {
     let asarPath = getDefaultPath();
     if (fs.existsSync(asarPath)) {
-        console.log(blue(`ℹ Found Antigravity Desktop installation at:`));
-        console.log(`  ${asarPath}\n`);
         return asarPath;
     }
 
-    console.log(yellow(`⚠ Could not find Antigravity Desktop at default location.`));
     const response = await prompts({
         type: 'text',
         name: 'customPath',
@@ -152,14 +150,52 @@ function getAntigravityIdeBinPath() {
     return null;
 }
 
-function handleGeminiPlugin() {
-    const geminiPluginDir = path.join(os.homedir(), '.gemini', 'config', 'plugins', 'antigravity-ui');
-    const sourcePluginDir = path.join(__dirname, '..', 'plugin');
-    if (fs.existsSync(geminiPluginDir) && fs.existsSync(sourcePluginDir)) {
-        try {
-            fs.cpSync(sourcePluginDir, geminiPluginDir, { recursive: true, force: true });
-        } catch (e) {}
+function installOrUpdatePlugin() {
+    const targetDir = path.join(os.homedir(), '.gemini', 'config', 'plugins', 'antigravity-ui');
+    const sourceDir = path.join(__dirname, '..', 'plugin');
+    if (!fs.existsSync(sourceDir)) {
+        throw new Error('Plugin source directory not found at: ' + sourceDir);
     }
+    fs.mkdirSync(targetDir, { recursive: true });
+    fs.cpSync(sourceDir, targetDir, { recursive: true, force: true });
+    return targetDir;
+}
+
+async function sendSidecarReloadSignal() {
+    const ports = [58888, 58889];
+    for (const port of ports) {
+        try {
+            const reloaded = await new Promise((resolve) => {
+                const req = http.request({
+                    hostname: '127.0.0.1',
+                    port,
+                    path: '/api/reload',
+                    method: 'POST',
+                    timeout: 800
+                }, (res) => {
+                    resolve(res.statusCode === 200);
+                });
+                req.on('error', () => resolve(false));
+                req.on('timeout', () => { req.destroy(); resolve(false); });
+                req.end();
+            });
+            if (reloaded) return true;
+        } catch (_) {}
+    }
+    return false;
+}
+
+function cleanupLegacyAsarPatch() {
+    try {
+        const asarPath = getDefaultPath();
+        const backupPath = asarPath + '.bak';
+        const metaPath = asarPath + '.meta.json';
+        if (fs.existsSync(backupPath) && fs.existsSync(asarPath)) {
+            restoreBackup(asarPath, backupPath, metaPath, { force: true });
+            return true;
+        }
+    } catch (_) {}
+    return false;
 }
 
 function handleIdeExtension(isRestore = false) {
@@ -194,8 +230,82 @@ function handleIdeExtension(isRestore = false) {
     }
 }
 
+async function applyLegacyAsarPatch(enableDevTools, isForce) {
+    const asarPath = await getAsarPath();
+    const backupPath = asarPath + '.bak';
+    const spinner = ora('Checking write permissions...').start();
+    try {
+        fs.accessSync(path.dirname(asarPath), fs.constants.W_OK);
+    } catch (e) {
+        spinner.fail('Permission Denied.');
+        console.error(red('\nSystem Error: ' + e.message));
+        if (os.platform() === 'win32') {
+            console.error(yellow('\nPlease run your terminal (PowerShell/CMD) as Administrator and try again.\n'));
+        } else {
+            console.error(yellow('\nPlease run this command with sudo.\n'));
+        }
+        process.exit(1);
+    }
+
+    const extractDir = path.join(path.dirname(asarPath), 'app-extracted-ui-temp');
+    spinner.text = 'Extracting app.asar...';
+    try {
+        if (fs.existsSync(extractDir)) {
+            fs.rmSync(extractDir, { recursive: true, force: true });
+        }
+        asar.extractAll(asarPath, extractDir);
+    } catch (e) {
+        spinner.fail('Failed to extract ASAR.');
+        console.error(red(e.message));
+        process.exit(1);
+    }
+
+    spinner.text = 'Injecting Antigravity UI Studio features into binary...';
+    try {
+        const utilsPath = path.join(extractDir, 'dist', 'utils.js');
+        if (!fs.existsSync(utilsPath)) {
+            throw new Error('dist/utils.js not found in ASAR. Unsupported Antigravity version.');
+        }
+
+        let utilsCode = fs.readFileSync(utilsPath, 'utf8');
+        const isPatched = detectPatchState(utilsCode);
+        const metaPath = asarPath + '.meta.json';
+
+        if (!isPatched) {
+            try {
+                createPristineBackup(asarPath, backupPath, metaPath, pkg.version);
+            } catch (e) {
+                fs.copyFileSync(asarPath, backupPath);
+            }
+        } else if (fs.existsSync(backupPath)) {
+            utilsCode = asar.extractFile(backupPath, 'dist/utils.js').toString('utf8');
+        }
+
+        const payloadPath = path.join(__dirname, 'payload.js');
+        const payload = fs.readFileSync(payloadPath, 'utf8');
+        utilsCode = applyPayloadToCode(utilsCode, payload, enableDevTools);
+        fs.writeFileSync(utilsPath, utilsCode);
+
+        const fontSource = path.join(__dirname, 'Vazirmatn-Variable.woff2');
+        const fontDest = path.join(extractDir, 'dist', 'Vazirmatn-Variable.woff2');
+        if (fs.existsSync(fontSource)) {
+            fs.copyFileSync(fontSource, fontDest);
+        }
+
+        await asar.createPackage(extractDir, asarPath);
+        fs.rmSync(extractDir, { recursive: true, force: true });
+        spinner.succeed('Successfully patched Antigravity Desktop binary (legacy mode)!');
+    } catch (e) {
+        spinner.fail('Injection failed.');
+        console.error(red(e.message));
+        if (fs.existsSync(extractDir)) fs.rmSync(extractDir, { recursive: true, force: true });
+        process.exit(1);
+    }
+}
+
 const args = process.argv.slice(2);
 const isRestore = args.includes('--restore');
+const isPatch = args.includes('--patch');
 const enableDevTools = args.includes('--devtools');
 const isForce = args.includes('--force');
 const isUpdate = args.includes('update') || args.includes('--update');
@@ -212,7 +322,7 @@ async function main() {
 
         if (!isNewerVersion(pkg.version, latest)) {
             updateSpinner.succeed(`You are already running the latest version of ${pkg.name} (v${pkg.version}).`);
-            console.log(cyan('\nRe-applying patch to ensure Antigravity Desktop and IDE are synchronized...\n'));
+            console.log(cyan('\nRe-synchronizing Antigravity UI Studio plugin files...\n'));
         } else {
             updateSpinner.text = `Found update: v${pkg.version} → v${latest}. Downloading and upgrading via npm...`;
             const upgradeResult = executeNpmUpgrade(pkg.name);
@@ -223,7 +333,7 @@ async function main() {
                 process.exit(1);
             }
             updateSpinner.succeed(bold(green(`Successfully upgraded ${pkg.name} to v${latest}!`)));
-            console.log(cyan('\nSpawning upgraded Antigravity UI Studio to patch Desktop and IDE...\n'));
+            console.log(cyan('\nSpawning upgraded Antigravity UI Studio CLI to synchronize plugins...\n'));
 
             const forwardedArgs = args.filter(a => a !== 'update' && a !== '--update');
             const reExecResult = reExecUpdatedCli(pkg.name, forwardedArgs);
@@ -239,122 +349,51 @@ async function main() {
         ? checkForUpdate(pkg.version, pkg.name, { useCache: true, timeoutMs: 1200, signal: abortController.signal })
         : Promise.resolve(null);
 
-    const asarPath = await getAsarPath();
-    const backupPath = asarPath + '.bak';
-    
     if (isRestore) {
-        if (!fs.existsSync(backupPath)) {
-            console.error(red('✖ No backup found to restore.\n'));
-            process.exit(1);
-        }
+        const asarPath = getDefaultPath();
+        const backupPath = asarPath + '.bak';
         const metaPath = asarPath + '.meta.json';
-        const spinner = ora('Verifying backup SHA-256 integrity and restoring app.asar...').start();
-        try {
-            const result = restoreBackup(asarPath, backupPath, metaPath, { force: isForce });
-            spinner.succeed(result.message);
-            handleIdeExtension(true);
-            process.exit(0);
-        } catch (e) {
-            spinner.fail('Failed to restore backup.');
-            console.error(red('\n' + e.message + '\n'));
-            process.exit(1);
-        }
-    }
-
-    const spinner = ora('Checking write permissions...').start();
-    try {
-        fs.accessSync(path.dirname(asarPath), fs.constants.W_OK);
-    } catch (e) {
-        spinner.fail('Permission Denied.');
-        console.error(red('\nSystem Error: ' + e.message));
-        if (os.platform() === 'win32') {
-            console.error(yellow('\nPlease run your terminal (PowerShell/CMD) as Administrator and try again.\n'));
-        } else if (os.platform() === 'darwin') {
-            console.error(yellow('\nPlease ensure you run this command with sudo.'));
-            console.error(yellow('If you are using sudo, macOS requires your terminal to have "App Management" permission.'));
-            console.error(yellow('Go to: System Settings > Privacy & Security > App Management'));
-            console.error(yellow('And enable the toggle for your terminal (e.g. Terminal, iTerm2, VS Code), then try again.\n'));
-        } else {
-            console.error(yellow('\nPlease run this command with sudo.\n'));
-        }
-        process.exit(1);
-    }
-    
-    const extractDir = path.join(path.dirname(asarPath), 'app-extracted-ui-temp');
-    spinner.text = 'Extracting app.asar (this may take a few seconds)...';
-    try {
-        if (fs.existsSync(extractDir)) {
-            fs.rmSync(extractDir, { recursive: true, force: true });
-        }
-        asar.extractAll(asarPath, extractDir);
-    } catch (e) {
-        spinner.fail('Failed to extract ASAR.');
-        console.error(red(e.message));
-        process.exit(1);
-    }
-
-    spinner.text = 'Injecting Antigravity UI Studio features...';
-    try {
-        const utilsPath = path.join(extractDir, 'dist', 'utils.js');
-        if (!fs.existsSync(utilsPath)) {
-            throw new Error('dist/utils.js not found in ASAR. Unsupported Antigravity version.');
-        }
-
-        let utilsCode = fs.readFileSync(utilsPath, 'utf8');
-        
-        const isPatched = detectPatchState(utilsCode);
-        const metaPath = asarPath + '.meta.json';
-
-        if (!isPatched) {
-            // Pristine, unpatched build from official Google release: always refresh backup to current version
-            spinner.text = 'Creating pristine backup with 64-char SHA-256 checksum...';
+        if (fs.existsSync(backupPath)) {
+            const spinner = ora('Restoring pristine app.asar backup...').start();
             try {
-                createPristineBackup(asarPath, backupPath, metaPath, pkg.version);
+                const result = restoreBackup(asarPath, backupPath, metaPath, { force: isForce });
+                spinner.succeed(result.message);
             } catch (e) {
-                console.warn(yellow(`⚠ Could not generate full backup metadata: ${e.message}`));
-                fs.copyFileSync(asarPath, backupPath);
-            }
-        } else {
-            if (fs.existsSync(backupPath)) {
-                spinner.text = 'Updating existing UI patch to latest version...';
-                utilsCode = asar.extractFile(backupPath, 'dist/utils.js').toString('utf8');
-            } else {
-                spinner.succeed('Antigravity Desktop is already patched with UI Studio!');
-                fs.rmSync(extractDir, { recursive: true, force: true });
-                handleIdeExtension(false);
-                handleGeminiPlugin();
-                console.log(green('\n✨ Enjoy your Antigravity UI Studio experience!\n'));
-                process.exit(0);
+                spinner.fail('Failed to restore backup: ' + e.message);
             }
         }
-
-        const payloadPath = path.join(__dirname, 'payload.js');
-        const payload = fs.readFileSync(payloadPath, 'utf8');
-
-        utilsCode = applyPayloadToCode(utilsCode, payload, enableDevTools);
-        fs.writeFileSync(utilsPath, utilsCode);
-
-        const fontSource = path.join(__dirname, 'Vazirmatn-Variable.woff2');
-        const fontDest = path.join(extractDir, 'dist', 'Vazirmatn-Variable.woff2');
-        if (fs.existsSync(fontSource)) {
-            fs.copyFileSync(fontSource, fontDest);
-        }
-
-    } catch (e) {
-        spinner.fail('Injection failed.');
-        console.error(red(e.message));
-        if (fs.existsSync(extractDir)) fs.rmSync(extractDir, { recursive: true, force: true });
-        process.exit(1);
+        handleIdeExtension(true);
+        console.log(green('✔ Antigravity restoration complete.\n'));
+        process.exit(0);
     }
 
-    spinner.text = 'Repacking app.asar (almost done)...';
-    try {
-        await asar.createPackage(extractDir, asarPath);
-        fs.rmSync(extractDir, { recursive: true, force: true });
-        spinner.succeed('Successfully patched Antigravity Desktop!');
+    if (isPatch) {
+        console.log(yellow('⚠ Legacy binary patching mode requested (--patch)...\n'));
+        await applyLegacyAsarPatch(enableDevTools, isForce);
         handleIdeExtension(false);
-        handleGeminiPlugin();
-        console.log(green('\n✨ Antigravity UI Studio is fully enabled. Please restart Antigravity to see the changes.\n'));
+        installOrUpdatePlugin();
+        process.exit(0);
+    }
+
+    // Default High-Velocity Native Architecture: Official Gemini Plugin Installation & Auto-Sync
+    const pluginSpinner = ora(`Installing & synchronizing Antigravity UI Studio plugin (v${pkg.version})...`).start();
+    try {
+        const installedDir = installOrUpdatePlugin();
+        const cleanedLegacy = cleanupLegacyAsarPatch();
+        pluginSpinner.succeed(bold(green(`Successfully installed & synchronized Antigravity UI Studio plugin (v${pkg.version})!`)));
+        
+        if (cleanedLegacy) {
+            console.log(blue('  ℹ Restored original unpatched app.asar (migrated to zero-patch native plugin architecture)'));
+        }
+
+        handleIdeExtension(false);
+
+        const reloaded = await sendSidecarReloadSignal();
+        if (reloaded) {
+            console.log(cyan('  ✔ Instant live reload signal sent to active Antigravity UI Studio!'));
+        }
+
+        console.log(green('\n✨ Antigravity UI Studio is active! Open Antigravity or click the Galaxy 🌌 icon in the sidebar.\n'));
 
         let updateInfo = null;
         try {
@@ -372,8 +411,8 @@ async function main() {
             console.log(renderUpdateBox(pkg.version, updateInfo.latestVersion));
         }
     } catch (e) {
-        spinner.fail('Failed to repack ASAR.');
-        console.error(red(e.message));
+        pluginSpinner.fail('Failed to install Antigravity UI Studio plugin.');
+        console.error(red('\n' + e.message + '\n'));
         process.exit(1);
     }
 }

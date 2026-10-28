@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 
+
+## [3.6.13] - 2026-10-28
+
+### Changed
+- **Zero-Patch Plugin Architecture CLI:** Completely transitioned default CLI execution from invasive ASAR patching to official Gemini plugin installation and auto-synchronization.
+- **Smart Disk Update Verification:** Added real-time disk package verification in popup-engine footer capsule, auto-clearing red update badge when local files are updated without requiring app restarts.
+- **Live Reload & Studio Restart Button:** Integrated '/api/reload' sidecar endpoint and interactive Studio reload button directly inside the update modal.
+- **Legacy ASAR Cleanup:** Automatically restores pristine unpatched app.asar on update while keeping '--patch' available as an opt-in fallback.
+
+---
 ## [3.6.10] - 2026-10-28
 
 ### Fixed

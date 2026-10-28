@@ -655,7 +655,7 @@ function generatePresetComponentVars(preset, isDark) {
   }
 }
 
-export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.6.10', bundledFonts = {}) {
+export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToken, currentVersion = '3.6.13', bundledFonts = {}) {
   const cfgJson = JSON.stringify(config);
   return `
 (() => {
@@ -2803,15 +2803,34 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       .rtl-modal-actions {
         display: flex !important;
         align-items: center !important;
-        justify-content: flex-end !important;
+        justify-content: space-between !important;
         gap: 10px !important;
+        margin-top: 14px !important;
+      }
+      .rtl-modal-btn-reload {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        background: #2563eb !important;
+        color: #ffffff !important;
+        border: none !important;
+        font-size: 11.5px !important;
+        font-weight: 500 !important;
+        padding: 6px 12px !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+      }
+      .rtl-modal-btn-reload:hover {
+        background: #1d4ed8 !important;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35) !important;
       }
       .rtl-modal-btn-link {
         font-size: 12px !important;
         color: #94a3b8 !important;
         text-decoration: none !important;
         cursor: pointer !important;
-        padding: 6px 12px !important;
+        padding: 6px 10px !important;
         border-radius: 8px !important;
         background: transparent !important;
         border: none !important;
@@ -4626,6 +4645,10 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           <span class="rtl-modal-copy-btn" id="p-modal-copy-status">📋 کپی دستور</span>
         </div>
         <div class="rtl-modal-actions">
+          <button type="button" class="rtl-modal-btn-reload" id="p-modal-reload-btn" title="بررسی فایل های دیسک و اعمال بروزرسانی">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <span id="p-modal-reload-text">🔄 بررسی و راه اندازی مجدد افزونه</span>
+          </button>
           <button type="button" class="rtl-modal-btn-link" id="p-modal-github-btn">
             مشاهده تغییرات در گیت هاب ↗
           </button>
@@ -4665,6 +4688,89 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         if (st) {
           st.textContent = '✔ کپی شد!';
           setTimeout(() => { if (st) st.textContent = '📋 کپی دستور'; }, 2000);
+        }
+      });
+    }
+
+    const reloadBtn = overlay.querySelector('#p-modal-reload-btn');
+    const reloadText = overlay.querySelector('#p-modal-reload-text');
+    if (reloadBtn) {
+      reloadBtn.addEventListener('click', async () => {
+        if (reloadText) reloadText.textContent = 'در حال بررسی و راه اندازی...';
+        reloadBtn.style.opacity = '0.7';
+        reloadBtn.style.pointerEvents = 'none';
+
+        const ports = [58888, 58889, SIDECAR_PORT].filter(p => p > 0);
+        let reloadSuccess = false;
+        let activeVersion = null;
+
+        for (const p of ports) {
+          try {
+            const res = await fetch('http://127.0.0.1:' + p + '/api/reload', {
+              method: 'POST',
+              signal: AbortSignal.timeout(2500)
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data && data.success) {
+                reloadSuccess = true;
+                activeVersion = data.version;
+                break;
+              }
+            }
+          } catch (_) {}
+        }
+
+        if (reloadSuccess) {
+          if (reloadText) reloadText.textContent = '✔ نسخه جدید با موفقیت اعمال شد!';
+          reloadBtn.style.background = '#10b981';
+          reloadBtn.style.opacity = '1';
+          availableUpdateInfo = null;
+          if (capsuleBtn) {
+            capsuleBtn.classList.remove('rtl-update-available');
+            capsuleBtn.title = 'v' + (activeVersion || remoteVer) + ' - Up to date';
+          }
+          if (versionText) versionText.textContent = 'Up to date ✔';
+          const iconWrap = $('p-capsule-icon-wrap');
+          if (iconWrap) iconWrap.innerHTML = '<svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
+          setTimeout(() => {
+            overlay.remove();
+            if (versionText) versionText.textContent = 'v' + (activeVersion || remoteVer);
+          }, 1200);
+        } else {
+          let isUpdatedOnDisk = false;
+          for (const p of ports) {
+            try {
+              const chk = await fetch('http://127.0.0.1:' + p + '/api/check-update', { signal: AbortSignal.timeout(1500) });
+              if (chk.ok) {
+                const data = await chk.json();
+                if (data && (!data.updateAvailable || compareVersions(data.currentVersion, remoteVer) >= 0)) {
+                  isUpdatedOnDisk = true;
+                  activeVersion = data.currentVersion;
+                  break;
+                }
+              }
+            } catch (_) {}
+          }
+
+          if (isUpdatedOnDisk) {
+            if (reloadText) reloadText.textContent = '✔ فایل ها بروز هستند!';
+            reloadBtn.style.background = '#10b981';
+            reloadBtn.style.opacity = '1';
+            availableUpdateInfo = null;
+            if (capsuleBtn) capsuleBtn.classList.remove('rtl-update-available');
+            if (versionText) versionText.textContent = 'v' + (activeVersion || remoteVer);
+            setTimeout(() => overlay.remove(), 1000);
+          } else {
+            if (reloadText) reloadText.textContent = '⚠ ابتدا کد را در ترمینال اجرا کنید!';
+            reloadBtn.style.background = '#ef4444';
+            reloadBtn.style.opacity = '1';
+            setTimeout(() => {
+              if (reloadText) reloadText.textContent = '🔄 بررسی و راه اندازی مجدد افزونه';
+              reloadBtn.style.background = '#2563eb';
+              reloadBtn.style.pointerEvents = 'auto';
+            }, 2500);
+          }
         }
       });
     }
@@ -4718,9 +4824,40 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
   }
 
   if (capsuleBtn) {
-    capsuleBtn.addEventListener('click', (e) => {
+    capsuleBtn.addEventListener('click', async (e) => {
       e.stopPropagation();
       if (availableUpdateInfo) {
+        // Pre-check: Did the user already update files on disk via npx?
+        const ports = [58888, 58889, SIDECAR_PORT].filter(p => p > 0);
+        let diskUpdated = false;
+        let freshVer = null;
+        for (const p of ports) {
+          try {
+            const res = await fetch('http://127.0.0.1:' + p + '/api/check-update', { signal: AbortSignal.timeout(1200) });
+            if (res.ok) {
+              const data = await res.json();
+              if (data && (!data.updateAvailable || compareVersions(data.currentVersion, availableUpdateInfo.remoteVersion) >= 0)) {
+                diskUpdated = true;
+                freshVer = data.currentVersion;
+                break;
+              }
+            }
+          } catch (_) {}
+        }
+
+        if (diskUpdated) {
+          // Files on disk are already upgraded! Clear red status immediately without opening modal
+          availableUpdateInfo = null;
+          capsuleBtn.classList.remove('rtl-update-available');
+          if (versionText) versionText.textContent = 'Up to date ✔';
+          const iconWrap = $('p-capsule-icon-wrap');
+          if (iconWrap) iconWrap.innerHTML = '<svg class="rtl-capsule-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>';
+          setTimeout(() => {
+            if (versionText) versionText.textContent = 'v' + (freshVer || clientCurrentVer);
+          }, 2000);
+          return;
+        }
+
         triggerUpdateFlow();
       } else {
         checkUpdateStatus(false);

@@ -2366,7 +2366,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.6.12';
+  return '3.6.13';
 }
 
 function compareVersions(v1, v2) {
@@ -2663,6 +2663,9 @@ function startLocalUpdateServer(port = 58888) {
 
       const url = new URL(req.url, `http://127.0.0.1:${port}`);
       if (url.pathname === '/api/check-update') {
+        const freshDiskVer = getStudioVersion();
+        CURRENT_VERSION = freshDiskVer;
+        updateState.currentVersion = freshDiskVer;
         const st = await checkGitHubUpdate();
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
@@ -2670,6 +2673,34 @@ function startLocalUpdateServer(port = 58888) {
           currentVersion: updateState.currentVersion,
           remoteVersion: st.latestVersion
         }));
+        return;
+      }
+
+      if ((url.pathname === '/api/reload' || url.pathname === '/api/restart') && (req.method === 'POST' || req.method === 'GET')) {
+        try {
+          const freshDiskVer = getStudioVersion();
+          CURRENT_VERSION = freshDiskVer;
+          updateState.currentVersion = freshDiskVer;
+          if (updateState.latestVersion) {
+            updateState.hasUpdate = compareVersions(updateState.latestVersion, freshDiskVer) > 0;
+          }
+
+          // Force re-inject new engine to live Electron windows immediately
+          try {
+            injectToLiveWindows(currentActiveConfig, true);
+          } catch (_) {}
+
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, version: freshDiskVer, reloaded: true }));
+
+          // Gracefully restart sidecar process so supervisor loads clean memory state
+          setTimeout(() => {
+            try { process.exit(0); } catch (_) {}
+          }, 800);
+        } catch (err) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: err.message }));
+        }
         return;
       }
 
