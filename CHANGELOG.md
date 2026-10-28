@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+
+## [3.6.10] - 2026-10-28
+
+### Fixed
+- **Plugin Sidecar Version Synchronization:** Fixed version mismatch between root package.json and plugin/sidecars/studio/package.json.
+- **CLI Auto-Synchronization:** Added handleGeminiPlugin() to bin/index.js to automatically synchronize plugin sidecar files under ~/.gemini/config/plugins/antigravity-ui.
+- **Sidecar Hot-Reloading:** Ensured sidecar update server stays perfectly synchronized with npm releases.
+
+---
 ## [3.1.0] - 2026-10-15
 
 ### Changed
