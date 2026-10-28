@@ -1400,7 +1400,7 @@ function generateScript(c) {
           --sidebar-width: var(--compact-sidebar-width, 200px) !important;
         }
         body:has([aria-label*="Sidebar"][aria-expanded="true"]) div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
-          max-width: var(--compact-sidebar-width, 200px) !important;
+          width: var(--compact-sidebar-width, 200px) !important;
         }
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
           width: 100% !important;
@@ -2366,7 +2366,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.6.11';
+  return '3.6.12';
 }
 
 function compareVersions(v1, v2) {
