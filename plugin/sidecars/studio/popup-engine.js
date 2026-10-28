@@ -2276,9 +2276,15 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           unicode-bidi: normal !important;
         }
 
+        body:has([aria-label*="Sidebar"][aria-expanded="true"]) div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]),
+        body:has([aria-label*="Sidebar"][aria-expanded="true"]) div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
+          overflow: visible !important;
+        }
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) {
           position: relative !important;
           z-index: 30 !important;
+          border-right: none !important;
+          border: none !important;
         }
         div.flex:has(> div > [role="navigation"][aria-label="Sidebar"]) > div {
           position: relative !important;
