@@ -52,6 +52,7 @@ function generatePresetComponentVars(preset, isDark) {
         --titlebar-shadow: 0 2px 6px rgba(166, 180, 200, 0.15);
         --backdrop-blur: none;
         --sb-bg: #f8fafc;
+        --sb-header-bg: #f8fafc;
         --sb-border: rgba(210, 224, 240, 0.85);
         --sb-radius: 18px;
         --sb-shadow: 8px 12px 28px rgba(166, 180, 200, 0.32), inset -4px -4px 8px rgba(210, 224, 240, 0.6), inset 4px 4px 8px rgba(255, 255, 255, 0.95);
@@ -115,6 +116,7 @@ function generatePresetComponentVars(preset, isDark) {
         --titlebar-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
         --backdrop-blur: none;
         --sb-bg: linear-gradient(180deg, #182234 0%, #141b29 100%);
+        --sb-header-bg: #161e2d;
         --sb-border: rgba(255, 255, 255, 0.08);
         --sb-radius: 18px;
         --sb-shadow: 10px 16px 36px rgba(0, 0, 0, 0.6), inset -4px -4px 8px rgba(10, 15, 25, 0.7), inset 4px 4px 8px rgba(255, 255, 255, 0.06);
@@ -183,6 +185,7 @@ function generatePresetComponentVars(preset, isDark) {
         --titlebar-shadow: 0 3px 0 #cbd5e1, 0 6px 12px rgba(0, 0, 0, 0.04);
         --backdrop-blur: none;
         --sb-bg: #ffffff;
+        --sb-header-bg: #ffffff;
         --sb-border: #94a3b8;
         --sb-radius: 16px;
         --sb-shadow: 4px 4px 0 #94a3b8, 6px 10px 20px rgba(15, 23, 42, 0.12), inset 0 1.5px 0 #ffffff;
@@ -247,6 +250,7 @@ function generatePresetComponentVars(preset, isDark) {
         --titlebar-shadow: 0 3px 0 #020617, 0 8px 16px rgba(0, 0, 0, 0.4);
         --backdrop-blur: none;
         --sb-bg: #0f172a;
+        --sb-header-bg: #0f172a;
         --sb-border: #334155;
         --sb-radius: 16px;
         --sb-shadow: 4px 4px 0 #020617, 8px 16px 30px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -315,6 +319,7 @@ function generatePresetComponentVars(preset, isDark) {
         --titlebar-shadow: 0 2px 10px rgba(99, 102, 241, 0.05);
         --backdrop-blur: none;
         --sb-bg: #ffffff;
+        --sb-header-bg: #ffffff;
         --sb-border: rgba(56, 189, 248, 0.55);
         --sb-radius: 16px;
         --sb-shadow: 0 0 24px rgba(56, 189, 248, 0.22), 4px 8px 24px rgba(14, 165, 233, 0.1);
@@ -379,6 +384,7 @@ function generatePresetComponentVars(preset, isDark) {
         --titlebar-shadow: 0 2px 12px rgba(99, 102, 241, 0.12);
         --backdrop-blur: none;
         --sb-bg: rgba(10, 15, 26, 0.92);
+        --sb-header-bg: #0b101c;
         --sb-border: rgba(56, 189, 248, 0.45);
         --sb-radius: 16px;
         --sb-shadow: 0 0 28px rgba(56, 189, 248, 0.22), 6px 12px 32px rgba(0, 0, 0, 0.5);
@@ -446,6 +452,7 @@ function generatePresetComponentVars(preset, isDark) {
         --titlebar-shadow: 0 2px 8px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.01);
         --backdrop-blur: blur(12px);
         --sb-bg: rgba(255, 255, 255, 0.82);
+        --sb-header-bg: rgba(255, 255, 255, 0.94);
         --sb-border: rgba(226, 232, 240, 0.85);
         --sb-radius: 16px;
         --sb-shadow: 4px 6px 24px -2px rgba(67, 105, 169, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.95);
@@ -509,6 +516,7 @@ function generatePresetComponentVars(preset, isDark) {
         --titlebar-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
         --backdrop-blur: blur(14px);
         --sb-bg: rgba(15, 23, 42, 0.75);
+        --sb-header-bg: rgba(15, 23, 42, 0.92);
         --sb-border: rgba(255, 255, 255, 0.08);
         --sb-radius: 16px;
         --sb-shadow: 6px 12px 32px -4px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
@@ -576,6 +584,7 @@ function generatePresetComponentVars(preset, isDark) {
       --titlebar-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       --backdrop-blur: none;
       --sb-bg: #ffffff;
+      --sb-header-bg: #ffffff;
       --sb-border: #e2e8f0;
       --sb-radius: 14px;
       --sb-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -639,6 +648,7 @@ function generatePresetComponentVars(preset, isDark) {
       --titlebar-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       --backdrop-blur: none;
       --sb-bg: #0f172a;
+      --sb-header-bg: #0f172a;
       --sb-border: #1e293b;
       --sb-radius: 14px;
       --sb-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
@@ -746,6 +756,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         --titlebar-shadow: 0 2px 6px rgba(166, 180, 200, 0.15);
         --backdrop-blur: none;
         --sb-bg: #f8fafc;
+        --sb-header-bg: #f8fafc;
         --sb-border: rgba(210, 224, 240, 0.85);
         --sb-radius: 18px;
         --sb-shadow: 8px 12px 28px rgba(166, 180, 200, 0.32), inset -4px -4px 8px rgba(210, 224, 240, 0.6), inset 4px 4px 8px rgba(255, 255, 255, 0.95);
@@ -809,6 +820,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         --titlebar-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
         --backdrop-blur: none;
         --sb-bg: linear-gradient(180deg, #182234 0%, #141b29 100%);
+        --sb-header-bg: #161e2d;
         --sb-border: rgba(255, 255, 255, 0.08);
         --sb-radius: 18px;
         --sb-shadow: 10px 16px 36px rgba(0, 0, 0, 0.6), inset -4px -4px 8px rgba(10, 15, 25, 0.7), inset 4px 4px 8px rgba(255, 255, 255, 0.06);
@@ -877,6 +889,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         --titlebar-shadow: 0 3px 0 #cbd5e1, 0 6px 12px rgba(0, 0, 0, 0.04);
         --backdrop-blur: none;
         --sb-bg: #ffffff;
+        --sb-header-bg: #ffffff;
         --sb-border: #94a3b8;
         --sb-radius: 16px;
         --sb-shadow: 4px 4px 0 #94a3b8, 6px 10px 20px rgba(15, 23, 42, 0.12), inset 0 1.5px 0 #ffffff;
@@ -941,6 +954,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         --titlebar-shadow: 0 3px 0 #020617, 0 8px 16px rgba(0, 0, 0, 0.4);
         --backdrop-blur: none;
         --sb-bg: #0f172a;
+        --sb-header-bg: #0f172a;
         --sb-border: #334155;
         --sb-radius: 16px;
         --sb-shadow: 4px 4px 0 #020617, 8px 16px 30px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -1009,6 +1023,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         --titlebar-shadow: 0 2px 10px rgba(99, 102, 241, 0.05);
         --backdrop-blur: none;
         --sb-bg: #ffffff;
+        --sb-header-bg: #ffffff;
         --sb-border: rgba(56, 189, 248, 0.55);
         --sb-radius: 16px;
         --sb-shadow: 0 0 24px rgba(56, 189, 248, 0.22), 4px 8px 24px rgba(14, 165, 233, 0.1);
@@ -1073,6 +1088,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         --titlebar-shadow: 0 2px 12px rgba(99, 102, 241, 0.12);
         --backdrop-blur: none;
         --sb-bg: rgba(10, 15, 26, 0.92);
+        --sb-header-bg: #0b101c;
         --sb-border: rgba(56, 189, 248, 0.45);
         --sb-radius: 16px;
         --sb-shadow: 0 0 28px rgba(56, 189, 248, 0.22), 6px 12px 32px rgba(0, 0, 0, 0.5);
@@ -1140,6 +1156,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         --titlebar-shadow: 0 2px 8px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.01);
         --backdrop-blur: blur(12px);
         --sb-bg: rgba(255, 255, 255, 0.82);
+        --sb-header-bg: rgba(255, 255, 255, 0.94);
         --sb-border: rgba(226, 232, 240, 0.85);
         --sb-radius: 16px;
         --sb-shadow: 4px 6px 24px -2px rgba(67, 105, 169, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.95);
@@ -1203,6 +1220,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         --titlebar-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
         --backdrop-blur: blur(14px);
         --sb-bg: rgba(15, 23, 42, 0.75);
+        --sb-header-bg: rgba(15, 23, 42, 0.92);
         --sb-border: rgba(255, 255, 255, 0.08);
         --sb-radius: 16px;
         --sb-shadow: 6px 12px 32px -4px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
@@ -1270,6 +1288,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       --titlebar-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       --backdrop-blur: none;
       --sb-bg: #ffffff;
+      --sb-header-bg: #ffffff;
       --sb-border: #e2e8f0;
       --sb-radius: 14px;
       --sb-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -1333,6 +1352,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       --titlebar-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       --backdrop-blur: none;
       --sb-bg: #0f172a;
+      --sb-header-bg: #0f172a;
       --sb-border: #1e293b;
       --sb-radius: 14px;
       --sb-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
@@ -2359,6 +2379,21 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
         [role="navigation"][aria-label="Sidebar"] .bg-sidebar {
           background-color: transparent !important;
+        }
+        /* Sticky Section Headers (Projects, Pinned Conversations, Conversations) - Solid Background Shield */
+        [role="navigation"][aria-label="Sidebar"] div[data-sidebar-section-drop-id="main-section-header"],
+        [role="navigation"][aria-label="Sidebar"] div[data-sidebar-section-drop-id="pinned"],
+        [role="navigation"][aria-label="Sidebar"] div[data-sidebar-section-drop-id="standalone"],
+        [role="navigation"][aria-label="Sidebar"] div[data-sidebar-section-drop-id*="section-header"],
+        [role="navigation"][aria-label="Sidebar"] div:has(> [data-testid="section-header"]),
+        [role="navigation"][aria-label="Sidebar"] [data-testid="section-header"],
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/section-header"],
+        [role="navigation"][aria-label="Sidebar"] div[style*="position: sticky"] {
+          background: var(--sb-header-bg, var(--sb-bg)) !important;
+          background-color: var(--sb-header-bg, var(--sb-bg)) !important;
+          backdrop-filter: var(--sb-backdrop-blur, blur(16px)) !important;
+          -webkit-backdrop-filter: var(--sb-backdrop-blur, blur(16px)) !important;
+          z-index: 25 !important;
         }
         [role="navigation"][aria-label="Sidebar"] a[href="/"] {
           background: var(--sb-btn-new-bg) !important;
