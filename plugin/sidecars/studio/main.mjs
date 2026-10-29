@@ -1352,6 +1352,32 @@ function generateScript(c) {
         text-align: left !important;
       }
 
+      /* Rock-solid, stationary media volume & mute controls (prevents expanding black capsule layout shift & jitter) */
+      video::-webkit-media-controls-volume-control-container,
+      audio::-webkit-media-controls-volume-control-container {
+        width: 36px !important;
+        min-width: 36px !important;
+        max-width: 36px !important;
+        flex: 0 0 36px !important;
+        overflow: hidden !important;
+        background: transparent !important;
+      }
+      video::-webkit-media-controls-volume-slider,
+      audio::-webkit-media-controls-volume-slider {
+        display: none !important;
+        width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      video::-webkit-media-controls-mute-button,
+      audio::-webkit-media-controls-mute-button {
+        width: 36px !important;
+        min-width: 36px !important;
+        max-width: 36px !important;
+        flex: 0 0 36px !important;
+        cursor: pointer !important;
+      }
+
       /* Multi-Choice Questions (ask_question) BiDi & RTL Support */
       [data-testid="ask-question-header-text"],
       [data-testid="ask-question-header-text"] p,
