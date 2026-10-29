@@ -864,8 +864,10 @@ win.webContents.on('dom-ready', () => {
                         transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
                     }
                     \${(isLightClay || isDarkClay) ? \`
-                    [id="antigravity.agentSidePanelInputBox"] .bg-card, 
-                    [id*="agentSidePanelInputBox"] .bg-card {
+                    [id="antigravity.agentSidePanelInputBox"] > div.bg-card:not([role="listbox"]):not(.bottom-full),
+                    [id="antigravity.agentSidePanelInputBox"] .surface-composer-card,
+                    [id*="agentSidePanelInputBox"] > div.bg-card:not([role="listbox"]):not(.bottom-full),
+                    [id*="agentSidePanelInputBox"] .surface-composer-card {
                         background: transparent !important;
                     }
                     [id="antigravity.agentSidePanelInputBox"]:hover, 
@@ -874,6 +876,14 @@ win.webContents.on('dom-ready', () => {
                         transform: translateY(-1.5px);
                     }
                     \` : ''}
+                    [id*="agentSidePanelInputBox"] [role="listbox"],
+                    [id*="agentSidePanelInputBox"] div.bottom-full,
+                    [id*="agentSidePanelInputBox"] div[role="listbox"] {
+                        background-color: var(--card) !important;
+                        backdrop-filter: blur(20px) !important;
+                        -webkit-backdrop-filter: blur(20px) !important;
+                        opacity: 1 !important;
+                    }
                 \` : '';
                 
                 // 1. Independent UI & Styling CSS (Always active, never disabled by RTL Engine)
