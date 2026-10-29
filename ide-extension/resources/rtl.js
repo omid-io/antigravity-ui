@@ -97,6 +97,27 @@
             font-family: Consolas, 'Courier New', monospace !important;
         }
 
+        /* Media Elements Isolation (Audio & Video Players & Native Controls) */
+        video, audio, video *, audio *,
+        [data-testid*="media"], [data-testid*="video"], [data-testid*="audio"],
+        .media-container, .video-container, .audio-container,
+        div:has(> video), div:has(> audio), figure:has(video), figure:has(audio) {
+            direction: ltr !important;
+            text-align: left !important;
+            unicode-bidi: normal !important;
+        }
+
+        video::-webkit-media-controls,
+        video::-webkit-media-controls-enclosure,
+        video::-webkit-media-controls-panel,
+        audio::-webkit-media-controls,
+        audio::-webkit-media-controls-enclosure,
+        audio::-webkit-media-controls-panel {
+            direction: ltr !important;
+            text-align: left !important;
+        }
+
+
         .aislash-editor-placeholder {
             right: 15px !important;
             left: auto !important;
@@ -937,11 +958,13 @@
     var TIPTAP_PLAN_ALLOW = '.plan-editor .tiptap.ProseMirror, .ui-plan-editor .tiptap.ProseMirror, .ui-rich-text-editor.plan-editor__richtext .tiptap.ProseMirror, .markdown-editor-react .tiptap.ProseMirror, .markdown-editor-react .ProseMirror';
     var TIPTAP_PROMPT_ALLOW = '.ui-prompt-input .tiptap.ProseMirror, .agent-prompt-input-root .tiptap.ProseMirror, .composer-questionnaire-toolbar .tiptap.ProseMirror';
     var CODE_EXCLUDE = 'code, pre, .markdown-code-outer-container, .cursor-code-block-content, .markdown-lexical-editor-code-block';
+    var MEDIA_EXCLUDE = 'video, audio, .media-container, .video-container, .audio-container, [data-testid*="media"], [data-testid*="video"], [data-testid*="audio"]';
     var PLAN_CONTEXT = '.plan-editor, .ui-plan-editor, .ui-rich-text-editor.plan-editor__richtext, .markdown-editor-react';
 
     function isExcludedElement(el) {
         if (!el) return false;
         if (el.closest(CODE_EXCLUDE)) return true;
+        if (el.closest(MEDIA_EXCLUDE)) return true;
         if (el.closest('.monaco-editor') && !el.closest(PLAN_CONTEXT)) return true;
         if (el.closest('.node-mermaid')) return true;
         var tiptap = el.closest('.tiptap.ProseMirror');

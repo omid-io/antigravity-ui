@@ -722,12 +722,12 @@ win.webContents.on('dom-ready', () => {
                 let codeFontStr = codeFont ? \`'\${codeFont}', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace\` : 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
                 
                 let forceRtlStyle = forceRTL ? \`
-                    .prose > *:not(pre):not(code), 
-                    [data-testid="chat-message"] > *:not(pre):not(code), 
-                    .markdown-body > *:not(pre):not(code), 
-                    .leading-relaxed > *:not(pre):not(code),
+                    .prose > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]), 
+                    [data-testid="chat-message"] > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]), 
+                    .markdown-body > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]), 
+                    .leading-relaxed > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]),
                     [data-testid="user-input-step"],
-                    [data-testid="user-input-step"] > *:not(pre):not(code),
+                    [data-testid="user-input-step"] > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]),
                     div:has(> [role="radiogroup"]),
                     label[for^="ask-opt-"] {
                         direction: rtl !important;
@@ -934,6 +934,38 @@ win.webContents.on('dom-ready', () => {
                     }
                     
                     \${forceRtlStyle}
+
+      /* Media Elements Isolation (Audio & Video Players & Native Controls) */
+      video,
+      audio,
+      video *,
+      audio *,
+      [data-testid*="media"],
+      [data-testid*="video"],
+      [data-testid*="audio"],
+      .media-container,
+      .video-container,
+      .audio-container,
+      div:has(> video),
+      div:has(> audio),
+      figure:has(video),
+      figure:has(audio) {
+        direction: ltr !important;
+        text-align: left !important;
+        unicode-bidi: normal !important;
+      }
+
+      /* Chromium Blink Media Controls Shadow DOM Layout Invariant */
+      video::-webkit-media-controls,
+      video::-webkit-media-controls-enclosure,
+      video::-webkit-media-controls-panel,
+      audio::-webkit-media-controls,
+      audio::-webkit-media-controls-enclosure,
+      audio::-webkit-media-controls-panel {
+        direction: ltr !important;
+        text-align: left !important;
+      }
+
                     
                     /* RTL List Padding Fix */
                     ul:not(#_)[dir="rtl"], ol:not(#_)[dir="rtl"],

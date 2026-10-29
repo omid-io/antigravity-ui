@@ -4,21 +4,23 @@
 
 **The complete zero-patch UI enhancement, native RTL & Persian/Arabic (راست چین) typography engine, workspace ergonomics, and tactile theme studio for Google Antigravity & Antigravity IDE.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/omid-io/antigravity-ui?style=social&label=Star)](https://github.com/omid-io/antigravity-ui)
 [![npm version](https://img.shields.io/npm/v/antigravity-ui.svg?color=cb3837)](https://www.npmjs.com/package/antigravity-ui)
-[![Open VSX](https://img.shields.io/open-vsx/v/omid-io/antigravity-rtl.svg?color=purple)](https://open-vsx.org/extension/omid-io/antigravity-rtl)
+[![npm downloads](https://img.shields.io/npm/dt/antigravity-ui.svg?color=2563eb&label=CLI%20downloads)](https://www.npmjs.com/package/antigravity-ui)
+[![Open VSX](https://img.shields.io/open-vsx/v/omid-io/antigravity-rtl.svg?color=purple&label=IDE%20Extension)](https://open-vsx.org/extension/omid-io/antigravity-rtl)
+[![Open VSX Downloads](https://img.shields.io/open-vsx/dt/omid-io/antigravity-rtl.svg?color=purple&label=IDE%20downloads)](https://open-vsx.org/extension/omid-io/antigravity-rtl)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![RTL Support](https://img.shields.io/badge/RTL-Native%20BiDi%20(راست%20چین)-10b981.svg)](#-persian--arabic-rtl-engine)
-[![Persian & Arabic](https://img.shields.io/badge/Persian%20%26%20Arabic-Supported-blue.svg)](#-راهنمای-فارسی-persian-guide)
 [![CI](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/omid-io/antigravity-ui/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/omid-io/antigravity-ui?color=blue&label=release)](https://github.com/omid-io/antigravity-ui/releases/latest)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey.svg)](https://github.com/google/antigravity)
 
 <p>
-  <a href="#-quick-start"><b>🚀 Install</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.6.6)</b></a> •
+  <a href="#-quick-start"><b>🚀 Quick Start</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.6.14)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
-  <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX</b></a> •
+  <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX (IDE Extension)</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
   <a href="#-visual-tour">Visual Tour</a> •
   <a href="#-version-compatibility-matrix">Compatibility</a> •
@@ -26,9 +28,14 @@
   <a href="#-راهنمای-فارسی-persian-guide">راهنمای فارسی</a>
 </p>
 
+> 🌟 **Enjoying Antigravity UI? Please star the repo on GitHub!** It takes one click and helps the project grow.
+
 ```bash
-# Instant launch with zero permanent patches (survives all Google Antigravity updates)
+# ⚡ 30-Second Instant Trial (Zero permanent patches, survives all Google updates)
 npx antigravity-ui
+
+# 🔄 Revert anytime back to 100% factory state:
+npx antigravity-ui --restore
 ```
 
 <br>
@@ -41,7 +48,7 @@ npx antigravity-ui
 
 ## 💡 Why Antigravity UI? (The Problems We Solve)
 
-| Default Google Antigravity | With Antigravity UI Studio (v3.6.6 Native) |
+| Default Google Antigravity | With Antigravity UI Studio (v3.6.14 Native) |
 | :--- | :--- |
 | **Invasive Binary Patches:** Vulnerable to desktop app updates wiping custom changes. | **100% Zero-Patch Plugin:** Official Google Plugin architecture that safely survives app updates. |
 | **Fixed 256px Docked Sidebar:** Clunky vertical borders and wasted ~100px screen real estate. | **Floating Island Sidebar & 160px Fluid Resizer:** Detached frosted glass canvas with zero divider borders. |
@@ -118,7 +125,7 @@ npx antigravity-ui
 
 ```mermaid
 flowchart LR
-    A["Antigravity UI v3.6.6"] --> B["Official Plugin Sidecar<br/>(Zero Asar Patches)"]
+    A["Antigravity UI v3.6.14"] --> B["Official Plugin Sidecar<br/>(Zero Asar Patches)"]
     A --> C["IDE Extension Installer"]
     B --> D["Antigravity Desktop App<br/>• Floating Island Sidebar<br/>• Native Sidebar 🌌 Button<br/>• 0ms Direct In-Memory Styling<br/>• Active Theme Auto-Sync<br/>• 160px Fluid Resizer"]
     C --> E["Antigravity IDE (VS Code Fork)<br/>• Status Bar RTL/LTR Toggle<br/>• Ctrl+Alt+R Shortcut<br/>• Editor Typography Injection<br/>• Unicode BiDi Markers"]
@@ -135,10 +142,10 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.6.6` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Floating Island Sidebar + Pure CSS 160px Resizer + BiDi Plaintext |
-| **Antigravity 2.16.x** | `1.107.0+` | `v3.6.6` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.6.6` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v3.6.6` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
+| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.6.14` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Floating Island Sidebar + Pure CSS 160px Resizer + BiDi Plaintext |
+| **Antigravity 2.16.x** | `1.107.0+` | `v3.6.14` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.6.14` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v3.6.14` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
 
 ---
 
@@ -286,6 +293,8 @@ npx antigravity-ui --restore
 
 ## سوئیت جامع ارتقای رابط کاربری، پشتیبانی کامل راست چین (RTL) و تایپوگرافی فارسی در Antigravity
 
+> 🌟 **اگر این افزونه برای شما مفید بود، لطفاً با ثبت یک ستاره (Star) در بالای صفحه گیت هاب از پروژه حمایت کنید!**
+
 **حل ریشه ای برعکس شدن متون فارسی و عربی (راستچین / راست چین)، پرانتزها و علائم نگارشی، فونت متغیر وزیرمتن، سایدبار جزیره ای شناور ۱۶۰ پیکسل و هماهنگی کامل دارک و لایت**
 
 <br>
@@ -298,7 +307,7 @@ npx antigravity-ui --restore
 
 ### 💡 چرا Antigravity UI؟ (مشکلاتی که حل می کنیم)
 
-| پیش فرض Google Antigravity | با Antigravity UI Studio (نسخه ۳.۶.۶) |
+| پیش فرض Google Antigravity | با Antigravity UI Studio (نسخه ۳.۶.۱۴) |
 | :--- | :--- |
 | **سایدبار متصل و ثابت ۲۵۶ پیکسل:** خط مرزی اضافی و هدر رفتن فضای مانیتور لپ تاپ ها. | **سایدبار شناور جزیره ای ۱۶۰ تا ۴۲۰ پیکسل:** طراحی مینیمال شیشه ای بدون خط مرزی مزاحم و درگ کاملا روان موس. |
 | **تداخل دکمه ها با عناوین:** افتادن دکمه های سه نقطه و + روی نام فولدرها و کلمات چت. | **باکس های اکشن یکدست بدون تداخل:** باکس های همرنگ با هاور، بدون خط بردر و با پوشش ۱۰۰٪ زمان چت. |
@@ -320,7 +329,7 @@ npx antigravity-ui --restore
 
 ---
 
-### 🌟 قابلیت های کلیدی نسخه ۳.۶.۶
+### 🌟 قابلیت های کلیدی نسخه ۳.۶.۱۴
 
 #### ۱. سایدبار جزیره ای شناور (Floating Island Sidebar)
 * **طراحی شناور و مدرن:** سایدبار با فواصل متقارن از لبه های پنجره جدا شده و گوشه های گرد با افکت های بصری (`Soft` شیشه ای، `3D` برجسته، `Clay` حجمی و `Glow` نئونی) به خود می گیرد.
