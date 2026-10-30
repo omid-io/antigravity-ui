@@ -30,12 +30,3 @@ pre code {
 	direction: ltr !important;
 	unicode-bidi: isolate !important;
 }
-
-
-/* Media Elements Isolation */
-video,
-audio {
-	direction: ltr !important;
-	text-align: left !important;
-	unicode-bidi: normal !important;
-}

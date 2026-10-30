@@ -1464,12 +1464,12 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           : "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace");
 
     const forceRtlCSS = forceRTL ? \`
-      .prose > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]), 
-      [data-testid="chat-message"] > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]), 
-      .markdown-body > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]), 
-      .leading-relaxed > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]),
+      .prose > *:not(pre):not(code), 
+      [data-testid="chat-message"] > *:not(pre):not(code), 
+      .markdown-body > *:not(pre):not(code), 
+      .leading-relaxed > *:not(pre):not(code),
       [data-testid="user-input-step"],
-      [data-testid="user-input-step"] > *:not(pre):not(code):not(video):not(audio):not([data-testid*="media"]):not([data-testid*="video"]),
+      [data-testid="user-input-step"] > *:not(pre):not(code),
       [data-testid="ask-question-header-text"],
       [data-testid="ask-question-header-text"] *,
       [data-testid="ask-question-option"],
@@ -1754,66 +1754,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         text-align: start;
       }
       \${forceRtlCSS}
-
-      /* Media Elements Isolation (Audio & Video Players & Native Controls) */
-      video,
-      audio,
-      video *,
-      audio *,
-      [data-testid*="media"],
-      [data-testid*="video"],
-      [data-testid*="audio"],
-      .media-container,
-      .video-container,
-      .audio-container,
-      div:has(> video),
-      div:has(> audio),
-      figure:has(video),
-      figure:has(audio) {
-        direction: ltr !important;
-        text-align: left !important;
-        unicode-bidi: normal !important;
-      }
-
-      /* Chromium Blink Media Controls Shadow DOM Layout Invariant */
-      video::-webkit-media-controls,
-      video::-webkit-media-controls-enclosure,
-      video::-webkit-media-controls-panel,
-      audio::-webkit-media-controls,
-      audio::-webkit-media-controls-enclosure,
-      audio::-webkit-media-controls-panel {
-        direction: ltr !important;
-        text-align: left !important;
-      }
-
-      /* Rock-solid, stationary media volume & mute controls (prevents expanding black capsule layout shift & jitter) */
-      video::-webkit-media-controls-volume-control-container,
-      audio::-webkit-media-controls-volume-control-container {
-        width: 36px !important;
-        min-width: 36px !important;
-        max-width: 36px !important;
-        flex: 0 0 36px !important;
-        overflow: hidden !important;
-        background: transparent !important;
-      }
-      video::-webkit-media-controls-volume-slider,
-      audio::-webkit-media-controls-volume-slider {
-        display: none !important;
-        width: 0 !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-      }
-      video::-webkit-media-controls-mute-button,
-      audio::-webkit-media-controls-mute-button {
-        width: 36px !important;
-        min-width: 36px !important;
-        max-width: 36px !important;
-        flex: 0 0 36px !important;
-        cursor: pointer !important;
-      }
-
-
-      /* Multi-Choice Questions (ask_question) BiDi & RTL Support */
+/* Multi-Choice Questions (ask_question) BiDi & RTL Support */
       [data-testid="ask-question-header-text"],
       [data-testid="ask-question-header-text"] p,
       [data-testid="ask-question-header-text"] span,
