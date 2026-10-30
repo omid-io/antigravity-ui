@@ -18,7 +18,7 @@
 
 <p>
   <a href="#-quick-start"><b>🚀 Quick Start</b></a> •
-  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.6.14)</b></a> •
+  <a href="https://github.com/omid-io/antigravity-ui/releases/latest"><b>📦 Latest Release (v3.6.15)</b></a> •
   <a href="https://www.npmjs.com/package/antigravity-ui"><b>🌐 npm Package</b></a> •
   <a href="https://open-vsx.org/extension/omid-io/antigravity-rtl"><b>🌌 Open VSX (IDE Extension)</b></a> •
   <a href="#-why-antigravity-ui-the-problems-we-solve">Why Antigravity UI?</a> •
@@ -48,7 +48,7 @@ npx antigravity-ui --restore
 
 ## 💡 Why Antigravity UI? (The Problems We Solve)
 
-| Default Google Antigravity | With Antigravity UI Studio (v3.6.14 Native) |
+| Default Google Antigravity | With Antigravity UI Studio (v3.6.15 Native) |
 | :--- | :--- |
 | **Invasive Binary Patches:** Vulnerable to desktop app updates wiping custom changes. | **100% Zero-Patch Plugin:** Official Google Plugin architecture that safely survives app updates. |
 | **Fixed 256px Docked Sidebar:** Clunky vertical borders and wasted ~100px screen real estate. | **Floating Island Sidebar & 160px Fluid Resizer:** Detached frosted glass canvas with zero divider borders. |
@@ -125,7 +125,7 @@ npx antigravity-ui --restore
 
 ```mermaid
 flowchart LR
-    A["Antigravity UI v3.6.14"] --> B["Official Plugin Sidecar<br/>(Zero Asar Patches)"]
+    A["Antigravity UI v3.6.15"] --> B["Official Plugin Sidecar<br/>(Zero Asar Patches)"]
     A --> C["IDE Extension Installer"]
     B --> D["Antigravity Desktop App<br/>• Floating Island Sidebar<br/>• Native Sidebar 🌌 Button<br/>• 0ms Direct In-Memory Styling<br/>• Active Theme Auto-Sync<br/>• 160px Fluid Resizer"]
     C --> E["Antigravity IDE (VS Code Fork)<br/>• Status Bar RTL/LTR Toggle<br/>• Ctrl+Alt+R Shortcut<br/>• Editor Typography Injection<br/>• Unicode BiDi Markers"]
@@ -142,10 +142,10 @@ Antigravity UI Studio is version-aware and continuously validated against upstre
 
 | Antigravity Version | Antigravity IDE | Antigravity UI Studio | Status | Architecture & Verification Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.6.14` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Floating Island Sidebar + Pure CSS 160px Resizer + BiDi Plaintext |
-| **Antigravity 2.16.x** | `1.107.0+` | `v3.6.14` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
-| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.6.14` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
-| **Cross-Platform OS** | Windows, macOS, Linux | `v3.6.14` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
+| **Antigravity 2.17.x – 2.20.x+** | `1.107.0+` (Code-OSS) | `v3.6.15` | 🟢 **Verified & Tested** | 100% Zero-Patch Plugin + Floating Island Sidebar + Pure CSS 160px Resizer + BiDi Plaintext |
+| **Antigravity 2.16.x** | `1.107.0+` | `v3.6.15` | 🟢 **Verified & Tested** | Official Plugin Sidecar Engine |
+| **Antigravity 2.x** (Earlier builds) | `1.100.x+` | `v3.6.15` | 🟢 **Compatible** | Standard Electron / Plugin Sidecar |
+| **Cross-Platform OS** | Windows, macOS, Linux | `v3.6.15` | 🟢 **CI-Verified** | Multi-OS verified & zero security leaks (Gitleaks passed) |
 
 ---
 
@@ -307,7 +307,7 @@ npx antigravity-ui --restore
 
 ### 💡 چرا Antigravity UI؟ (مشکلاتی که حل می کنیم)
 
-| پیش فرض Google Antigravity | با Antigravity UI Studio (نسخه ۳.۶.۱۴) |
+| پیش فرض Google Antigravity | با Antigravity UI Studio (نسخه ۳.۶.۱۵) |
 | :--- | :--- |
 | **سایدبار متصل و ثابت ۲۵۶ پیکسل:** خط مرزی اضافی و هدر رفتن فضای مانیتور لپ تاپ ها. | **سایدبار شناور جزیره ای ۱۶۰ تا ۴۲۰ پیکسل:** طراحی مینیمال شیشه ای بدون خط مرزی مزاحم و درگ کاملا روان موس. |
 | **تداخل دکمه ها با عناوین:** افتادن دکمه های سه نقطه و + روی نام فولدرها و کلمات چت. | **باکس های اکشن یکدست بدون تداخل:** باکس های همرنگ با هاور، بدون خط بردر و با پوشش ۱۰۰٪ زمان چت. |
@@ -329,7 +329,7 @@ npx antigravity-ui --restore
 
 ---
 
-### 🌟 قابلیت های کلیدی نسخه ۳.۶.۱۴
+### 🌟 قابلیت های کلیدی نسخه ۳.۶.۱۵
 
 #### ۱. سایدبار جزیره ای شناور (Floating Island Sidebar)
 * **طراحی شناور و مدرن:** سایدبار با فواصل متقارن از لبه های پنجره جدا شده و گوشه های گرد با افکت های بصری (`Soft` شیشه ای، `3D` برجسته، `Clay` حجمی و `Glow` نئونی) به خود می گیرد.

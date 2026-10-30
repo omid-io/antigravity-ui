@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [3.6.15] - 2026-10-30
+
+### Fixed
+- **Sidebar Sticky Section Headers Background Shield:** Introduced `--sb-header-bg` across all presets (Clay, 3D, Glow, Glass, Minimal) with a solid background and `blur(16px)` backdrop shield to prevent underlying scrolled items from bleeding through sticky `Projects`, `Pinned`, and `Conversations` headers.
+- **Slash Commands Menu (`/`) Background Isolation:** Resolved an issue where input composer card transparency leaked into floating slash command suggestion overlays (`[role="listbox"]`), restoring solid cards and crisp readability over chat content.
+- **Sidecar Direct-Run Supervision:** Enhanced sidecar runtime detection with `process.argv.some` to support Antigravity supervisor `--import` loader flags and ensure reliable background checks.
+
+---
+
+## [3.6.14] - 2026-10-28
+
+### Fixed
+- **Floating Sidebar Drop Shadow & Borderless Edge:** Scoped `overflow: visible !important` strictly to expanded states (`[aria-expanded="true"]`) and removed dividing border lines, restoring ambient right-side drop shadows while preserving native `Ctrl+B` accordion collapse.
+
+---
+
 ## [3.6.13] - 2026-10-28
 
 ### Changed
