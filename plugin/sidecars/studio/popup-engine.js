@@ -2592,15 +2592,13 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         #antigravity-ui-sidebar-btn {
           border-radius: 10px !important;
           background: var(--sb-footer-bg, rgba(255, 255, 255, 0.65)) !important;
-          border: 1px solid var(--sb-border) !important;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
-          backdrop-filter: blur(8px) !important;
+          border: none !important;
           -webkit-backdrop-filter: blur(8px) !important;
           transition: all 0.15s ease !important;
         }
         #antigravity-ui-sidebar-btn:hover {
           transform: translateY(-0.5px) !important;
-          border-color: var(--sb-item-active-border) !important;
+          border: none !important;
         }
       \` : \`
         /* --- CLEAN RESET TO DEFAULT DOCKED SIDEBAR WHEN FLOATING IS DISABLED --- */
