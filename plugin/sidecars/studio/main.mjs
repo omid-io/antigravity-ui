@@ -2482,7 +2482,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.6.19';
+  return '3.6.20';
 }
 
 function compareVersions(v1, v2) {
@@ -2604,11 +2604,67 @@ function injectToLiveWindows(config, force = false) {
   }).on('error', () => {});
 }
 
+function teardownLiveWindows(reload = true) {
+  const port = getDevToolsPort();
+  if (!port) return;
+
+  http.get(`http://127.0.0.1:${port}/json/list`, (res) => {
+    let raw = '';
+    res.on('data', chunk => raw += chunk);
+    res.on('end', () => {
+      try {
+        const targets = JSON.parse(raw);
+        const pages = targets.filter(t => t.type === 'page');
+
+        for (const page of pages) {
+          if (!page.webSocketDebuggerUrl) continue;
+          try {
+            const ws = new WebSocket(page.webSocketDebuggerUrl);
+            ws.onerror = () => {};
+            ws.onopen = () => {
+              const teardownScript = `(() => {
+                const ids = ['antigravity-ui-style', 'antigravity-ui-sidebar-btn', 'antigravity-ui-sidebar-btn-wrap', 'antigravity-ui-popup', 'antigravity-update-modal'];
+                for (const id of ids) {
+                  const el = document.getElementById(id);
+                  if (el) el.remove();
+                }
+                if (window.__antigravityUiObserver) {
+                  try { window.__antigravityUiObserver.disconnect(); } catch (_) {}
+                  delete window.__antigravityUiObserver;
+                }
+                delete window.__ANTIGRAVITY_CONFIG__;
+                delete window.__ANTIGRAVITY_POPUP_VERSION__;
+                delete window.__ANTIGRAVITY_UI_PAYLOAD_LOADED__;
+                ${reload ? 'location.reload();' : ''}
+              })()`;
+              ws.send(JSON.stringify({
+                id: 999,
+                method: 'Runtime.evaluate',
+                params: { expression: teardownScript }
+              }));
+              setTimeout(() => {
+                try { ws.close(); } catch (_) {}
+              }, 400);
+            };
+          } catch (_) {}
+        }
+      } catch (_) {}
+    });
+  }).on('error', () => {});
+}
+
 const isDirectRun = Boolean(process.argv.some(arg => arg && (arg.endsWith('main.mjs') || arg.endsWith('main.js'))));
+let healthCheckInterval = null;
 
 if (isDirectRun) {
   // Continuous background health check (every 3s, zero reflow, zero DOM touch unless missing)
-  setInterval(() => {
+  healthCheckInterval = setInterval(() => {
+    // Graceful self-teardown if plugin folder was removed from disk
+    if (!existsSync(HERE) || !existsSync(join(HERE, 'main.mjs'))) {
+      if (healthCheckInterval) clearInterval(healthCheckInterval);
+      try { process.exit(0); } catch (_) {}
+      return;
+    }
     injectToLiveWindows(currentActiveConfig, false);
   }, 3000);
 
@@ -2789,6 +2845,27 @@ function startLocalUpdateServer(port = 58888) {
           currentVersion: updateState.currentVersion,
           remoteVersion: st.latestVersion
         }));
+        return;
+      }
+
+      if ((url.pathname === '/api/restore' || url.pathname === '/api/teardown' || url.pathname === '/api/uninstall') && (req.method === 'POST' || req.method === 'GET')) {
+        try {
+          if (healthCheckInterval) {
+            clearInterval(healthCheckInterval);
+            healthCheckInterval = null;
+          }
+          teardownLiveWindows(true);
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, restored: true }));
+
+          // Gracefully terminate sidecar process
+          setTimeout(() => {
+            try { process.exit(0); } catch (_) {}
+          }, 600);
+        } catch (err) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: err.message }));
+        }
         return;
       }
 

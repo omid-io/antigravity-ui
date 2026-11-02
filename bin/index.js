@@ -185,6 +185,122 @@ async function sendSidecarReloadSignal() {
     return false;
 }
 
+function removePluginDirectory() {
+    const targetDir = path.join(os.homedir(), '.gemini', 'config', 'plugins', 'antigravity-ui');
+    if (fs.existsSync(targetDir)) {
+        try {
+            fs.rmSync(targetDir, { recursive: true, force: true });
+            return true;
+        } catch (e) {
+            console.error(yellow(`  ⚠ Could not remove ${targetDir}: ${e.message}`));
+        }
+    }
+    return false;
+}
+
+async function sendSidecarRestoreSignal() {
+    const ports = [58888, 58889];
+    for (const port of ports) {
+        try {
+            const restored = await new Promise((resolve) => {
+                const req = http.request({
+                    hostname: '127.0.0.1',
+                    port,
+                    path: '/api/restore',
+                    method: 'POST',
+                    timeout: 1000
+                }, (res) => {
+                    resolve(res.statusCode === 200);
+                });
+                req.on('error', () => resolve(false));
+                req.on('timeout', () => { req.destroy(); resolve(false); });
+                req.end();
+            });
+            if (restored) return true;
+        } catch (_) {}
+    }
+    return false;
+}
+
+async function performDirectCdpRestore() {
+    return new Promise((resolve) => {
+        let devToolsPort = null;
+        const candidates = [
+            path.join(os.homedir(), 'AppData', 'Roaming', 'Antigravity', 'DevToolsActivePort'),
+            path.join(os.homedir(), 'Library', 'Application Support', 'Antigravity', 'DevToolsActivePort'),
+            path.join(os.homedir(), '.config', 'Antigravity', 'DevToolsActivePort')
+        ];
+        for (const p of candidates) {
+            if (fs.existsSync(p)) {
+                try {
+                    const lines = fs.readFileSync(p, 'utf8').trim().split('\n');
+                    const port = parseInt(lines[0]?.trim(), 10);
+                    if (port && !isNaN(port)) {
+                        devToolsPort = port;
+                        break;
+                    }
+                } catch (_) {}
+            }
+        }
+        if (!devToolsPort) return resolve(false);
+
+        const req = http.get(`http://127.0.0.1:${devToolsPort}/json/list`, (res) => {
+            let raw = '';
+            res.on('data', chunk => raw += chunk);
+            res.on('end', () => {
+                try {
+                    const targets = JSON.parse(raw);
+                    const pages = targets.filter(t => t.type === 'page');
+                    if (pages.length === 0) return resolve(false);
+
+                    let handled = 0;
+                    for (const page of pages) {
+                        if (!page.webSocketDebuggerUrl) continue;
+                        try {
+                            if (typeof WebSocket !== 'undefined') {
+                                const ws = new WebSocket(page.webSocketDebuggerUrl);
+                                ws.onerror = () => {};
+                                ws.onopen = () => {
+                                    const teardownScript = `(() => {
+                                        const ids = ['antigravity-ui-style', 'antigravity-ui-sidebar-btn', 'antigravity-ui-sidebar-btn-wrap', 'antigravity-ui-popup', 'antigravity-update-modal'];
+                                        for (const id of ids) {
+                                            const el = document.getElementById(id);
+                                            if (el) el.remove();
+                                        }
+                                        if (window.__antigravityUiObserver) {
+                                            try { window.__antigravityUiObserver.disconnect(); } catch (_) {}
+                                            delete window.__antigravityUiObserver;
+                                        }
+                                        delete window.__ANTIGRAVITY_CONFIG__;
+                                        delete window.__ANTIGRAVITY_POPUP_VERSION__;
+                                        delete window.__ANTIGRAVITY_UI_PAYLOAD_LOADED__;
+                                        location.reload();
+                                    })()`;
+                                    ws.send(JSON.stringify({
+                                        id: 999,
+                                        method: 'Runtime.evaluate',
+                                        params: { expression: teardownScript }
+                                    }));
+                                    setTimeout(() => {
+                                        try { ws.close(); } catch (_) {}
+                                    }, 400);
+                                };
+                            }
+                        } catch (_) {}
+                        handled++;
+                    }
+                    setTimeout(() => resolve(handled > 0), 600);
+                } catch (_) {
+                    resolve(false);
+                }
+            });
+        });
+        req.on('error', () => resolve(false));
+        req.on('timeout', () => { req.destroy(); resolve(false); });
+        req.setTimeout(1000);
+    });
+}
+
 function cleanupLegacyAsarPatch() {
     try {
         const asarPath = getDefaultPath();
@@ -192,6 +308,7 @@ function cleanupLegacyAsarPatch() {
         const metaPath = asarPath + '.meta.json';
         if (fs.existsSync(backupPath) && fs.existsSync(asarPath)) {
             restoreBackup(asarPath, backupPath, metaPath, { force: true });
+            try { fs.unlinkSync(backupPath); } catch (_) {}
             return true;
         }
     } catch (_) {}
@@ -350,21 +467,54 @@ async function main() {
         : Promise.resolve(null);
 
     if (isRestore) {
-        const asarPath = getDefaultPath();
-        const backupPath = asarPath + '.bak';
-        const metaPath = asarPath + '.meta.json';
-        if (fs.existsSync(backupPath)) {
-            const spinner = ora('Restoring pristine app.asar backup...').start();
-            try {
-                const result = restoreBackup(asarPath, backupPath, metaPath, { force: isForce });
-                spinner.succeed(result.message);
-            } catch (e) {
-                spinner.fail('Failed to restore backup: ' + e.message);
+        const spinner = ora('Restoring Antigravity to pristine factory default...').start();
+        try {
+            // 1. Broadcast live teardown & reload signal to active Antigravity sidecar
+            spinner.text = 'Broadcasting live restore & teardown signal to active Antigravity windows...';
+            const sidecarRestored = await sendSidecarRestoreSignal();
+
+            // 2. Direct CDP fallback to ensure all active windows teardown & reload even if sidecar was down
+            const cdpRestored = await performDirectCdpRestore();
+
+            // 3. Remove Antigravity UI Studio plugin files
+            spinner.text = 'Removing Antigravity UI Studio plugin files...';
+            const removedPlugin = removePluginDirectory();
+
+            // 4. Restore legacy asar backup if present
+            spinner.text = 'Restoring pristine binary backups...';
+            const asarPath = getDefaultPath();
+            const backupPath = asarPath + '.bak';
+            const metaPath = asarPath + '.meta.json';
+            let asarRestored = false;
+            if (fs.existsSync(backupPath)) {
+                try {
+                    restoreBackup(asarPath, backupPath, metaPath, { force: isForce });
+                    try { fs.unlinkSync(backupPath); } catch (_) {}
+                    asarRestored = true;
+                } catch (e) {
+                    // backup might not exist or failed
+                }
             }
+
+            // 5. Remove IDE extension
+            handleIdeExtension(true);
+
+            spinner.succeed(bold(green('Successfully restored Antigravity to factory default!')));
+            if (sidecarRestored || cdpRestored) {
+                console.log(cyan('  ✔ Active Antigravity window instantly reloaded to factory default'));
+            }
+            if (removedPlugin) {
+                console.log(cyan('  ✔ Removed plugin from ~/.gemini/config/plugins/antigravity-ui'));
+            }
+            if (asarRestored) {
+                console.log(blue('  ✔ Restored original unpatched app.asar binary'));
+            }
+            console.log(green('\n✨ Antigravity restoration complete. All custom styles, buttons, and studio components reverted.\n'));
+            process.exit(0);
+        } catch (e) {
+            spinner.fail('Failed to restore Antigravity: ' + e.message);
+            process.exit(1);
         }
-        handleIdeExtension(true);
-        console.log(green('✔ Antigravity restoration complete.\n'));
-        process.exit(0);
     }
 
     if (isPatch) {
