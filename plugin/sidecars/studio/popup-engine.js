@@ -3963,10 +3963,10 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             <div class="rtl-select-wrap">
               <span class="rtl-select-label">Persian Font</span>
               <select class="rtl-select" id="p-faFont">
-                <option value="Vazirmatn" selected style="font-family: 'Vazirmatn', sans-serif;">Vazirmatn (وزیرمتن)</option>
-                <option value="Noto Sans Arabic" style="font-family: 'Noto Sans Arabic', sans-serif;">Noto Sans Arabic (نوتو)</option>
-                <option value="Rubik" style="font-family: 'Rubik', sans-serif;">Rubik (روبیک)</option>
-                <option value="Markazi Text" style="font-family: 'Markazi Text', serif;">Markazi Text (مرکزی)</option>
+                <option value="Vazirmatn" selected style="font-family: 'Vazirmatn', sans-serif;">Vazirmatn</option>
+                <option value="Noto Sans Arabic" style="font-family: 'Noto Sans Arabic', sans-serif;">Noto Sans Arabic</option>
+                <option value="Rubik" style="font-family: 'Rubik', sans-serif;">Rubik</option>
+                <option value="Markazi Text" style="font-family: 'Markazi Text', serif;">Markazi Text</option>
               </select>
             </div>
 
@@ -4676,9 +4676,9 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       <div class="rtl-modal-card">
         <div class="rtl-modal-header">
           <div class="rtl-modal-title">
-            <span>🚀 بروزرسانی Antigravity UI</span>
+            <span>🚀 Antigravity UI Update</span>
           </div>
-          <button type="button" class="rtl-modal-close" id="p-modal-close-btn" title="بستن">✕</button>
+          <button type="button" class="rtl-modal-close" id="p-modal-close-btn" title="Close">✕</button>
         </div>
         <div class="rtl-modal-badge">
           <span>v\${currentVer}</span>
@@ -4686,19 +4686,19 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           <span style="color:#38bdf8;font-weight:700;">v\${remoteVer}</span>
         </div>
         <div class="rtl-modal-desc">
-          نسخه جدید منتشر شد! برای ارتقا به این نسخه، دستور زیر را در ترمینال اجرا کنید (دستور در کلیپ بورد کپی شد):
+          A new version is available! Run the command below in your terminal to upgrade (copied to clipboard):
         </div>
-        <div class="rtl-modal-codebox" id="p-modal-codebox" title="برای کپی کلیک کنید">
+        <div class="rtl-modal-codebox" id="p-modal-codebox" title="Click to copy">
           <code class="rtl-modal-code">npx antigravity-ui</code>
-          <span class="rtl-modal-copy-btn" id="p-modal-copy-status">📋 کپی دستور</span>
+          <span class="rtl-modal-copy-btn" id="p-modal-copy-status">📋 Copy Command</span>
         </div>
         <div class="rtl-modal-actions">
-          <button type="button" class="rtl-modal-btn-reload" id="p-modal-reload-btn" title="بررسی فایل های دیسک و اعمال بروزرسانی">
+          <button type="button" class="rtl-modal-btn-reload" id="p-modal-reload-btn" title="Verify disk files and apply update">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            <span id="p-modal-reload-text">🔄 بررسی و راه اندازی مجدد افزونه</span>
+            <span id="p-modal-reload-text">🔄 Verify & Restart Extension</span>
           </button>
           <button type="button" class="rtl-modal-btn-link" id="p-modal-github-btn">
-            مشاهده تغییرات در گیت هاب ↗
+            View Release Notes on GitHub ↗
           </button>
         </div>
       </div>
@@ -4711,7 +4711,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText('npx antigravity-ui');
         const st = overlay.querySelector('#p-modal-copy-status');
-        if (st) st.textContent = '✔ کپی شد!';
+        if (st) st.textContent = '✔ Copied!';
       }
     } catch (_) {}
 
@@ -4734,8 +4734,8 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         } catch (_) {}
         const st = overlay.querySelector('#p-modal-copy-status');
         if (st) {
-          st.textContent = '✔ کپی شد!';
-          setTimeout(() => { if (st) st.textContent = '📋 کپی دستور'; }, 2000);
+          st.textContent = '✔ Copied!';
+          setTimeout(() => { if (st) st.textContent = '📋 Copy Command'; }, 2000);
         }
       });
     }
@@ -4744,7 +4744,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
     const reloadText = overlay.querySelector('#p-modal-reload-text');
     if (reloadBtn) {
       reloadBtn.addEventListener('click', async () => {
-        if (reloadText) reloadText.textContent = 'در حال بررسی و راه اندازی...';
+        if (reloadText) reloadText.textContent = 'Verifying & restarting...';
         reloadBtn.style.opacity = '0.7';
         reloadBtn.style.pointerEvents = 'none';
 
@@ -4770,7 +4770,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
 
         if (reloadSuccess) {
-          if (reloadText) reloadText.textContent = '✔ نسخه جدید با موفقیت اعمال شد!';
+          if (reloadText) reloadText.textContent = '✔ Successfully updated to latest version!';
           reloadBtn.style.background = '#10b981';
           reloadBtn.style.opacity = '1';
           availableUpdateInfo = null;
@@ -4802,7 +4802,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           }
 
           if (isUpdatedOnDisk) {
-            if (reloadText) reloadText.textContent = '✔ فایل ها بروز هستند!';
+            if (reloadText) reloadText.textContent = '✔ Extension files are up to date!';
             reloadBtn.style.background = '#10b981';
             reloadBtn.style.opacity = '1';
             availableUpdateInfo = null;
@@ -4810,11 +4810,11 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
             if (versionText) versionText.textContent = 'v' + (activeVersion || remoteVer);
             setTimeout(() => overlay.remove(), 1000);
           } else {
-            if (reloadText) reloadText.textContent = '⚠ ابتدا کد را در ترمینال اجرا کنید!';
+            if (reloadText) reloadText.textContent = '⚠ Run upgrade command in terminal first!';
             reloadBtn.style.background = '#ef4444';
             reloadBtn.style.opacity = '1';
             setTimeout(() => {
-              if (reloadText) reloadText.textContent = '🔄 بررسی و راه اندازی مجدد افزونه';
+              if (reloadText) reloadText.textContent = '🔄 Verify & Restart Extension';
               reloadBtn.style.background = '#2563eb';
               reloadBtn.style.pointerEvents = 'auto';
             }, 2500);

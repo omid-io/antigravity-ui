@@ -165,11 +165,11 @@ function generateCSS(state) {
 }
 
 const HTML_PAGE = `<!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تنظیمات نهایی تفکیک پروژه‌ها (Antigravity Projects)</title>
+  <title>Antigravity Projects - Sidebar Style Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #0f172a; }
@@ -210,14 +210,14 @@ const HTML_PAGE = `<!DOCTYPE html>
       <div>
         <div class="flex items-center gap-2.5">
           <span class="w-3.5 h-3.5 rounded-full bg-blue-600 animate-pulse"></span>
-          <h1 class="text-base font-bold text-slate-900">تنظیمات نهایی سایدبار پروژه‌ها</h1>
+          <h1 class="text-base font-bold text-slate-900">Sidebar Projects Final Settings</h1>
         </div>
         <p class="text-xs text-slate-500 mt-1">
-          تنها انتخاب‌های برگزیده شما نگه داشته شده‌اند. سوییچ‌ها را بررسی کنید:
+          Selected customization switches:
         </p>
       </div>
       <div id="status-pill" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5">
-        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> فعال و اعمال‌شده ✔
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Active & Applied ✔
       </div>
     </div>
 
@@ -231,8 +231,8 @@ const HTML_PAGE = `<!DOCTYPE html>
             T
           </div>
           <div>
-            <div class="text-xs font-bold text-slate-800">رنگ عنوان پروژه: آبی ملوانی (Accent Blue)</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">تفکیک شفاف نام پروژه از متن خاکستری چت‌ها</div>
+            <div class="text-xs font-bold text-slate-800">Project Title Color: Dynamic Accent</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Clear separation of project titles from chat items</div>
           </div>
         </div>
         <div onclick="toggle('blueText')" id="sw-blueText" class="switch-track active">
@@ -247,8 +247,8 @@ const HTML_PAGE = `<!DOCTYPE html>
             W
           </div>
           <div>
-            <div class="text-xs font-bold text-slate-800">وزن فونت عنوان: متوسط (Medium / 500)</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">ضخامت بهینه و استاندارد، بدون سنگینی بولد</div>
+            <div class="text-xs font-bold text-slate-800">Project Title Font Weight: Medium (500)</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Optimal typography hierarchy without bold clutter</div>
           </div>
         </div>
         <div onclick="toggle('mediumWeight')" id="sw-mediumWeight" class="switch-track active">
@@ -263,8 +263,8 @@ const HTML_PAGE = `<!DOCTYPE html>
             📁
           </div>
           <div>
-            <div class="text-xs font-bold text-slate-800">بزرگ‌نمایی آیکون پوشه (۱۲۲٪ - برجسته)</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">رنگ خاکستری ملایم همراه با مقیاس برجسته‌تر</div>
+            <div class="text-xs font-bold text-slate-800">Folder Icon Scale: Emphasized (122%)</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Harmonized icon styling with enhanced visibility</div>
           </div>
         </div>
         <div onclick="toggle('largeIcon')" id="sw-largeIcon" class="switch-track active">
@@ -279,8 +279,8 @@ const HTML_PAGE = `<!DOCTYPE html>
             ↔
           </div>
           <div>
-            <div class="text-xs font-bold text-slate-800">فاصله تنفس فشرده (۴ پیکسل بدون خط جداکننده)</div>
-            <div class="text-[11px] text-slate-400 mt-0.5">حفظ فضای خالی بین پروژه‌ها بدون ایجاد شلوغی بصری</div>
+            <div class="text-xs font-bold text-slate-800">Breathing Gap: Compact (4px, Borderless)</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Clean negative space without divider lines</div>
           </div>
         </div>
         <div onclick="toggle('compactSpacing')" id="sw-compactSpacing" class="switch-track active">
@@ -293,10 +293,10 @@ const HTML_PAGE = `<!DOCTYPE html>
     <!-- Bottom Actions -->
     <div class="flex items-center justify-between pt-1 text-xs">
       <button onclick="resetAll(false)" class="text-slate-400 hover:text-slate-600 transition">
-        خاموش کردن همه (حالت پیش‌فرض کامل)
+        Turn off all (Full Default)
       </button>
       <button onclick="resetAll(true)" class="text-blue-600 hover:text-blue-700 font-bold transition">
-        روشن کردن همه انتخاب‌ها
+        Turn on all selections
       </button>
     </div>
 
@@ -322,7 +322,7 @@ const HTML_PAGE = `<!DOCTYPE html>
 
     async function send() {
       const statusPill = document.getElementById('status-pill');
-      statusPill.innerHTML = '<span class="w-2 h-2 rounded-full bg-blue-500 animate-spin"></span> در حال اعمال...';
+      statusPill.innerHTML = '<span class="w-2 h-2 rounded-full bg-blue-500 animate-spin"></span> Applying...';
 
       try {
         const res = await fetch('/api/apply', {
@@ -332,12 +332,12 @@ const HTML_PAGE = `<!DOCTYPE html>
         });
         const data = await res.json();
         if (data.success) {
-          statusPill.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> اعمال شد ✔';
+          statusPill.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Applied ✔';
         } else {
-          statusPill.textContent = 'خطا در اعمال';
+          statusPill.textContent = 'Error applying';
         }
       } catch (e) {
-        statusPill.textContent = 'عدم ارتباط با سرور';
+        statusPill.textContent = 'Server communication error';
       }
     }
 
