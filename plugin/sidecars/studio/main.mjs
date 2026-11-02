@@ -2482,7 +2482,7 @@ function getStudioVersion() {
       if (pkg && pkg.version) return pkg.version;
     }
   } catch (_) {}
-  return '3.6.20';
+  return '3.6.21';
 }
 
 function compareVersions(v1, v2) {
