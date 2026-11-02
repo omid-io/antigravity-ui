@@ -2362,47 +2362,52 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           -webkit-backdrop-filter: var(--sb-backdrop-blur, blur(16px)) !important;
           z-index: 25 !important;
         }
-        [role="navigation"][aria-label="Sidebar"] a[href="/"] {
-          background: var(--sb-btn-new-bg) !important;
-          color: var(--sb-btn-new-color) !important;
-          border: 1px solid var(--sb-btn-new-border) !important;
-          border-radius: 10px !important;
-          box-shadow: var(--sb-btn-new-shadow) !important;
-          transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
-          font-weight: 500 !important;
-        }
-        [role="navigation"][aria-label="Sidebar"] a[href="/"]:hover {
-          transform: translateY(-1px) !important;
-          filter: brightness(1.06) !important;
-        }
-        [role="navigation"][aria-label="Sidebar"] a[href="/"]:active {
-          transform: translateY(1px) !important;
-          filter: brightness(0.96) !important;
-        }
-        [role="navigation"][aria-label="Sidebar"] a[href="/"] svg {
-          color: var(--sb-btn-new-color) !important;
-        }
+        /* Dynamic Accent Harmonization (Follows var(--primary) from Antigravity Settings) */
+        [role="navigation"][aria-label="Sidebar"] a[href="/"],
         [role="navigation"][aria-label="Sidebar"] [aria-label="Create New Project"] {
-          background: var(--sb-btn-new-bg) !important;
-          color: var(--sb-btn-new-color) !important;
-          border: 1px solid var(--sb-btn-new-border) !important;
-          border-radius: 8px !important;
-          box-shadow: var(--sb-btn-new-shadow) !important;
+          background: var(--primary) !important;
+          color: var(--primary-foreground, #ffffff) !important;
+          border: 1px solid color-mix(in srgb, var(--primary) 85%, #000000) !important;
+          box-shadow: 0 1px 3px color-mix(in srgb, var(--primary) 20%, transparent) !important;
           transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
+        [role="navigation"][aria-label="Sidebar"] a[href="/"]:hover,
         [role="navigation"][aria-label="Sidebar"] [aria-label="Create New Project"]:hover {
+          filter: brightness(1.08) !important;
           transform: translateY(-1px) !important;
-          filter: brightness(1.06) !important;
+          box-shadow: 0 3px 8px color-mix(in srgb, var(--primary) 28%, transparent) !important;
         }
-        /* Folder Item Titles & Solid Action Overlays */
+        [role="navigation"][aria-label="Sidebar"] a[href="/"] svg,
+        [role="navigation"][aria-label="Sidebar"] [aria-label="Create New Project"] svg {
+          color: var(--primary-foreground, #ffffff) !important;
+        }
+
+        /* Sidebar Project Separator & Hierarchy */
+        [role="navigation"][aria-label="Sidebar"] div[data-sidebar-section-drop-id]:has([data-testid="project-header"]) {
+          margin-top: 4px !important;
+          padding-top: 2px !important;
+          border-top: none !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] div[data-sidebar-section-drop-id="main-section-header"] + div[data-sidebar-section-drop-id]:has([data-testid="project-header"]) {
+          margin-top: 2px !important;
+          padding-top: 2px !important;
+          border-top: none !important;
+        }
+
+        /* Project Header Titles (Dynamic Accent Color, Medium Weight, Transparent Background) */
         [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"],
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] {
           background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          color: var(--primary) !important;
+          font-weight: 500 !important;
+          font-size: 13px !important;
           border-radius: 8px !important;
           padding-right: 12px !important;
           padding-left: 6px !important;
           position: relative !important;
-          transition: background 0.15s ease !important;
+          transition: background-color 0.15s ease, color 0.15s ease !important;
         }
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] > div.flex-1 {
           min-width: 0 !important;
@@ -2410,16 +2415,54 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         }
         [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
-          background: #eaf1fb !important;
+          background: color-mix(in srgb, var(--primary) 4.5%, transparent) !important;
           padding-right: 56px !important;
         }
-        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
-        .dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
-        .theme-dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover,
-        .dark [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
-          background: #1c273a !important;
+
+        /* Project Folder Icon (Dynamic Accent Color, Scaled 122%) */
+        [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"] svg,
+        [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"] svg {
+          color: var(--primary) !important;
+          opacity: 0.9 !important;
+          transform: scale(1.22) !important;
+          transition: transform 0.15s ease, color 0.15s ease, opacity 0.15s ease !important;
         }
-        /* Solid Harmonious Folder Action Box (No fade, no border, matching background) */
+
+        /* Hover State on Sidebar Conversation Items & Buttons (Ultra-Subtle 4.5%) */
+        [role="navigation"][aria-label="Sidebar"] div[data-sidebar-section-drop-id] [role="button"]:hover,
+        [role="navigation"][aria-label="Sidebar"] div[data-sidebar-section-drop-id] a:hover:not([aria-current="page"]):not([href="/"]) {
+          background: color-mix(in srgb, var(--primary) 4.5%, transparent) !important;
+        }
+
+        /* Active / Current Conversation Item: Natural Default Foreground Text with Medium 550 Weight */
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"][data-selected="true"],
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary,
+        [role="navigation"][aria-label="Sidebar"] .bg-sidebar-secondary,
+        [role="navigation"][aria-label="Sidebar"] a[aria-current="page"],
+        [role="navigation"][aria-label="Sidebar"] [data-active="true"],
+        [role="navigation"][aria-label="Sidebar"] div[data-selected="true"] {
+          background: color-mix(in srgb, var(--primary) 7%, transparent) !important;
+          border: 1px solid color-mix(in srgb, var(--primary) 16%, transparent) !important;
+          border-radius: 8px !important;
+          box-shadow: 0 1px 2px color-mix(in srgb, var(--primary) 8%, transparent) !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"][data-selected="true"] span,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary span,
+        [role="navigation"][aria-label="Sidebar"] .bg-sidebar-secondary span,
+        [role="navigation"][aria-label="Sidebar"] a[aria-current="page"] span,
+        [role="navigation"][aria-label="Sidebar"] [data-active="true"] span {
+          color: var(--foreground) !important;
+          font-weight: 550 !important;
+        }
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div.absolute.-right-1,
+        [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div[class*="absolute"][class*="-right-"] {
+          background: color-mix(in srgb, var(--primary) 12%, #ffffff) !important;
+        }
+        .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div.absolute.-right-1,
+        .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div.absolute.-right-1 {
+          background: color-mix(in srgb, var(--primary) 15%, #1e293b) !important;
+        }
+        /* Solid Harmonious Folder Action Box */
         [role="navigation"][aria-label="Sidebar"] div:has(> button[aria-label*="Project options"]),
         [role="navigation"][aria-label="Sidebar"] div:has(> a[aria-label*="New Conversation in Project"]),
         [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1,
@@ -2431,7 +2474,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
           right: 2px !important;
           height: 24px !important;
           padding: 0 4px !important;
-          background: #eaf1fb !important;
+          background: #e2edfd !important;
           border-radius: 6px !important;
           border: none !important;
           box-shadow: none !important;
@@ -2448,25 +2491,7 @@ export function generatePopupBundle(config, fontBase64, sidecarPort, sidecarToke
         .theme-dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1,
         .dark [role="navigation"][aria-label="Sidebar"] div.group\/header > div.absolute.right-1,
         .dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1 {
-          background: #1c273a !important;
-        }
-
-        /* Active & Hover Chat Rows */
-        [role="navigation"][aria-label="Sidebar"] .bg-sidebar-secondary {
-          background: var(--sb-item-active-bg) !important;
-          color: var(--sb-item-active-color) !important;
-          border: 1px solid var(--sb-item-active-border) !important;
-          border-radius: 10px !important;
-          font-weight: 500 !important;
-          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
-          transition: all 0.15s ease !important;
-        }
-        [role="navigation"][aria-label="Sidebar"] .bg-sidebar-secondary span {
-          color: var(--sb-item-active-color) !important;
-        }
-        [role="navigation"][aria-label="Sidebar"] div[style*="--row-bg"] {
-          border-radius: 10px !important;
-          transition: background 0.15s ease !important;
+          background: #1e3a5f !important;
         }
         /* Chat Rows Styling, Left-Aligned LTR, Hover & Compact Clickable Area */
         [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"] {
