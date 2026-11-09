@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.6.23] - 2026-11-09
 
+### Fixed
+- **Sidebar Project Titles Un-truncation:** Removed 58px and 64px right-padding restrictions on project headers, expanding project titles to full available width with clean symmetric 6px padding.
+- **Solid Folder Action Box Hover Pill:** Fixed unescaped CSS selector in folder action box, ensuring action buttons reliably render with a solid, rounded pill background overlay on hover in both light and dark themes without obscuring underlying text.
+
+---
 
 ## [3.6.15] - 2026-10-30
 

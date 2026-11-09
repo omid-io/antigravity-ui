@@ -121,7 +121,7 @@ function generateCSS(state) {
     html body [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
     html body [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
       background: rgba(0, 0, 0, 0.04) !important;
-      padding-right: 56px !important;
+      padding-right: 6px !important;
     }
     .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
     .dark [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,

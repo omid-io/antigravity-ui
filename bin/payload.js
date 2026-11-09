@@ -1037,7 +1037,7 @@ win.webContents.on('dom-ready', () => {
           font-weight: 500 !important;
           font-size: 13px !important;
           border-radius: 8px !important;
-          padding-right: 12px !important;
+          padding-right: 6px !important;
           padding-left: 6px !important;
           position: relative !important;
           transition: background-color 0.15s ease, color 0.15s ease !important;
@@ -1049,7 +1049,7 @@ win.webContents.on('dom-ready', () => {
         [role="navigation"][aria-label="Sidebar"] [data-testid="project-header"]:hover,
         [role="navigation"][aria-label="Sidebar"] button[class*="group/headerbtn"]:hover {
           background: color-mix(in srgb, var(--primary) 4.5%, transparent) !important;
-          padding-right: 56px !important;
+          padding-right: 6px !important;
         }
 
         /* Project Folder Icon (Dynamic Accent Color, Scaled 122%) */
@@ -1094,6 +1094,42 @@ win.webContents.on('dom-ready', () => {
         .theme-dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div.absolute.-right-1,
         .dark [role="navigation"][aria-label="Sidebar"] [data-testid="conversation-row-sidebar"].bg-sidebar-secondary div.absolute.-right-1 {
           background: color-mix(in srgb, var(--primary) 15%, #1e293b) !important;
+        }
+
+        /* Solid Harmonious Folder Action Box (Guaranteed visible pill background on hover) */
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1,
+        [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div[class*="absolute"][class*="right-"],
+        [role="navigation"][aria-label="Sidebar"] div:has(> button[aria-label*="Project options"]),
+        [role="navigation"][aria-label="Sidebar"] div:has(> a[aria-label*="New Conversation in Project"]) {
+          position: absolute !important;
+          top: 50% !important;
+          bottom: auto !important;
+          transform: translateY(-50%) !important;
+          right: 4px !important;
+          height: 24px !important;
+          padding: 0 4px !important;
+          background: #e2edfd !important;
+          border-radius: 6px !important;
+          border: none !important;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 2px !important;
+          z-index: 10 !important;
+        }
+
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1,
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div[class*="absolute"][class*="right-"],
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div:has(> button[aria-label*="Project options"]),
+        .theme-dark [role="navigation"][aria-label="Sidebar"] div:has(> a[aria-label*="New Conversation in Project"]),
+        .dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div.absolute.right-1,
+        .dark [role="navigation"][aria-label="Sidebar"] div[class*="group/header"] > div[class*="absolute"][class*="right-"],
+        .dark [role="navigation"][aria-label="Sidebar"] div:has(> button[aria-label*="Project options"]),
+        .dark [role="navigation"][aria-label="Sidebar"] div:has(> a[aria-label*="New Conversation in Project"]) {
+          background: #1e3a5f !important;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
         }
 
                     /* Multi-Choice Questions (ask_question) BiDi & RTL Support */
